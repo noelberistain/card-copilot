@@ -1,65 +1,75 @@
-import { Alert, Text, View } from "react-native";
 import { router } from "expo-router";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { ActivityIndicator, Text, View } from "react-native";
 
-import { AppButton, AppTextInput, ScreenContainer } from "@/components/ui";
-import {
-  cardFormSchema,
-  type CardFormInput,
-  type CardFormValues,
-} from "@/features/cards/schemas/cardForm.schema";
-import { useSaveCard } from "@/features/cards/hooks/useSaveCard";
+import { AppButton, EmptyState, ScreenContainer } from "@/components/ui";
+import { CardListItem } from "@/features/cards/components/CardListItem";
+import { useCards } from "@/features/cards/hooks/useCards";
 
-export default function NewCardScreen() {
-  const { save, saving, error } = useSaveCard();
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CardFormInput, unknown, CardFormValues>({
-    resolver: zodResolver(cardFormSchema),
-    defaultValues: {
-      alias: "",
-      bank: "",
-      creditLimit: "",
-      cutoffDay: "",
-      paymentDueDay: "",
-      network: "",
-      color: "",
-    },
-  });
-
-  async function onSubmit(values: CardFormValues) {
-    try {
-      await save(values);
-
-      Alert.alert("Tarjeta guardada", "La tarjeta se guardó correctamente.", [
-        {
-          text: "OK",
-          onPress: () => router.back(),
-        },
-      ]);
-    } catch {
-      // El hook ya setea el error.
-    }
-  }
+export default function HomeScreen() {
+  const { cards, loading, error, refresh } = useCards();
 
   return (
     <ScreenContainer>
       <View className="gap-6">
         <View>
           <Text className="text-3xl font-bold text-slate-950">
-            Agregar tarjeta
+            Card Copilot
           </Text>
 
           <Text className="mt-2 text-base text-slate-500">
-            Captura la información base de tu tarjeta para empezar a darle
-            seguimiento.
+            Administra tus tarjetas y entiende mejor tus fechas de corte, pago y
+            saldos.
           </Text>
         </View>
 
-        <View className="gap-4">
-          <Controller
-            control={control}
+        <AppButton
+          title="Agregar tarjeta"
+          onPress={() => router.push("/cards/new")}
+        />
+
+        {loading ? (
+          <View className="items-center justify-center py-10">
+            <ActivityIndicator />
+            <Text className="mt-3 text-sm text-slate-500">
+              Cargando tarjetas...
+            </Text>
+          </View>
+        ) : null}
+
+        {!loading && error ? (
+          <View className="gap-3 rounded-3xl bg-red-50 p-5">
+            <Text className="text-base font-semibold text-red-700">
+              Ocurrió un problema
+            </Text>
+
+            <Text className="text-sm text-red-600">{error}</Text>
+
+            <AppButton title="Reintentar" onPress={refresh} variant="danger" />
+          </View>
+        ) : null}
+
+        {!loading && !error && cards.length === 0 ? (
+          <EmptyState
+            title="Aún no tienes tarjetas"
+            message="Agrega tu primera tarjeta para empezar a darle seguimiento."
+          />
+        ) : null}
+
+        {!loading && !error && cards.length > 0 ? (
+          <View className="gap-4">
+            {cards.map((card) => (
+              <CardListItem
+                key={card.id}
+                card={card}
+                onPress={() => {
+                  // En Sprint 1 todavía no tenemos pantalla de detalle.
+                  // Más adelante navegaremos a /cards/[cardId].
+                }}
+              />
+            ))}
+          </View>
+        ) : null}
+      </View>
+    </ScreenContainer>
+  );
+}
