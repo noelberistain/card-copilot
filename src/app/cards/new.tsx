@@ -1,79 +1,196 @@
-import { router } from 'expo-router';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { Alert, Text, View } from "react-native";
+import { router } from "expo-router";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { AppButton, EmptyState, ScreenContainer } from '@/components/ui';
-import { CardListItem } from '@/features/cards/components/CardListItem';
-import { useCards } from '@/features/cards/hooks/useCards';
+import { AppButton, AppTextInput, ScreenContainer } from "@/components/ui";
+import {
+  cardFormSchema,
+  type CardFormInput,
+  type CardFormValues,
+} from "@/features/cards/schemas/cardForm.schema";
+import { useSaveCard } from "@/features/cards/hooks/useSaveCard";
 
-export default function HomeScreen() {
-	const { cards, loading, error, refresh } = useCards();
+export default function NewCardScreen() {
+  const { save, saving, error } = useSaveCard();
 
-	return (
-		<ScreenContainer>
-			<View className='gap-6'>
-				<View>
-					<Text className='text-3xl font-bold text-slate-950'>
-						Card Copilot
-					</Text>
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CardFormInput, unknown, CardFormValues>({
+    resolver: zodResolver(cardFormSchema),
+    defaultValues: {
+      alias: "",
+      bank: "",
+      creditLimit: "",
+      cutoffDay: "",
+      paymentDueDay: "",
+      network: "",
+      color: "",
+    },
+  });
 
-					<Text className='mt-2 text-base text-slate-500'>
-						Administra tus tarjetas y entiende mejor tus fechas de
-						corte, pago y saldos.
-					</Text>
-				</View>
+  async function onSubmit(values: CardFormValues) {
+    try {
+      await save(values);
 
-				<AppButton
-					title='Agregar tarjeta'
-					onPress={() => router.push('/cards/new')}
-				/>
+      Alert.alert("Tarjeta guardada", "La tarjeta se guardó correctamente.", [
+        {
+          text: "OK",
+          onPress: () => router.back(),
+        },
+      ]);
+    } catch {
+      // El hook ya registra el error en estado.
+    }
+  }
 
-				{loading ? (
-					<View className='items-center justify-center py-10'>
-						<ActivityIndicator />
-						<Text className='mt-3 text-sm text-slate-500'>
-							Cargando tarjetas...
-						</Text>
-					</View>
-				) : null}
+  return (
+    <ScreenContainer>
+      <View className="gap-6">
+        <View>
+          <Text className="text-3xl font-bold text-slate-950">
+            Agregar tarjeta
+          </Text>
 
-				{!loading && error ? (
-					<View className='gap-3 rounded-3xl bg-red-50 p-5'>
-						<Text className='text-base font-semibold text-red-700'>
-							Ocurrió un problema
-						</Text>
+          <Text className="mt-2 text-base text-slate-500">
+            Captura la información base de tu tarjeta para empezar a darle
+            seguimiento.
+          </Text>
+        </View>
 
-						<Text className='text-sm text-red-600'>{error}</Text>
+        <View className="gap-4">
+          <Controller
+            control={control}
+            name="alias"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <AppTextInput
+                label="Alias"
+                placeholder="Ej. BBVA Azul"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.alias?.message}
+                autoCapitalize="words"
+              />
+            )}
+          />
 
-						<AppButton
-							title='Reintentar'
-							onPress={refresh}
-							variant='danger'
-						/>
-					</View>
-				) : null}
+          <Controller
+            control={control}
+            name="bank"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <AppTextInput
+                label="Banco"
+                placeholder="Ej. BBVA"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.bank?.message}
+                autoCapitalize="words"
+              />
+            )}
+          />
 
-				{!loading && !error && cards.length === 0 ? (
-					<EmptyState
-						title='Aún no tienes tarjetas'
-						message='Agrega tu primera tarjeta para empezar a darle seguimiento.'
-					/>
-				) : null}
+          <Controller
+            control={control}
+            name="creditLimit"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <AppTextInput
+                label="Línea de crédito"
+                placeholder="Ej. 25000"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.creditLimit?.message}
+                keyboardType="decimal-pad"
+              />
+            )}
+          />
 
-				{!loading && !error && cards.length > 0 ? (
-					<View className='gap-4'>
-						{cards.map(card => (
-							<CardListItem
-								key={card.id}
-								card={card}
-								onPress={() => {
-									// En Sprint 1 todavía no tenemos pantalla de detalle.
-									// Más adelante navegaremos a /cards/[cardId].
-								}}
-							/>
-						))}
-					</View>
-				) : null}
-			</View>
-		</ScreenContainer>
-	);
+          <Controller
+            control={control}
+            name="cutoffDay"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <AppTextInput
+                label="Día de corte"
+                placeholder="Ej. 20"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.cutoffDay?.message}
+                keyboardType="number-pad"
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="paymentDueDay"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <AppTextInput
+                label="Día de pago"
+                placeholder="Ej. 10"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.paymentDueDay?.message}
+                keyboardType="number-pad"
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="network"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <AppTextInput
+                label="Red de tarjeta"
+                placeholder="visa, mastercard, amex u other"
+                value={value ?? ""}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.network?.message}
+                autoCapitalize="none"
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="color"
+            render={({ field: { value, onChange, onBlur } }) => (
+              <AppTextInput
+                label="Color"
+                placeholder="Ej. #2563eb"
+                value={value ?? ""}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={errors.color?.message}
+                autoCapitalize="none"
+              />
+            )}
+          />
+        </View>
+
+        {error ? (
+          <Text className="text-sm font-medium text-red-600">{error}</Text>
+        ) : null}
+
+        <AppButton
+          title={saving ? "Guardando..." : "Guardar tarjeta"}
+          onPress={handleSubmit(onSubmit)}
+          disabled={saving}
+        />
+
+        <AppButton
+          title="Cancelar"
+          variant="secondary"
+          onPress={() => router.back()}
+          disabled={saving}
+        />
+      </View>
+    </ScreenContainer>
+  );
 }
