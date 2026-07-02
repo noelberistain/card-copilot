@@ -1,76 +1,78 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from "react";
 
-import { SqliteCardsPersistence } from '@/data/persistence/cards.persistence';
-import type { CardFormValues } from '@/features/cards/schemas/cardForm.schema';
-import { nowIso } from '@/lib/date/nowIso';
-import { createId } from '@/lib/ids/createId';
-import type { Card } from '@/models/cards/card.types';
+import { SqliteCardsPersistence } from "@/data/persistence/cards.persistence";
+import type { Card } from "@/models/cards/card.types";
+import type { CardFormValues } from "@/features/cards/schemas/cardForm.schema";
+import { nowIso } from "@/lib/date/nowIso";
+import { createId } from "@/lib/ids/createId";
 
 interface UseSaveCardOptions {
-	initialCard?: Card;
+  initialCard?: Card;
 }
 
 export function useSaveCard(options?: UseSaveCardOptions) {
-	const [saving, setSaving] = useState(false);
-	const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-	const cardsPersistence = useMemo(() => new SqliteCardsPersistence(), []);
+  const initialCard = options?.initialCard;
 
-	const save = useCallback(
-		async (values: CardFormValues): Promise<Card> => {
-			try {
-				setSaving(true);
-				setError(null);
+  const cardsPersistence = useMemo(() => new SqliteCardsPersistence(), []);
 
-				const timestamp = nowIso();
+  const save = useCallback(
+    async (values: CardFormValues): Promise<Card> => {
+      try {
+        setSaving(true);
+        setError(null);
 
-				const card: Card = options?.initialCard
-					? {
-							...options.initialCard,
-							alias: values.alias,
-							bank: values.bank,
-							creditLimit: values.creditLimit,
-							cutoffDay: values.cutoffDay,
-							paymentDueDay: values.paymentDueDay,
-							network: values.network,
-							color: values.color,
-							updatedAt: timestamp,
-						}
-					: {
-							id: createId(),
-							alias: values.alias,
-							bank: values.bank,
-							creditLimit: values.creditLimit,
-							cutoffDay: values.cutoffDay,
-							paymentDueDay: values.paymentDueDay,
-							network: values.network,
-							color: values.color,
-							isActive: true,
-							createdAt: timestamp,
-							updatedAt: timestamp,
-						};
+        const timestamp = nowIso();
 
-				if (options?.initialCard) {
-					await cardsPersistence.update(card);
-				} else {
-					await cardsPersistence.create(card);
-				}
+        const card: Card = initialCard
+          ? {
+              ...initialCard,
+              alias: values.alias,
+              bank: values.bank,
+              creditLimit: values.creditLimit,
+              cutoffDay: values.cutoffDay,
+              paymentDueDay: values.paymentDueDay,
+              network: values.network,
+              color: values.color,
+              updatedAt: timestamp,
+            }
+          : {
+              id: createId(),
+              alias: values.alias,
+              bank: values.bank,
+              creditLimit: values.creditLimit,
+              cutoffDay: values.cutoffDay,
+              paymentDueDay: values.paymentDueDay,
+              network: values.network,
+              color: values.color,
+              isActive: true,
+              createdAt: timestamp,
+              updatedAt: timestamp,
+            };
 
-				return card;
-			} catch (err) {
-				console.error(err);
-				setError('No se pudo guardar la tarjeta.');
-				throw err;
-			} finally {
-				setSaving(false);
-			}
-		},
-		[cardsPersistence, options?.initialCard],
-	);
+        if (initialCard) {
+          await cardsPersistence.update(card);
+        } else {
+          await cardsPersistence.create(card);
+        }
 
-	return {
-		save,
-		saving,
-		error,
-	};
+        return card;
+      } catch (err) {
+        console.error(err);
+        setError("No se pudo guardar la tarjeta.");
+        throw err;
+      } finally {
+        setSaving(false);
+      }
+    },
+    [cardsPersistence, initialCard]
+  );
+
+  return {
+    save,
+    saving,
+    error,
+  };
 }
