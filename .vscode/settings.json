@@ -4,5 +4,5 @@
 		"source.organizeImports": "explicit",
 		"source.sortMembers": "explicit"
 	},
-	"cSpell.words": ["cardcopilot", "nativewind", "worklets"]
+	"cSpell.words": ["cardcopilot", "nativewind", "Pressable", "worklets"]
 }
