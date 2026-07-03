@@ -1,11 +1,6 @@
 import { differenceInCalendarDays, format, parseISO } from "date-fns";
 
-export type PaymentTimingStatus =
-  | "overdue"
-  | "due-today"
-  | "urgent"
-  | "soon"
-  | "ok";
+export type PaymentTimingStatus = "overdue" | "due-today" | "urgent" | "soon" | "ok";
 
 export function getTodayIsoDate() {
   return format(new Date(), "yyyy-MM-dd");
@@ -35,9 +30,7 @@ export function isPaymentSoon(daysUntilPayment: number) {
   return daysUntilPayment > 3 && daysUntilPayment <= 7;
 }
 
-export function getPaymentTimingStatus(
-  daysUntilPayment: number
-): PaymentTimingStatus {
+export function getPaymentTimingStatus(daysUntilPayment: number): PaymentTimingStatus {
   if (isPaymentOverdue(daysUntilPayment)) return "overdue";
   if (isPaymentDueToday(daysUntilPayment)) return "due-today";
   if (isPaymentUrgent(daysUntilPayment)) return "urgent";
