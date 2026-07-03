@@ -2,6 +2,8 @@ import type { PaymentTimingStatus } from "@/logic/cards/cardDates.logic";
 import {
   getDifferenceBetweenCurrentAndNoInterest,
   getPaymentGap,
+  hasCurrentBalanceButNoPaymentDue,
+  hasNoPaymentDue,
   hasPostCutoffBalance,
   isMinimumPaymentLowerThanNoInterest,
 } from "@/logic/cards/cardPayment.logic";
@@ -17,7 +19,14 @@ export interface CardInsight {
 }
 
 export type CardVisualStatus =
-  "overdue" | "due-today" | "urgent" | "soon" | "ok" | "no-snapshot";
+  export type CardVisualStatus =
+  | "overdue"
+  | "due-today"
+  | "urgent"
+  | "soon"
+  | "ok"
+  | "no-payment-due"
+  | "no-snapshot";
 
 interface BuildCardInsightsOptions {
   snapshot: CardSnapshot;
@@ -26,8 +35,13 @@ interface BuildCardInsightsOptions {
 }
 
 export function getCardVisualStatus(
-  paymentTimingStatus: PaymentTimingStatus
+  paymentTimingStatus: PaymentTimingStatus,
+  snapshot?: CardSnapshot
 ): CardVisualStatus {
+ if (snapshot && hasNoPaymentDue(snapshot)) {
+    return "no-payment-due";
+  }
+
   return paymentTimingStatus;
 }
 
@@ -37,6 +51,28 @@ export function buildCardInsights({
   daysUntilPayment,
 }: BuildCardInsightsOptions): CardInsight[] {
   const insights: CardInsight[] = [];
+  
+  if (hasNoPaymentDue(snapshot)) {
+    insights.push({
+      id: "no-payment-due",
+      tone: "success",
+      title: "No tienes pago requerido en este ciclo",
+      message:
+        "El pago mínimo, el pago para no generar intereses y el saldo al corte están en cero. Esto normalmente indica que ya cubriste el saldo requerido del ciclo o no había pago pendiente.",
+    });
+  
+    if (hasCurrentBalanceButNoPaymentDue(snapshot)) {
+      insights.push({
+        id: "current-balance-next-cycle",
+        tone: "info",
+        title: "Tu saldo actual puede pertenecer al siguiente ciclo",
+        message:
+          "Aunque tienes saldo actual, no parece haber pago requerido para este ciclo. Ese saldo podría corresponder a compras posteriores al corte.",
+      });
+    }
+  
+    return insights;
+  }
 
   if (paymentTimingStatus === "overdue") {
     insights.push({
