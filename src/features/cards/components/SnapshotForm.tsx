@@ -1,6 +1,6 @@
-import { Text, View } from "react-native";
-import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { Text, View } from "react-native";
 
 import { AppButton, AppTextInput } from "@/components/ui";
 import {
@@ -164,9 +164,7 @@ export function SnapshotForm({
         />
       </View>
 
-      {error ? (
-        <Text className="text-sm font-medium text-red-600">{error}</Text>
-      ) : null}
+      {error ? <Text className="text-sm font-medium text-red-600">{error}</Text> : null}
 
       <AppButton
         title={saving ? "Guardando..." : submitLabel}

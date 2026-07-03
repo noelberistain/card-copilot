@@ -140,6 +140,20 @@ export default function EditCardScreen() {
           onCancel={() => router.back()}
         />
 
+        <AppButton
+          title="Capturar estado actual"
+          variant="secondary"
+          onPress={() =>
+            router.push({
+              pathname: "/cards/[cardId]/snapshot",
+              params: {
+                cardId: card.id,
+              },
+            })
+          }
+          disabled={saving || deactivating}
+        />
+
         {deactivateError ? (
           <Text className="text-sm font-medium text-red-600">{deactivateError}</Text>
         ) : null}
