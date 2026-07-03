@@ -1,9 +1,6 @@
 import { Text, View } from "react-native";
 
-import type {
-  CardInsight,
-  CardInsightTone,
-} from "@/logic/cards/cardStatus.logic";
+import type { CardInsight, CardInsightTone } from "@/logic/cards/cardStatus.logic";
 
 interface CardInsightsPanelProps {
   insights: CardInsight[];
@@ -54,9 +51,7 @@ function getMessageClasses(tone: CardInsightTone) {
 export function CardInsightsPanel({ insights }: CardInsightsPanelProps) {
   return (
     <View className="rounded-3xl bg-white p-5">
-      <Text className="text-base font-semibold text-slate-900">
-        Insights
-      </Text>
+      <Text className="text-base font-semibold text-slate-900">Insights</Text>
 
       <Text className="mt-1 text-sm text-slate-500">
         Explicaciones basadas en el último estado capturado.
@@ -66,21 +61,13 @@ export function CardInsightsPanel({ insights }: CardInsightsPanelProps) {
         {insights.map((insight) => (
           <View
             key={insight.id}
-            className={`rounded-2xl border p-4 ${getInsightClasses(
-              insight.tone
-            )}`}
+            className={`rounded-2xl border p-4 ${getInsightClasses(insight.tone)}`}
           >
-            <Text
-              className={`text-base font-semibold ${getTitleClasses(
-                insight.tone
-              )}`}
-            >
+            <Text className={`text-base font-semibold ${getTitleClasses(insight.tone)}`}>
               {insight.title}
             </Text>
 
-            <Text
-              className={`mt-1 text-sm ${getMessageClasses(insight.tone)}`}
-            >
+            <Text className={`mt-1 text-sm ${getMessageClasses(insight.tone)}`}>
               {insight.message}
             </Text>
           </View>
