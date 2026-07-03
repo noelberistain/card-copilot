@@ -22,6 +22,8 @@ function getStatusLabel(status: CardVisualStatus) {
       return "Pago en tiempo";
     case "no-snapshot":
       return "Sin estado";
+    case "no-payment-due":
+      return "Sin pago requerido";
     default:
       return "Estado desconocido";
   }
@@ -38,6 +40,8 @@ function getStatusClasses(status: CardVisualStatus) {
       return "bg-blue-50 text-blue-700";
     case "ok":
       return "bg-emerald-50 text-emerald-700";
+    case "no-payment-due":
+      return "bg-emerald-50 text-emerald-700";  
     case "no-snapshot":
     default:
       return "bg-slate-100 text-slate-600";
