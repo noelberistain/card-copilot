@@ -58,15 +58,9 @@ export const snapshotFormSchema = z
           .min(0, "El pago para no generar intereses no puede ser negativo.")
       ),
 
-    lastCutoffDate: z
-      .string()
-      .trim()
-      .regex(datePattern, "Usa formato YYYY-MM-DD."),
+    lastCutoffDate: z.string().trim().regex(datePattern, "Usa formato YYYY-MM-DD."),
 
-    paymentDueDate: z
-      .string()
-      .trim()
-      .regex(datePattern, "Usa formato YYYY-MM-DD."),
+    paymentDueDate: z.string().trim().regex(datePattern, "Usa formato YYYY-MM-DD."),
 
     notes: z
       .string()
@@ -79,8 +73,7 @@ export const snapshotFormSchema = z
     path: ["minimumPayment"],
   })
   .refine((values) => values.paymentToAvoidInterest <= values.currentBalance, {
-    message:
-      "El pago para no generar intereses no puede ser mayor al saldo actual.",
+    message: "El pago para no generar intereses no puede ser mayor al saldo actual.",
     path: ["paymentToAvoidInterest"],
   })
   .refine((values) => values.paymentDueDate > values.lastCutoffDate, {

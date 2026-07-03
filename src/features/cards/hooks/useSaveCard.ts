@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { SqliteCardsPersistence } from "@/data/persistence/cards.persistence";
-import type { Card } from "@/models/cards/card.types";
 import type { CardFormValues } from "@/features/cards/schemas/cardForm.schema";
 import { nowIso } from "@/lib/date/nowIso";
 import { createId } from "@/lib/ids/createId";
+import type { Card } from "@/models/cards/card.types";
 
 interface UseSaveCardOptions {
   initialCard?: Card;
