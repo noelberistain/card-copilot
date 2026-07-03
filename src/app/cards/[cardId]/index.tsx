@@ -1,5 +1,5 @@
-import { ActivityIndicator, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator, Text, View } from "react-native";
 
 import { AppButton, EmptyState, ScreenContainer } from "@/components/ui";
 import { CardDatesPanel } from "@/features/cards/components/CardDatesPanel";
@@ -19,9 +19,7 @@ export default function CardDetailScreen() {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
 
-          <Text className="mt-3 text-sm text-slate-500">
-            Cargando detalle...
-          </Text>
+          <Text className="mt-3 text-sm text-slate-500">Cargando detalle...</Text>
         </View>
       </ScreenContainer>
     );
@@ -31,9 +29,7 @@ export default function CardDetailScreen() {
     return (
       <ScreenContainer>
         <View className="gap-4">
-          <Text className="text-3xl font-bold text-slate-950">
-            No se pudo cargar
-          </Text>
+          <Text className="text-3xl font-bold text-slate-950">No se pudo cargar</Text>
 
           <Text className="text-base text-slate-500">
             {error ?? "No se encontró la tarjeta solicitada."}
@@ -41,11 +37,7 @@ export default function CardDetailScreen() {
 
           <AppButton title="Reintentar" onPress={refresh} />
 
-          <AppButton
-            title="Volver"
-            variant="secondary"
-            onPress={() => router.back()}
-          />
+          <AppButton title="Volver" variant="secondary" onPress={() => router.back()} />
         </View>
       </ScreenContainer>
     );
@@ -57,9 +49,7 @@ export default function CardDetailScreen() {
     <ScreenContainer>
       <View className="gap-6">
         <View>
-          <Text className="text-3xl font-bold text-slate-950">
-            {card.alias}
-          </Text>
+          <Text className="text-3xl font-bold text-slate-950">{card.alias}</Text>
 
           <Text className="mt-2 text-base text-slate-500">{card.bank}</Text>
         </View>
@@ -105,11 +95,7 @@ export default function CardDetailScreen() {
             }
           />
 
-          <AppButton
-            title="Volver"
-            variant="secondary"
-            onPress={() => router.back()}
-          />
+          <AppButton title="Volver" variant="secondary" onPress={() => router.back()} />
         </View>
       </View>
     </ScreenContainer>

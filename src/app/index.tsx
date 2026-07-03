@@ -53,7 +53,12 @@ export default function HomeScreen() {
               <CardListItem
                 key={card.id}
                 card={card}
-                onPress={() => router.push(`/cards/${card.id}/edit`)}
+                onPress={() =>
+                  router.push({
+                    pathname: "/cards/[cardId]",
+                    params: { cardId: card.id },
+                  })
+                }
               />
             ))}
           </View>
