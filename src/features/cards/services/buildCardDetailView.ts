@@ -1,20 +1,20 @@
-import type { Card, CardSnapshot } from "@/models/cards/card.types";
-import {
-  getAvailableCredit,
-  getCreditUsagePercentage,
-  getDifferenceBetweenCurrentAndNoInterest,
-} from "@/logic/cards/cardPayment.logic";
 import {
   getDaysUntilPayment,
   getPaymentTimingStatus,
   getTodayIsoDate,
 } from "@/logic/cards/cardDates.logic";
 import {
+  getAvailableCredit,
+  getCreditUsagePercentage,
+  getDifferenceBetweenCurrentAndNoInterest,
+} from "@/logic/cards/cardPayment.logic";
+import {
   buildCardInsights,
   getCardVisualStatus,
   type CardInsight,
   type CardVisualStatus,
 } from "@/logic/cards/cardStatus.logic";
+import type { Card, CardSnapshot } from "@/models/cards/card.types";
 
 export interface CardDetailView {
   card: Card;
@@ -62,10 +62,7 @@ export function buildCardDetailView({
     };
   }
 
-  const daysUntilPayment = getDaysUntilPayment(
-    todayIso,
-    latestSnapshot.paymentDueDate
-  );
+  const daysUntilPayment = getDaysUntilPayment(todayIso, latestSnapshot.paymentDueDate);
 
   const paymentTimingStatus = getPaymentTimingStatus(daysUntilPayment);
   const status = getCardVisualStatus(paymentTimingStatus);
