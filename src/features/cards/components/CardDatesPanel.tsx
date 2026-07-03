@@ -41,7 +41,7 @@ function getStatusClasses(status: CardVisualStatus) {
     case "ok":
       return "bg-emerald-50 text-emerald-700";
     case "no-payment-due":
-      return "bg-emerald-50 text-emerald-700";  
+      return "bg-emerald-50 text-emerald-700";
     case "no-snapshot":
     default:
       return "bg-slate-100 text-slate-600";

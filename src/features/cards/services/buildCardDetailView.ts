@@ -65,7 +65,7 @@ export function buildCardDetailView({
   const daysUntilPayment = getDaysUntilPayment(todayIso, latestSnapshot.paymentDueDate);
 
   const paymentTimingStatus = getPaymentTimingStatus(daysUntilPayment);
-  
+
   const status = getCardVisualStatus(paymentTimingStatus, latestSnapshot);
 
   const metrics: CardDetailMetrics = {

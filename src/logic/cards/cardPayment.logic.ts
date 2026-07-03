@@ -10,13 +10,8 @@ export function getCreditUsagePercentage(card: Card, snapshot: CardSnapshot) {
   return Math.min((snapshot.currentBalance / card.creditLimit) * 100, 100);
 }
 
-export function getDifferenceBetweenCurrentAndNoInterest(
-  snapshot: CardSnapshot
-) {
-  return Math.max(
-    snapshot.currentBalance - snapshot.paymentToAvoidInterest,
-    0
-  );
+export function getDifferenceBetweenCurrentAndNoInterest(snapshot: CardSnapshot) {
+  return Math.max(snapshot.currentBalance - snapshot.paymentToAvoidInterest, 0);
 }
 
 export function hasPostCutoffBalance(snapshot: CardSnapshot) {
@@ -28,10 +23,7 @@ export function isMinimumPaymentLowerThanNoInterest(snapshot: CardSnapshot) {
 }
 
 export function getPaymentGap(snapshot: CardSnapshot) {
-  return Math.max(
-    snapshot.paymentToAvoidInterest - snapshot.minimumPayment,
-    0
-  );
+  return Math.max(snapshot.paymentToAvoidInterest - snapshot.minimumPayment, 0);
 }
 
 const ZERO_AMOUNT_THRESHOLD = 0.005;

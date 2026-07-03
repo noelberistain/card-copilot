@@ -19,14 +19,7 @@ export interface CardInsight {
 }
 
 export type CardVisualStatus =
-  export type CardVisualStatus =
-  | "overdue"
-  | "due-today"
-  | "urgent"
-  | "soon"
-  | "ok"
-  | "no-payment-due"
-  | "no-snapshot";
+  "overdue" | "due-today" | "urgent" | "soon" | "ok" | "no-payment-due" | "no-snapshot";
 
 interface BuildCardInsightsOptions {
   snapshot: CardSnapshot;
@@ -38,7 +31,7 @@ export function getCardVisualStatus(
   paymentTimingStatus: PaymentTimingStatus,
   snapshot?: CardSnapshot
 ): CardVisualStatus {
- if (snapshot && hasNoPaymentDue(snapshot)) {
+  if (snapshot && hasNoPaymentDue(snapshot)) {
     return "no-payment-due";
   }
 
@@ -51,7 +44,7 @@ export function buildCardInsights({
   daysUntilPayment,
 }: BuildCardInsightsOptions): CardInsight[] {
   const insights: CardInsight[] = [];
-  
+
   if (hasNoPaymentDue(snapshot)) {
     insights.push({
       id: "no-payment-due",
@@ -60,7 +53,7 @@ export function buildCardInsights({
       message:
         "El pago mínimo, el pago para no generar intereses y el saldo al corte están en cero. Esto normalmente indica que ya cubriste el saldo requerido del ciclo o no había pago pendiente.",
     });
-  
+
     if (hasCurrentBalanceButNoPaymentDue(snapshot)) {
       insights.push({
         id: "current-balance-next-cycle",
@@ -70,7 +63,7 @@ export function buildCardInsights({
           "Aunque tienes saldo actual, no parece haber pago requerido para este ciclo. Ese saldo podría corresponder a compras posteriores al corte.",
       });
     }
-  
+
     return insights;
   }
 
