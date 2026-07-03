@@ -65,10 +65,7 @@ export default function HomeScreen() {
 							<CardListItem
 								key={card.id}
 								card={card}
-								onPress={() => {
-									// En Sprint 1 todavía no tenemos pantalla de detalle.
-									// Más adelante navegaremos a /cards/[cardId].
-								}}
+								onPress={() => router.push(`/cards/${card.id}/edit`)}
 							/>
 						))}
 					</View>
