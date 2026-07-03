@@ -1,11 +1,11 @@
-import type { CardSnapshot } from "@/models/cards/card.types";
+import type { PaymentTimingStatus } from "@/logic/cards/cardDates.logic";
 import {
   getDifferenceBetweenCurrentAndNoInterest,
   getPaymentGap,
   hasPostCutoffBalance,
   isMinimumPaymentLowerThanNoInterest,
 } from "@/logic/cards/cardPayment.logic";
-import type { PaymentTimingStatus } from "@/logic/cards/cardDates.logic";
+import type { CardSnapshot } from "@/models/cards/card.types";
 
 export type CardInsightTone = "info" | "warning" | "danger" | "success";
 
@@ -17,12 +17,7 @@ export interface CardInsight {
 }
 
 export type CardVisualStatus =
-  | "overdue"
-  | "due-today"
-  | "urgent"
-  | "soon"
-  | "ok"
-  | "no-snapshot";
+  "overdue" | "due-today" | "urgent" | "soon" | "ok" | "no-snapshot";
 
 interface BuildCardInsightsOptions {
   snapshot: CardSnapshot;
