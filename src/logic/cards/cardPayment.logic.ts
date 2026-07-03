@@ -33,3 +33,21 @@ export function getPaymentGap(snapshot: CardSnapshot) {
     0
   );
 }
+
+const ZERO_AMOUNT_THRESHOLD = 0.005;
+
+export function isZeroAmount(value: number) {
+  return Math.abs(value) < ZERO_AMOUNT_THRESHOLD;
+}
+
+export function hasNoPaymentDue(snapshot: CardSnapshot) {
+  return (
+    isZeroAmount(snapshot.minimumPayment) &&
+    isZeroAmount(snapshot.paymentToAvoidInterest) &&
+    isZeroAmount(snapshot.statementBalance)
+  );
+}
+
+export function hasCurrentBalanceButNoPaymentDue(snapshot: CardSnapshot) {
+  return hasNoPaymentDue(snapshot) && snapshot.currentBalance > 0;
+}
