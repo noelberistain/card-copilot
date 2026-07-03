@@ -6,6 +6,8 @@ import { CardForm } from "@/features/cards/components/CardForm";
 import { useCard } from "@/features/cards/hooks/useCard";
 import { useDeactivateCard } from "@/features/cards/hooks/useDeactivateCard";
 import { useSaveCard } from "@/features/cards/hooks/useSaveCard";
+import { LatestSnapshotPanel } from "@/features/cards/components/LatestSnapshotPanel";
+import { useLatestSnapshot } from "@/features/cards/hooks/useLatestSnapshot";
 
 import type {
   CardFormInput,
@@ -17,6 +19,11 @@ export default function EditCardScreen() {
   const cardId = Array.isArray(params.cardId) ? params.cardId[0] : params.cardId;
 
   const { card, loading, error: loadError, refresh } = useCard({ cardId });
+  const {
+  snapshot: latestSnapshot,
+  loading: latestSnapshotLoading,
+  error: latestSnapshotError,
+} = useLatestSnapshot({ cardId });
   const {
     save,
     saving,
@@ -130,6 +137,12 @@ export default function EditCardScreen() {
             Actualiza la información base de esta tarjeta.
           </Text>
         </View>
+
+        <LatestSnapshotPanel
+          snapshot={latestSnapshot}
+          loading={latestSnapshotLoading}
+          error={latestSnapshotError}
+        />
 
         <CardForm
           defaultValues={defaultValues}
