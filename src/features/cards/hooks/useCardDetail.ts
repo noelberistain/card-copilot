@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
 import { useFocusEffect } from "expo-router";
+import { useCallback, useMemo, useState } from "react";
 
 import { SqliteCardsPersistence } from "@/data/persistence/cards.persistence";
 import { SqliteCardSnapshotsPersistence } from "@/data/persistence/cardSnapshots.persistence";
@@ -18,10 +18,7 @@ export function useCardDetail({ cardId }: UseCardDetailOptions) {
   const [error, setError] = useState<string | null>(null);
 
   const cardsPersistence = useMemo(() => new SqliteCardsPersistence(), []);
-  const snapshotsPersistence = useMemo(
-    () => new SqliteCardSnapshotsPersistence(),
-    []
-  );
+  const snapshotsPersistence = useMemo(() => new SqliteCardSnapshotsPersistence(), []);
 
   const loadDetail = useCallback(async () => {
     if (!cardId) {
@@ -43,8 +40,7 @@ export function useCardDetail({ cardId }: UseCardDetailOptions) {
         return;
       }
 
-      const latestSnapshot =
-        await snapshotsPersistence.findLatestByCardId(cardId);
+      const latestSnapshot = await snapshotsPersistence.findLatestByCardId(cardId);
 
       const cardDetail = buildCardDetailView({
         card,
