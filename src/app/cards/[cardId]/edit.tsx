@@ -4,8 +4,8 @@ import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { AppButton, ScreenContainer } from "@/components/ui";
 import { CardForm } from "@/features/cards/components/CardForm";
 import { useCard } from "@/features/cards/hooks/useCard";
-import { useSaveCard } from "@/features/cards/hooks/useSaveCard";
 import { useDeactivateCard } from "@/features/cards/hooks/useDeactivateCard";
+import { useSaveCard } from "@/features/cards/hooks/useSaveCard";
 
 import type {
   CardFormInput,
@@ -25,48 +25,44 @@ export default function EditCardScreen() {
     initialCard: card ?? undefined,
   });
 
-  const {
-  deactivate,
-  deactivating,
-  error: deactivateError,
-} = useDeactivateCard();
+  const { deactivate, deactivating, error: deactivateError } = useDeactivateCard();
 
   function handleDeactivate() {
-  if (!card) return;
+    if (!card) return;
 
-  Alert.alert(
-    "Desactivar tarjeta",
-    "La tarjeta dejará de aparecer en Home, pero sus datos no se borrarán.",
-    [
-      {
-        text: "Cancelar",
-        style: "cancel",
-      },
-      {
-        text: "Desactivar",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await deactivate(card.id);
-
-            Alert.alert(
-              "Tarjeta desactivada",
-              "La tarjeta se desactivó correctamente.",
-              [
-                {
-                  text: "OK",
-                  onPress: () => router.back(),
-                },
-              ]
-            );
-          } catch {
-            // El hook ya registra el error.
-          }
+    Alert.alert(
+      "Desactivar tarjeta",
+      "La tarjeta dejará de aparecer en Home, pero sus datos no se borrarán.",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
         },
-      },
-    ]
-  );
-}
+        {
+          text: "Desactivar",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await deactivate(card.id);
+
+              Alert.alert(
+                "Tarjeta desactivada",
+                "La tarjeta se desactivó correctamente.",
+                [
+                  {
+                    text: "OK",
+                    onPress: () => router.back(),
+                  },
+                ]
+              );
+            } catch {
+              // El hook ya registra el error.
+            }
+          },
+        },
+      ]
+    );
+  }
 
   async function handleSave(values: CardFormValues) {
     if (!card) return;
@@ -145,15 +141,15 @@ export default function EditCardScreen() {
         />
 
         {deactivateError ? (
-  <Text className="text-sm font-medium text-red-600">{deactivateError}</Text>
-) : null}
+          <Text className="text-sm font-medium text-red-600">{deactivateError}</Text>
+        ) : null}
 
-<AppButton
-  title={deactivating ? "Desactivando..." : "Desactivar tarjeta"}
-  variant="danger"
-  onPress={handleDeactivate}
-  disabled={saving || deactivating}
-/>
+        <AppButton
+          title={deactivating ? "Desactivando..." : "Desactivar tarjeta"}
+          variant="danger"
+          onPress={handleDeactivate}
+          disabled={saving || deactivating}
+        />
       </View>
     </ScreenContainer>
   );
