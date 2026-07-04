@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 
-import { AppButton, AppTextInput } from "@/components/ui";
+import { AppButton, AppColorInput, AppTextInput } from "@/components/ui";
 import {
   cardFormSchema,
   type CardFormInput,
@@ -150,15 +150,12 @@ export function CardForm({
         <Controller
           control={control}
           name="color"
-          render={({ field: { value, onChange, onBlur } }) => (
-            <AppTextInput
+          render={({ field: { value, onChange } }) => (
+            <AppColorInput
               label="Color"
-              placeholder="Ej. #2563eb"
-              value={value ?? ""}
+              value={value}
               onChangeText={onChange}
-              onBlur={onBlur}
               error={errors.color?.message}
-              autoCapitalize="none"
             />
           )}
         />
