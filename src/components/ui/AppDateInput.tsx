@@ -31,19 +31,34 @@ export function AppDateInput({
   disabled = false,
 }: AppDateInputProps) {
   const [showPicker, setShowPicker] = useState(false);
-
   const selectedDate = useMemo(() => dateFromValue(value), [value]);
+  const [draftDate, setDraftDate] = useState(selectedDate);
+
+  function openPicker() {
+    setDraftDate(selectedDate);
+    setShowPicker(true);
+  }
 
   function handleChange(event: DateTimePickerEvent, date?: Date) {
-    if (Platform.OS === "android") {
+    if (event.type === "dismissed") {
       setShowPicker(false);
-    }
-
-    if (event.type === "dismissed" || !date) {
       return;
     }
 
-    onChangeText(format(date, "yyyy-MM-dd"));
+    if (!date) return;
+
+    if (Platform.OS === "android") {
+      onChangeText(format(date, "yyyy-MM-dd"));
+      setShowPicker(false);
+      return;
+    }
+
+    setDraftDate(date);
+  }
+
+  function confirmIosDate() {
+    onChangeText(format(draftDate, "yyyy-MM-dd"));
+    setShowPicker(false);
   }
 
   return (
@@ -52,7 +67,7 @@ export function AppDateInput({
 
       <Pressable
         disabled={disabled}
-        onPress={() => setShowPicker(true)}
+        onPress={openPicker}
         className={[
           "rounded-2xl border bg-white px-4 py-4",
           error ? "border-red-500" : "border-slate-300",
@@ -70,21 +85,34 @@ export function AppDateInput({
       </Pressable>
 
       {showPicker ? (
-        <DateTimePicker
-          value={selectedDate}
-          mode="date"
-          display={Platform.OS === "ios" ? "inline" : "default"}
-          onChange={handleChange}
-        />
-      ) : null}
+        <View className="rounded-2xl bg-white p-3">
+          <DateTimePicker
+            value={draftDate}
+            mode="date"
+            display={Platform.OS === "ios" ? "compact" : "default"}
+            onChange={handleChange}
+          />
 
-      {Platform.OS === "ios" && showPicker ? (
-        <Pressable
-          onPress={() => setShowPicker(false)}
-          className="self-start rounded-full bg-slate-200 px-4 py-2"
-        >
-          <Text className="text-sm font-semibold text-slate-700">Listo</Text>
-        </Pressable>
+          {Platform.OS === "ios" ? (
+            <View className="mt-3 flex-row gap-3">
+              <Pressable
+                onPress={() => setShowPicker(false)}
+                className="rounded-full bg-slate-200 px-4 py-2"
+              >
+                <Text className="text-sm font-semibold text-slate-700">
+                  Cancelar
+                </Text>
+              </Pressable>
+
+              <Pressable
+                onPress={confirmIosDate}
+                className="rounded-full bg-blue-600 px-4 py-2"
+              >
+                <Text className="text-sm font-semibold text-white">Listo</Text>
+              </Pressable>
+            </View>
+          ) : null}
+        </View>
       ) : null}
 
       {error ? <Text className="text-sm text-red-600">{error}</Text> : null}
