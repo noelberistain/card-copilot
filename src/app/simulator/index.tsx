@@ -1,0 +1,317 @@
+import { Controller, useForm } from "react-hook-form";
+import { ActivityIndicator, Text, View } from "react-native";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { AppButton, AppTextInput, ScreenContainer } from "@/components/ui";
+import { formatCurrency } from "@/lib/money/formatCurrency";
+import {
+  purchaseSimulationSchema,
+  type PurchaseSimulationFormInput,
+  type PurchaseSimulationFormValues,
+} from "@/features/simulator/schemas/purchaseSimulation.schema";
+import { usePurchaseSimulation } from "@/features/simulator/hooks/usePurchaseSimulation";
+import type { PurchaseSimulationCardResult } from "@/logic/cards/purchaseTiming.logic";
+
+const emptyDefaultValues: PurchaseSimulationFormInput = {
+  amount: "",
+  purchaseDate: "",
+};
+
+export default function SimulatorScreen() {
+  const { result, simulating, error, simulate, clear } = usePurchaseSimulation();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<
+    PurchaseSimulationFormInput,
+    unknown,
+    PurchaseSimulationFormValues
+  >({
+    resolver: zodResolver(purchaseSimulationSchema),
+    defaultValues: emptyDefaultValues,
+  });
+
+  async function handleSimulation(values: PurchaseSimulationFormValues) {
+    await simulate(values);
+  }
+
+  return (
+    <ScreenContainer>
+      <View className="gap-6">
+        <View>
+          <Text className="text-3xl font-bold text-slate-950">
+            Simulador de compra
+          </Text>
+
+          <Text className="mt-2 text-base text-slate-500">
+            Ingresa una compra y te ayudamos a estimar con cuál tarjeta podrías
+            tener más tiempo para pagar.
+          </Text>
+        </View>
+
+        <View className="rounded-3xl bg-white p-5">
+          <Text className="text-base font-semibold text-slate-900">
+            Datos de la compra
+          </Text>
+
+          <View className="mt-5 gap-4">
+            <Controller
+              control={control}
+              name="amount"
+              render={({ field: { value, onChange, onBlur } }) => (
+                <AppTextInput
+                  label="Monto de compra"
+                  placeholder="Ej. 3500"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors.amount?.message}
+                  keyboardType="decimal-pad"
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="purchaseDate"
+              render={({ field: { value, onChange, onBlur } }) => (
+                <AppTextInput
+                  label="Fecha de compra"
+                  placeholder="YYYY-MM-DD"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  error={errors.purchaseDate?.message}
+                  autoCapitalize="none"
+                />
+              )}
+            />
+          </View>
+
+          <View className="mt-6 gap-3">
+            <AppButton
+              title={simulating ? "Simulando..." : "Simular compra"}
+              onPress={handleSubmit(handleSimulation)}
+              disabled={simulating}
+            />
+
+            {result ? (
+              <AppButton
+                title="Limpiar resultado"
+                variant="secondary"
+                onPress={clear}
+                disabled={simulating}
+              />
+            ) : null}
+          </View>
+        </View>
+
+        {simulating ? (
+          <View className="items-center justify-center rounded-3xl bg-white p-6">
+            <ActivityIndicator />
+
+            <Text className="mt-3 text-sm text-slate-500">
+              Calculando mejor tarjeta...
+            </Text>
+          </View>
+        ) : null}
+
+        {error ? (
+          <View className="rounded-3xl bg-red-50 p-5">
+            <Text className="text-base font-semibold text-red-700">
+              No se pudo simular la compra
+            </Text>
+
+            <Text className="mt-1 text-sm text-red-600">{error}</Text>
+          </View>
+        ) : null}
+
+        {result ? (
+          <View className="gap-5">
+            <View className="rounded-3xl bg-white p-5">
+              <Text className="text-base font-semibold text-slate-900">
+                Resultado
+              </Text>
+
+              <Text className="mt-2 text-sm text-slate-500">
+                Compra simulada por {formatCurrency(result.amount)} el{" "}
+                {result.purchaseDate}.
+              </Text>
+
+              <Text className="mt-4 text-base text-slate-700">
+                {result.summary}
+              </Text>
+            </View>
+
+            {result.recommendedCard ? (
+              <RecommendedCardCard result={result.recommendedCard} />
+            ) : (
+              <View className="rounded-3xl bg-amber-50 p-5">
+                <Text className="text-base font-semibold text-amber-800">
+                  Sin tarjeta recomendada
+                </Text>
+
+                <Text className="mt-1 text-sm text-amber-700">
+                  Ninguna tarjeta activa tiene crédito disponible suficiente
+                  para esta compra.
+                </Text>
+              </View>
+            )}
+
+            {result.eligibleCards.length > 0 ? (
+              <View className="gap-3">
+                <Text className="text-lg font-bold text-slate-950">
+                  Tarjetas elegibles
+                </Text>
+
+                {result.eligibleCards.map((cardResult) => (
+                  <SimulationCardResult
+                    key={cardResult.card.id}
+                    result={cardResult}
+                  />
+                ))}
+              </View>
+            ) : null}
+
+            {result.ineligibleCards.length > 0 ? (
+              <View className="gap-3">
+                <Text className="text-lg font-bold text-slate-950">
+                  Tarjetas no elegibles
+                </Text>
+
+                {result.ineligibleCards.map((cardResult) => (
+                  <SimulationCardResult
+                    key={cardResult.card.id}
+                    result={cardResult}
+                  />
+                ))}
+              </View>
+            ) : null}
+          </View>
+        ) : null}
+      </View>
+    </ScreenContainer>
+  );
+}
+
+interface SimulationCardResultProps {
+  result: PurchaseSimulationCardResult;
+}
+
+function RecommendedCardCard({ result }: SimulationCardResultProps) {
+  return (
+    <View className="rounded-3xl bg-blue-600 p-5">
+      <Text className="text-sm font-medium text-blue-100">
+        Tarjeta recomendada
+      </Text>
+
+      <Text className="mt-1 text-2xl font-bold text-white">
+        {result.card.alias}
+      </Text>
+
+      <Text className="mt-1 text-sm text-blue-100">{result.card.bank}</Text>
+
+      <View className="mt-5 gap-3">
+        <View className="rounded-2xl bg-blue-500 p-4">
+          <Text className="text-xs text-blue-100">Tiempo estimado para pagar</Text>
+
+          <Text className="mt-1 text-xl font-bold text-white">
+            {result.estimatedDaysToPay ?? "-"} día(s)
+          </Text>
+        </View>
+
+        <View className="flex-row gap-3">
+          <View className="flex-1 rounded-2xl bg-blue-500 p-4">
+            <Text className="text-xs text-blue-100">Corte estimado</Text>
+
+            <Text className="mt-1 text-sm font-semibold text-white">
+              {result.estimatedCutoffDate ?? "-"}
+            </Text>
+          </View>
+
+          <View className="flex-1 rounded-2xl bg-blue-500 p-4">
+            <Text className="text-xs text-blue-100">Pago estimado</Text>
+
+            <Text className="mt-1 text-sm font-semibold text-white">
+              {result.estimatedPaymentDueDate ?? "-"}
+            </Text>
+          </View>
+        </View>
+
+        <Text className="text-sm text-blue-100">{result.reason}</Text>
+      </View>
+    </View>
+  );
+}
+
+function SimulationCardResult({ result }: SimulationCardResultProps) {
+  const containerClass = result.eligible
+    ? "rounded-3xl bg-white p-5"
+    : "rounded-3xl bg-slate-200 p-5";
+
+  return (
+    <View className={containerClass}>
+      <View className="flex-row items-start justify-between gap-4">
+        <View className="flex-1">
+          <Text className="text-lg font-semibold text-slate-950">
+            {result.card.alias}
+          </Text>
+
+          <Text className="mt-1 text-sm text-slate-500">
+            {result.card.bank}
+          </Text>
+        </View>
+
+        <View
+          className={
+            result.eligible
+              ? "rounded-full bg-emerald-50 px-3 py-1"
+              : "rounded-full bg-red-50 px-3 py-1"
+          }
+        >
+          <Text
+            className={
+              result.eligible
+                ? "text-xs font-semibold text-emerald-700"
+                : "text-xs font-semibold text-red-700"
+            }
+          >
+            {result.eligible ? "Elegible" : "No elegible"}
+          </Text>
+        </View>
+      </View>
+
+      <View className="mt-4 gap-3">
+        <View className="rounded-2xl bg-slate-100 p-4">
+          <Text className="text-xs text-slate-500">Crédito disponible</Text>
+
+          <Text className="mt-1 text-base font-semibold text-slate-950">
+            {formatCurrency(result.availableCredit)}
+          </Text>
+        </View>
+
+        <View className="flex-row gap-3">
+          <View className="flex-1 rounded-2xl bg-slate-100 p-4">
+            <Text className="text-xs text-slate-500">Corte estimado</Text>
+
+            <Text className="mt-1 text-sm font-semibold text-slate-950">
+              {result.estimatedCutoffDate ?? "-"}
+            </Text>
+          </View>
+
+          <View className="flex-1 rounded-2xl bg-slate-100 p-4">
+            <Text className="text-xs text-slate-500">Pago estimado</Text>
+
+            <Text className="mt-1 text-sm font-semibold text-slate-950">
+              {result.estimatedPaymentDueDate ?? "-"}
+            </Text>
+          </View>
+        </View>
+
+        <Text className="text-sm text-slate-500">{result.reason}</Text>
+      </View>
+    </View>
+  );
+}
