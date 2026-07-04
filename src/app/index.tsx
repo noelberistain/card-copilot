@@ -21,11 +21,13 @@ export default function HomeScreen() {
 
         <View className="gap-3">
           <AppButton title="Agregar tarjeta" onPress={() => router.push("/cards/new")} />
-          <AppButton
-            title="Simular compra"
-            variant="secondary"
-            onPress={() => router.push({ pathname: "/simulator" })}
-          />
+          {cards.length > 0 ? (
+            <AppButton
+              title="Simular compra"
+              variant="secondary"
+              onPress={() => router.push({ pathname: "/simulator" })}
+            />
+          ) : null}
         </View>
 
         {loading ? (
@@ -50,7 +52,7 @@ export default function HomeScreen() {
         {!loading && !error && cards.length === 0 ? (
           <EmptyState
             title="Aún no tienes tarjetas"
-            message="Agrega tu primera tarjeta para empezar a darle seguimiento."
+            message="Agrega tu primera tarjeta para empezar a darle seguimiento. Después podrás simular compras y comparar qué tarjeta te conviene usar."
           />
         ) : null}
 
