@@ -19,7 +19,14 @@ export default function HomeScreen() {
           </Text>
         </View>
 
-        <AppButton title="Agregar tarjeta" onPress={() => router.push("/cards/new")} />
+        <View className="gap-3">
+          <AppButton title="Agregar tarjeta" onPress={() => router.push("/cards/new")} />
+          <AppButton
+            title="Simular compra"
+            variant="secondary"
+            onPress={() => router.push({ pathname: "/simulator" })}
+          />
+        </View>
 
         {loading ? (
           <View className="items-center justify-center py-10">
