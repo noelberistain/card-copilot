@@ -24,16 +24,9 @@ export const purchaseSimulationSchema = z.object({
         .positive("El monto de la compra debe ser mayor a 0.")
     ),
 
-  purchaseDate: z
-    .string()
-    .trim()
-    .regex(datePattern, "Usa formato YYYY-MM-DD."),
+  purchaseDate: z.string().trim().regex(datePattern, "Usa formato YYYY-MM-DD."),
 });
 
-export type PurchaseSimulationFormInput = z.input<
-  typeof purchaseSimulationSchema
->;
+export type PurchaseSimulationFormInput = z.input<typeof purchaseSimulationSchema>;
 
-export type PurchaseSimulationFormValues = z.output<
-  typeof purchaseSimulationSchema
->;
+export type PurchaseSimulationFormValues = z.output<typeof purchaseSimulationSchema>;

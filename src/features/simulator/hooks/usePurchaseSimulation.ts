@@ -2,11 +2,11 @@ import { useCallback, useMemo, useState } from "react";
 
 import { SqliteCardsPersistence } from "@/data/persistence/cards.persistence";
 import { SqliteCardSnapshotsPersistence } from "@/data/persistence/cardSnapshots.persistence";
+import type { PurchaseSimulationFormValues } from "@/features/simulator/schemas/purchaseSimulation.schema";
 import {
   buildPurchaseSimulationResult,
   type PurchaseSimulationResult,
 } from "@/features/simulator/services/buildPurchaseSimulationResult";
-import type { PurchaseSimulationFormValues } from "@/features/simulator/schemas/purchaseSimulation.schema";
 
 export function usePurchaseSimulation() {
   const [result, setResult] = useState<PurchaseSimulationResult | null>(null);
@@ -14,10 +14,7 @@ export function usePurchaseSimulation() {
   const [error, setError] = useState<string | null>(null);
 
   const cardsPersistence = useMemo(() => new SqliteCardsPersistence(), []);
-  const snapshotsPersistence = useMemo(
-    () => new SqliteCardSnapshotsPersistence(),
-    []
-  );
+  const snapshotsPersistence = useMemo(() => new SqliteCardSnapshotsPersistence(), []);
 
   const simulate = useCallback(
     async (values: PurchaseSimulationFormValues) => {
@@ -29,8 +26,7 @@ export function usePurchaseSimulation() {
 
         const cardsWithSnapshots = await Promise.all(
           activeCards.map(async (card) => {
-            const latestSnapshot =
-              await snapshotsPersistence.findLatestByCardId(card.id);
+            const latestSnapshot = await snapshotsPersistence.findLatestByCardId(card.id);
 
             return {
               card,
