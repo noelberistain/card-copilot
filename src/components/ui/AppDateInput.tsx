@@ -1,8 +1,6 @@
 import { useMemo, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
-import DateTimePicker, {
-  type DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, isValid, parseISO } from "date-fns";
 
 interface AppDateInputProps {
@@ -39,12 +37,7 @@ export function AppDateInput({
     setShowPicker(true);
   }
 
-  function handleChange(event: DateTimePickerEvent, date?: Date) {
-    if (event.type === "dismissed") {
-      setShowPicker(false);
-      return;
-    }
-
+  function handleValueChange(_event: unknown, date?: Date) {
     if (!date) return;
 
     if (Platform.OS === "android") {
@@ -54,6 +47,10 @@ export function AppDateInput({
     }
 
     setDraftDate(date);
+  }
+
+  function handleDismiss() {
+    setShowPicker(false);
   }
 
   function confirmIosDate() {
@@ -90,13 +87,14 @@ export function AppDateInput({
             value={draftDate}
             mode="date"
             display={Platform.OS === "ios" ? "compact" : "default"}
-            onChange={handleChange}
+            onValueChange={handleValueChange}
+            onDismiss={handleDismiss}
           />
 
           {Platform.OS === "ios" ? (
             <View className="mt-3 flex-row gap-3">
               <Pressable
-                onPress={() => setShowPicker(false)}
+                onPress={handleDismiss}
                 className="rounded-full bg-slate-200 px-4 py-2"
               >
                 <Text className="text-sm font-semibold text-slate-700">
