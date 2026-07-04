@@ -40,6 +40,12 @@ export default function SimulatorScreen() {
     reset(emptyDefaultValues);
   }
 
+  const otherEligibleCards = result?.recommendedCard
+    ? result.eligibleCards.filter(
+        (cardResult) => cardResult.card.id !== result.recommendedCard?.card.id
+      )
+    : (result?.eligibleCards ?? []);
+
   return (
     <ScreenContainer>
       <View className="gap-6">
@@ -163,13 +169,13 @@ export default function SimulatorScreen() {
               </View>
             )}
 
-            {result.eligibleCards.length > 0 ? (
+            {otherEligibleCards.length > 0 ? (
               <View className="gap-3">
                 <Text className="text-lg font-bold text-slate-950">
                   Tarjetas elegibles
                 </Text>
 
-                {result.eligibleCards.map((cardResult) => (
+                {otherEligibleCards.map((cardResult) => (
                   <SimulationCardResult key={cardResult.card.id} result={cardResult} />
                 ))}
               </View>
