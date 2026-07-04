@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
-import { Platform, Pressable, Text, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, isValid, parseISO } from "date-fns";
+import { useMemo, useState } from "react";
+import { Platform, Pressable, Text, View } from "react-native";
 
 interface AppDateInputProps {
   label: string;
@@ -72,10 +72,7 @@ export function AppDateInput({
         ].join(" ")}
       >
         <Text
-          className={[
-            "text-base",
-            value ? "text-slate-900" : "text-slate-400",
-          ].join(" ")}
+          className={["text-base", value ? "text-slate-900" : "text-slate-400"].join(" ")}
         >
           {value || placeholder}
         </Text>
@@ -97,9 +94,7 @@ export function AppDateInput({
                 onPress={handleDismiss}
                 className="rounded-full bg-slate-200 px-4 py-2"
               >
-                <Text className="text-sm font-semibold text-slate-700">
-                  Cancelar
-                </Text>
+                <Text className="text-sm font-semibold text-slate-700">Cancelar</Text>
               </Pressable>
 
               <Pressable

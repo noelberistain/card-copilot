@@ -102,7 +102,7 @@ export default function SimulatorScreen() {
                 />
               )}
             />
-
+          </View>
           <View className="mt-6 gap-3">
             <AppButton
               title={simulating ? "Simulando..." : "Simular compra"}
