@@ -1,22 +1,13 @@
 import { Pressable, Text, View } from "react-native";
 
+import { CARD_COLOR_OPTIONS } from "@/constants/cardColors";
+
 interface AppColorInputProps {
   label: string;
   value: string | null | undefined;
   onChangeText: (value: string) => void;
   error?: string | null;
 }
-
-const colorOptions = [
-  { label: "Azul", value: "#2563eb" },
-  { label: "Morado", value: "#7c3aed" },
-  { label: "Rosa", value: "#db2777" },
-  { label: "Rojo", value: "#dc2626" },
-  { label: "Naranja", value: "#ea580c" },
-  { label: "Verde", value: "#16a34a" },
-  { label: "Negro", value: "#0f172a" },
-  { label: "Gris", value: "#64748b" },
-];
 
 export function AppColorInput({
   label,
@@ -29,7 +20,7 @@ export function AppColorInput({
       <Text className="text-sm font-medium text-slate-700">{label}</Text>
 
       <View className="flex-row flex-wrap gap-3">
-        {colorOptions.map((color) => {
+        {CARD_COLOR_OPTIONS.map((color) => {
           const selected = value === color.value;
 
           return (
