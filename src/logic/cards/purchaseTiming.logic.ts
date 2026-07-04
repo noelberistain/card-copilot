@@ -6,13 +6,11 @@ import {
   parseISO,
 } from "date-fns";
 
-import type { Card, CardSnapshot } from "@/models/cards/card.types";
 import { getAvailableCredit } from "@/logic/cards/cardPayment.logic";
+import type { Card, CardSnapshot } from "@/models/cards/card.types";
 
 export type PurchaseSimulationEvaluationStatus =
-  | "eligible"
-  | "ineligible"
-  | "not-evaluated";
+  "eligible" | "ineligible" | "not-evaluated";
 
 export interface PurchaseSimulationCardInput {
   card: Card;
@@ -43,11 +41,7 @@ interface RankCardsForPurchaseOptions {
   purchaseDate: string;
 }
 
-function createDateWithClampedDay(
-  year: number,
-  monthIndex: number,
-  day: number
-) {
+function createDateWithClampedDay(year: number, monthIndex: number, day: number) {
   const firstDayOfMonth = new Date(year, monthIndex, 1);
   const lastDay = endOfMonth(firstDayOfMonth).getDate();
   const safeDay = Math.min(day, lastDay);
@@ -82,10 +76,7 @@ export function estimatePurchaseCutoffDate({
   return format(nextMonthCutoff, "yyyy-MM-dd");
 }
 
-export function estimatePaymentDueDateFromCutoff(
-  card: Card,
-  cutoffDate: string
-) {
+export function estimatePaymentDueDateFromCutoff(card: Card, cutoffDate: string) {
   const cutoff = parseISO(cutoffDate);
 
   const sameMonthDueDate = createDateWithClampedDay(
@@ -133,10 +124,7 @@ export function estimatePurchaseDaysToPay({
   return differenceInCalendarDays(parseISO(paymentDueDate), parseISO(purchaseDate));
 }
 
-export function isCardEligibleForPurchase(
-  amount: number,
-  availableCredit: number
-) {
+export function isCardEligibleForPurchase(amount: number, availableCredit: number) {
   return amount > 0 && availableCredit >= amount;
 }
 
@@ -235,17 +223,11 @@ export function rankCardsForPurchase({
       return 1;
     }
 
-    if (
-      a.evaluationStatus === "ineligible" &&
-      b.evaluationStatus === "not-evaluated"
-    ) {
+    if (a.evaluationStatus === "ineligible" && b.evaluationStatus === "not-evaluated") {
       return -1;
     }
 
-    if (
-      a.evaluationStatus === "not-evaluated" &&
-      b.evaluationStatus === "ineligible"
-    ) {
+    if (a.evaluationStatus === "not-evaluated" && b.evaluationStatus === "ineligible") {
       return 1;
     }
 

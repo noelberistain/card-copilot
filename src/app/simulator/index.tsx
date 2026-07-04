@@ -1,16 +1,16 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { ActivityIndicator, Text, View } from "react-native";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { AppButton, AppTextInput, ScreenContainer } from "@/components/ui";
-import { formatCurrency } from "@/lib/money/formatCurrency";
+import { usePurchaseSimulation } from "@/features/simulator/hooks/usePurchaseSimulation";
 import {
   purchaseSimulationSchema,
   type PurchaseSimulationFormInput,
   type PurchaseSimulationFormValues,
 } from "@/features/simulator/schemas/purchaseSimulation.schema";
-import { usePurchaseSimulation } from "@/features/simulator/hooks/usePurchaseSimulation";
+import { formatCurrency } from "@/lib/money/formatCurrency";
 import type { PurchaseSimulationCardResult } from "@/logic/cards/purchaseTiming.logic";
 
 const emptyDefaultValues: PurchaseSimulationFormInput = {
@@ -26,11 +26,7 @@ export default function SimulatorScreen() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<
-    PurchaseSimulationFormInput,
-    unknown,
-    PurchaseSimulationFormValues
-  >({
+  } = useForm<PurchaseSimulationFormInput, unknown, PurchaseSimulationFormValues>({
     resolver: zodResolver(purchaseSimulationSchema),
     defaultValues: emptyDefaultValues,
   });
@@ -39,7 +35,7 @@ export default function SimulatorScreen() {
     ? result.eligibleCards.filter(
         (cardResult) => cardResult.card.id !== result.recommendedCard?.card.id
       )
-    : result?.eligibleCards ?? [];
+    : (result?.eligibleCards ?? []);
 
   async function handleSimulation(values: PurchaseSimulationFormValues) {
     await simulate(values);
@@ -54,13 +50,11 @@ export default function SimulatorScreen() {
     <ScreenContainer>
       <View className="gap-6">
         <View>
-          <Text className="text-3xl font-bold text-slate-950">
-            Simulador de compra
-          </Text>
+          <Text className="text-3xl font-bold text-slate-950">Simulador de compra</Text>
 
           <Text className="mt-2 text-base text-slate-500">
-            Ingresa una compra y te ayudamos a estimar con cuál tarjeta podrías
-            tener más tiempo para pagar.
+            Ingresa una compra y te ayudamos a estimar con cuál tarjeta podrías tener más
+            tiempo para pagar.
           </Text>
         </View>
 
@@ -154,18 +148,14 @@ export default function SimulatorScreen() {
         {result ? (
           <View className="gap-5">
             <View className="rounded-3xl bg-white p-5">
-              <Text className="text-base font-semibold text-slate-900">
-                Resultado
-              </Text>
+              <Text className="text-base font-semibold text-slate-900">Resultado</Text>
 
               <Text className="mt-2 text-sm text-slate-500">
                 Compra simulada por {formatCurrency(result.amount)} el{" "}
                 {result.purchaseDate}.
               </Text>
 
-              <Text className="mt-4 text-base text-slate-700">
-                {result.summary}
-              </Text>
+              <Text className="mt-4 text-base text-slate-700">{result.summary}</Text>
             </View>
 
             {result.recommendedCard ? (
@@ -177,8 +167,8 @@ export default function SimulatorScreen() {
                 </Text>
 
                 <Text className="mt-1 text-sm text-amber-700">
-                  Ninguna tarjeta evaluada tiene crédito disponible suficiente
-                  para esta compra.
+                  Ninguna tarjeta evaluada tiene crédito disponible suficiente para esta
+                  compra.
                 </Text>
               </View>
             )}
@@ -190,10 +180,7 @@ export default function SimulatorScreen() {
                 </Text>
 
                 {otherEligibleCards.map((cardResult) => (
-                  <SimulationCardResult
-                    key={cardResult.card.id}
-                    result={cardResult}
-                  />
+                  <SimulationCardResult key={cardResult.card.id} result={cardResult} />
                 ))}
               </View>
             ) : null}
@@ -205,10 +192,7 @@ export default function SimulatorScreen() {
                 </Text>
 
                 {result.ineligibleCards.map((cardResult) => (
-                  <SimulationCardResult
-                    key={cardResult.card.id}
-                    result={cardResult}
-                  />
+                  <SimulationCardResult key={cardResult.card.id} result={cardResult} />
                 ))}
               </View>
             ) : null}
@@ -220,16 +204,13 @@ export default function SimulatorScreen() {
                 </Text>
 
                 <Text className="text-sm text-slate-500">
-                  Estas tarjetas no fueron consideradas para la recomendación
-                  porque no tienen un estado capturado. Captura un snapshot para
-                  conocer su crédito disponible real.
+                  Estas tarjetas no fueron consideradas para la recomendación porque no
+                  tienen un estado capturado. Captura un snapshot para conocer su crédito
+                  disponible real.
                 </Text>
 
                 {result.notEvaluatedCards.map((cardResult) => (
-                  <SimulationCardResult
-                    key={cardResult.card.id}
-                    result={cardResult}
-                  />
+                  <SimulationCardResult key={cardResult.card.id} result={cardResult} />
                 ))}
               </View>
             ) : null}
@@ -247,21 +228,15 @@ interface SimulationCardResultProps {
 function RecommendedCardCard({ result }: SimulationCardResultProps) {
   return (
     <View className="rounded-3xl bg-blue-600 p-5">
-      <Text className="text-sm font-medium text-blue-100">
-        Tarjeta recomendada
-      </Text>
+      <Text className="text-sm font-medium text-blue-100">Tarjeta recomendada</Text>
 
-      <Text className="mt-1 text-2xl font-bold text-white">
-        {result.card.alias}
-      </Text>
+      <Text className="mt-1 text-2xl font-bold text-white">{result.card.alias}</Text>
 
       <Text className="mt-1 text-sm text-blue-100">{result.card.bank}</Text>
 
       <View className="mt-5 gap-3">
         <View className="rounded-2xl bg-blue-500 p-4">
-          <Text className="text-xs text-blue-100">
-            Tiempo estimado para pagar
-          </Text>
+          <Text className="text-xs text-blue-100">Tiempo estimado para pagar</Text>
 
           <Text className="mt-1 text-xl font-bold text-white">
             {result.estimatedDaysToPay ?? "-"} día(s)
@@ -309,9 +284,7 @@ function SimulationCardResult({ result }: SimulationCardResultProps) {
             {result.card.alias}
           </Text>
 
-          <Text className="mt-1 text-sm text-slate-500">
-            {result.card.bank}
-          </Text>
+          <Text className="mt-1 text-sm text-slate-500">{result.card.bank}</Text>
         </View>
 
         <StatusBadge result={result} />
@@ -371,9 +344,7 @@ function StatusBadge({ result }: SimulationCardResultProps) {
   if (result.evaluationStatus === "not-evaluated") {
     return (
       <View className="rounded-full bg-amber-100 px-3 py-1">
-        <Text className="text-xs font-semibold text-amber-700">
-          No evaluada
-        </Text>
+        <Text className="text-xs font-semibold text-amber-700">No evaluada</Text>
       </View>
     );
   }
@@ -381,9 +352,7 @@ function StatusBadge({ result }: SimulationCardResultProps) {
   if (result.eligible) {
     return (
       <View className="rounded-full bg-emerald-50 px-3 py-1">
-        <Text className="text-xs font-semibold text-emerald-700">
-          Elegible
-        </Text>
+        <Text className="text-xs font-semibold text-emerald-700">Elegible</Text>
       </View>
     );
   }
