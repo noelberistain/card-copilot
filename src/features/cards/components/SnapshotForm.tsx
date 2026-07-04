@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 
-import { AppButton, AppTextInput } from "@/components/ui";
+import { AppButton, AppDateInput, AppTextInput } from "@/components/ui";
 import {
   snapshotFormSchema,
   type SnapshotFormInput,
@@ -118,15 +118,12 @@ export function SnapshotForm({
         <Controller
           control={control}
           name="lastCutoffDate"
-          render={({ field: { value, onChange, onBlur } }) => (
-            <AppTextInput
+          render={({ field: { value, onChange } }) => (
+            <AppDateInput
               label="Fecha del último corte"
-              placeholder="YYYY-MM-DD"
               value={value}
               onChangeText={onChange}
-              onBlur={onBlur}
               error={errors.lastCutoffDate?.message}
-              autoCapitalize="none"
             />
           )}
         />
@@ -134,15 +131,12 @@ export function SnapshotForm({
         <Controller
           control={control}
           name="paymentDueDate"
-          render={({ field: { value, onChange, onBlur } }) => (
-            <AppTextInput
+          render={({ field: { value, onChange } }) => (
+            <AppDateInput
               label="Fecha límite de pago"
-              placeholder="YYYY-MM-DD"
               value={value}
               onChangeText={onChange}
-              onBlur={onBlur}
               error={errors.paymentDueDate?.message}
-              autoCapitalize="none"
             />
           )}
         />
