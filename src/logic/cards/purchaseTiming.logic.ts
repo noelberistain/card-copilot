@@ -1,7 +1,18 @@
-import { addMonths, differenceInCalendarDays, endOfMonth, format, parseISO } from "date-fns";
+import {
+  addMonths,
+  differenceInCalendarDays,
+  endOfMonth,
+  format,
+  parseISO,
+} from "date-fns";
 
 import type { Card, CardSnapshot } from "@/models/cards/card.types";
 import { getAvailableCredit } from "@/logic/cards/cardPayment.logic";
+
+export type PurchaseSimulationEvaluationStatus =
+  | "eligible"
+  | "ineligible"
+  | "not-evaluated";
 
 export interface PurchaseSimulationCardInput {
   card: Card;
@@ -12,6 +23,7 @@ export interface PurchaseSimulationCardResult {
   card: Card;
   latestSnapshot: CardSnapshot | null;
   eligible: boolean;
+  evaluationStatus: PurchaseSimulationEvaluationStatus;
   reason: string;
   availableCredit: number;
   estimatedCutoffDate: string | null;
@@ -70,7 +82,10 @@ export function estimatePurchaseCutoffDate({
   return format(nextMonthCutoff, "yyyy-MM-dd");
 }
 
-export function estimatePaymentDueDateFromCutoff(card: Card, cutoffDate: string) {
+export function estimatePaymentDueDateFromCutoff(
+  card: Card,
+  cutoffDate: string
+) {
   const cutoff = parseISO(cutoffDate);
 
   const sameMonthDueDate = createDateWithClampedDay(
@@ -134,12 +149,6 @@ export function buildPurchaseSimulationCardResult({
   amount: number;
   purchaseDate: string;
 }): PurchaseSimulationCardResult {
-  const availableCredit = latestSnapshot
-    ? getAvailableCredit(card, latestSnapshot)
-    : card.creditLimit;
-
-  const eligible = isCardEligibleForPurchase(amount, availableCredit);
-
   const estimatedCutoffDate = estimatePurchaseCutoffDate({
     card,
     purchaseDate,
@@ -155,11 +164,31 @@ export function buildPurchaseSimulationCardResult({
     purchaseDate,
   });
 
+  if (!latestSnapshot) {
+    return {
+      card,
+      latestSnapshot,
+      eligible: false,
+      evaluationStatus: "not-evaluated",
+      reason:
+        "Falta capturar el estado actual de esta tarjeta. Sin un snapshot no podemos saber su crédito disponible real.",
+      availableCredit: 0,
+      estimatedCutoffDate,
+      estimatedPaymentDueDate,
+      estimatedDaysToPay,
+      score: -1,
+    };
+  }
+
+  const availableCredit = getAvailableCredit(card, latestSnapshot);
+  const eligible = isCardEligibleForPurchase(amount, availableCredit);
+
   if (!eligible) {
     return {
       card,
       latestSnapshot,
       eligible: false,
+      evaluationStatus: "ineligible",
       reason: "No tiene crédito disponible suficiente para esta compra.",
       availableCredit,
       estimatedCutoffDate,
@@ -173,6 +202,7 @@ export function buildPurchaseSimulationCardResult({
     card,
     latestSnapshot,
     eligible: true,
+    evaluationStatus: "eligible",
     reason: `Tendrías aproximadamente ${estimatedDaysToPay} día(s) para pagar esta compra.`,
     availableCredit,
     estimatedCutoffDate,
@@ -197,8 +227,27 @@ export function rankCardsForPurchase({
   );
 
   return results.sort((a, b) => {
-    if (a.eligible && !b.eligible) return -1;
-    if (!a.eligible && b.eligible) return 1;
+    if (a.evaluationStatus === "eligible" && b.evaluationStatus !== "eligible") {
+      return -1;
+    }
+
+    if (a.evaluationStatus !== "eligible" && b.evaluationStatus === "eligible") {
+      return 1;
+    }
+
+    if (
+      a.evaluationStatus === "ineligible" &&
+      b.evaluationStatus === "not-evaluated"
+    ) {
+      return -1;
+    }
+
+    if (
+      a.evaluationStatus === "not-evaluated" &&
+      b.evaluationStatus === "ineligible"
+    ) {
+      return 1;
+    }
 
     return b.score - a.score;
   });
