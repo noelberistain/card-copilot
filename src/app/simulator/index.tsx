@@ -24,6 +24,7 @@ export default function SimulatorScreen() {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<PurchaseSimulationFormInput, unknown, PurchaseSimulationFormValues>({
     resolver: zodResolver(purchaseSimulationSchema),
@@ -32,6 +33,11 @@ export default function SimulatorScreen() {
 
   async function handleSimulation(values: PurchaseSimulationFormValues) {
     await simulate(values);
+  }
+
+  function handleClear() {
+    clear();
+    reset(emptyDefaultValues);
   }
 
   return (
@@ -102,7 +108,7 @@ export default function SimulatorScreen() {
               <AppButton
                 title="Limpiar resultado"
                 variant="secondary"
-                onPress={clear}
+                onPress={handleClear}
                 disabled={simulating}
               />
             ) : null}
