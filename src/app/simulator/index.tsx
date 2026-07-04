@@ -3,7 +3,7 @@ import { router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { ActivityIndicator, Text, View } from "react-native";
 
-import { AppButton, AppTextInput, ScreenContainer } from "@/components/ui";
+import { AppButton, AppDateInput, AppTextInput, ScreenContainer } from "@/components/ui";
 import { usePurchaseSimulation } from "@/features/simulator/hooks/usePurchaseSimulation";
 import {
   purchaseSimulationSchema,
@@ -93,19 +93,15 @@ export default function SimulatorScreen() {
             <Controller
               control={control}
               name="purchaseDate"
-              render={({ field: { value, onChange, onBlur } }) => (
-                <AppTextInput
+              render={({ field: { value, onChange } }) => (
+                <AppDateInput
                   label="Fecha de compra"
-                  placeholder="YYYY-MM-DD"
                   value={value}
                   onChangeText={onChange}
-                  onBlur={onBlur}
                   error={errors.purchaseDate?.message}
-                  autoCapitalize="none"
                 />
               )}
             />
-          </View>
 
           <View className="mt-6 gap-3">
             <AppButton
