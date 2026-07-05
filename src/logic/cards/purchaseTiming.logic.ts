@@ -8,13 +8,11 @@ import {
 
 import { formatHumanDate } from "@/lib/date/formatHumanDate";
 
-import type { Card, CardSnapshot } from "@/models/cards/card.types";
 import { getAvailableCredit } from "@/logic/cards/cardPayment.logic";
+import type { Card, CardSnapshot } from "@/models/cards/card.types";
 
 export type PurchaseSimulationEvaluationStatus =
-  | "eligible"
-  | "ineligible"
-  | "not-evaluated";
+  "eligible" | "ineligible" | "not-evaluated";
 
 export interface PurchaseSimulationCardInput {
   card: Card;
@@ -52,11 +50,7 @@ interface BuildEligiblePurchaseReasonOptions {
   estimatedDaysToPay: number | null;
 }
 
-function createDateWithClampedDay(
-  year: number,
-  monthIndex: number,
-  day: number
-) {
+function createDateWithClampedDay(year: number, monthIndex: number, day: number) {
   const firstDayOfMonth = new Date(year, monthIndex, 1);
   const lastDay = endOfMonth(firstDayOfMonth).getDate();
   const safeDay = Math.min(day, lastDay);
@@ -70,11 +64,7 @@ function buildEligiblePurchaseReason({
   estimatedPaymentDueDate,
   estimatedDaysToPay,
 }: BuildEligiblePurchaseReasonOptions) {
-  if (
-    !estimatedCutoffDate ||
-    !estimatedPaymentDueDate ||
-    estimatedDaysToPay === null
-  ) {
+  if (!estimatedCutoffDate || !estimatedPaymentDueDate || estimatedDaysToPay === null) {
     return "Esta tarjeta es elegible, pero no pudimos estimar completamente sus fechas de corte y pago.";
   }
 
@@ -82,7 +72,9 @@ function buildEligiblePurchaseReason({
   const cutoffDateText = formatHumanDate(estimatedCutoffDate);
   const paymentDueDateText = formatHumanDate(estimatedPaymentDueDate);
 
-  return `Si compras ${purchaseDateText}, el próximo corte de esta tarjeta podría ser el ${cutoffDateText}. Después, la fecha estimada de pago sería el ${paymentDueDateText}. Por eso tendrías aproximadamente ${estimatedDaysToPay} día(s) para pagar esta compra.`;
+  const purchaseDatePrefix = purchaseDateText === "hoy" ? "" : "el ";
+
+  return `Si compras ${purchaseDatePrefix}${purchaseDateText}, el próximo corte de esta tarjeta podría ser el ${cutoffDateText}. Entonces, la siguiente fecha estimada de pago sería el ${paymentDueDateText}. Por eso tendrías aproximadamente ${estimatedDaysToPay} día(s) para pagar esta compra.`;
 }
 
 export function estimatePurchaseCutoffDate({
@@ -112,10 +104,7 @@ export function estimatePurchaseCutoffDate({
   return format(nextMonthCutoff, "yyyy-MM-dd");
 }
 
-export function estimatePaymentDueDateFromCutoff(
-  card: Card,
-  cutoffDate: string
-) {
+export function estimatePaymentDueDateFromCutoff(card: Card, cutoffDate: string) {
   const cutoff = parseISO(cutoffDate);
 
   const sameMonthDueDate = createDateWithClampedDay(
@@ -160,16 +149,10 @@ export function estimatePurchaseDaysToPay({
     purchaseDate,
   });
 
-  return differenceInCalendarDays(
-    parseISO(paymentDueDate),
-    parseISO(purchaseDate)
-  );
+  return differenceInCalendarDays(parseISO(paymentDueDate), parseISO(purchaseDate));
 }
 
-export function isCardEligibleForPurchase(
-  amount: number,
-  availableCredit: number
-) {
+export function isCardEligibleForPurchase(amount: number, availableCredit: number) {
   return amount > 0 && availableCredit >= amount;
 }
 
@@ -273,17 +256,11 @@ export function rankCardsForPurchase({
       return 1;
     }
 
-    if (
-      a.evaluationStatus === "ineligible" &&
-      b.evaluationStatus === "not-evaluated"
-    ) {
+    if (a.evaluationStatus === "ineligible" && b.evaluationStatus === "not-evaluated") {
       return -1;
     }
 
-    if (
-      a.evaluationStatus === "not-evaluated" &&
-      b.evaluationStatus === "ineligible"
-    ) {
+    if (a.evaluationStatus === "not-evaluated" && b.evaluationStatus === "ineligible") {
       return 1;
     }
 
