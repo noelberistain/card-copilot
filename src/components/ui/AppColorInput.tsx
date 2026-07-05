@@ -11,7 +11,7 @@ interface AppColorInputProps {
 
 export function AppColorInput({
   label,
-  value,
+  value: selectedColor,
   onChangeText,
   error,
 }: AppColorInputProps) {
@@ -20,37 +20,38 @@ export function AppColorInput({
       <Text className="text-sm font-medium text-slate-700">{label}</Text>
 
       <View className="flex-row flex-wrap gap-3">
-        {CARD_COLOR_OPTIONS.map((color) => {
-          const selected = value === color.value;
+        {CARD_COLOR_OPTIONS.map((colorOption) => {
+          const colorValue = colorOption.value;
+          const selected = selectedColor === colorValue;
 
           return (
             <Pressable
-              key={color.value}
-              onPress={() => onChangeText(color.value)}
+              key={colorValue}
+              onPress={() => onChangeText(colorValue)}
               className={[
                 "h-12 w-12 items-center justify-center rounded-full border-2",
                 selected ? "border-slate-950" : "border-transparent",
               ].join(" ")}
               accessibilityRole="button"
-              accessibilityLabel={`Seleccionar color ${color.label}`}
+              accessibilityLabel={`Seleccionar color ${colorOption.label}`}
             >
               <View
                 className="h-9 w-9 rounded-full"
-                style={{ backgroundColor: color.value }}
+                style={{ backgroundColor: colorValue }}
               />
             </Pressable>
           );
         })}
       </View>
 
-      {value ? (
+      {selectedColor ? (
         <View className="mt-1 flex-row items-center gap-2">
           <View
             className="h-4 w-4 rounded-full"
-            style={{ backgroundColor: value }}
+            style={{ backgroundColor: selectedColor }}
           />
 
-          <Text className="text-sm text-slate-500">{value}</Text>
+          <Text className="text-sm text-slate-500">{selectedColor}</Text>
         </View>
       ) : (
         <Text className="text-sm text-slate-400">
