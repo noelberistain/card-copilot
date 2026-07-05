@@ -6,6 +6,8 @@ import {
   parseISO,
 } from "date-fns";
 
+import { formatHumanDate } from "@/lib/date/formatHumanDate";
+
 import type { Card, CardSnapshot } from "@/models/cards/card.types";
 import { getAvailableCredit } from "@/logic/cards/cardPayment.logic";
 
@@ -76,7 +78,11 @@ function buildEligiblePurchaseReason({
     return "Esta tarjeta es elegible, pero no pudimos estimar completamente sus fechas de corte y pago.";
   }
 
-  return `Si compras el ${purchaseDate}, el próximo corte de esta tarjeta podría ser el ${estimatedCutoffDate}. Después, la fecha estimada de pago sería el ${estimatedPaymentDueDate}. Por eso tendrías aproximadamente ${estimatedDaysToPay} día(s) para pagar esta compra.`;
+  const purchaseDateText = formatHumanDate(purchaseDate);
+  const cutoffDateText = formatHumanDate(estimatedCutoffDate);
+  const paymentDueDateText = formatHumanDate(estimatedPaymentDueDate);
+
+  return `Si compras ${purchaseDateText}, el próximo corte de esta tarjeta podría ser el ${cutoffDateText}. Después, la fecha estimada de pago sería el ${paymentDueDateText}. Por eso tendrías aproximadamente ${estimatedDaysToPay} día(s) para pagar esta compra.`;
 }
 
 export function estimatePurchaseCutoffDate({
