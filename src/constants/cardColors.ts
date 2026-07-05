@@ -13,4 +13,5 @@ export const CARD_COLOR_OPTIONS: CardColorOption[] = [
   { label: "Verde", value: "#16a34a", tailwindName: "green-600" },
   { label: "Negro", value: "#0f172a", tailwindName: "slate-900" },
   { label: "Gris", value: "#64748b", tailwindName: "slate-500" },
+  { label: "Gold", value: "#f59e0b", tailwindName: "yellow-500" },
 ];

@@ -44,16 +44,7 @@ export function AppColorInput({
         })}
       </View>
 
-      {selectedColor ? (
-        <View className="mt-1 flex-row items-center gap-2">
-          <View
-            className="h-4 w-4 rounded-full"
-            style={{ backgroundColor: selectedColor }}
-          />
-
-          <Text className="text-sm text-slate-500">{selectedColor}</Text>
-        </View>
-      ) : (
+      {selectedColor ? null : (
         <Text className="text-sm text-slate-400">
           Selecciona un color para identificar la tarjeta.
         </Text>
