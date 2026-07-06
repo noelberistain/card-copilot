@@ -1,5 +1,5 @@
-import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
 
 import { AppButton, ScreenContainer } from "@/components/ui";
 import { SnapshotForm } from "@/features/cards/components/SnapshotForm";
@@ -16,20 +16,13 @@ export default function EditSnapshotScreen() {
     snapshotId?: string;
   }>();
 
-  const cardId = Array.isArray(params.cardId)
-    ? params.cardId[0]
-    : params.cardId;
+  const cardId = Array.isArray(params.cardId) ? params.cardId[0] : params.cardId;
 
   const snapshotId = Array.isArray(params.snapshotId)
     ? params.snapshotId[0]
     : params.snapshotId;
 
-  const {
-    snapshot,
-    loading,
-    error: loadError,
-    refresh,
-  } = useSnapshot({ snapshotId });
+  const { snapshot, loading, error: loadError, refresh } = useSnapshot({ snapshotId });
 
   const {
     save,
@@ -79,9 +72,7 @@ export default function EditSnapshotScreen() {
     return (
       <ScreenContainer>
         <View className="gap-4">
-          <Text className="text-3xl font-bold text-slate-950">
-            No se pudo cargar
-          </Text>
+          <Text className="text-3xl font-bold text-slate-950">No se pudo cargar</Text>
 
           <Text className="text-base text-slate-500">
             {loadError ?? "No se encontró el estado capturado solicitado."}
@@ -89,11 +80,7 @@ export default function EditSnapshotScreen() {
 
           <AppButton title="Reintentar" onPress={refresh} />
 
-          <AppButton
-            title="Volver"
-            variant="secondary"
-            onPress={() => router.back()}
-          />
+          <AppButton title="Volver" variant="secondary" onPress={() => router.back()} />
         </View>
       </ScreenContainer>
     );
@@ -113,13 +100,11 @@ export default function EditSnapshotScreen() {
     <ScreenContainer>
       <View className="gap-6">
         <View>
-          <Text className="text-3xl font-bold text-slate-950">
-            Editar estado
-          </Text>
+          <Text className="text-3xl font-bold text-slate-950">Editar estado</Text>
 
           <Text className="mt-2 text-base text-slate-500">
-            Corrige los datos capturados si cometiste un error al registrar el
-            estado de la tarjeta.
+            Corrige los datos capturados si cometiste un error al registrar el estado de
+            la tarjeta.
           </Text>
 
           <Text className="mt-2 text-sm text-slate-400">

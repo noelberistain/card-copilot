@@ -1,20 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { SqliteCardSnapshotsPersistence } from "@/data/persistence/cardSnapshots.persistence";
-import type { CardSnapshot } from "@/models/cards/card.types";
 import type { SnapshotFormValues } from "@/features/cards/schemas/snapshotForm.schema";
-import { createId } from "@/lib/ids/createId";
 import { nowIso } from "@/lib/date/nowIso";
+import { createId } from "@/lib/ids/createId";
+import type { CardSnapshot } from "@/models/cards/card.types";
 
 interface UseSaveSnapshotOptions {
   cardId: string;
   initialSnapshot?: CardSnapshot;
 }
 
-export function useSaveSnapshot({
-  cardId,
-  initialSnapshot,
-}: UseSaveSnapshotOptions) {
+export function useSaveSnapshot({ cardId, initialSnapshot }: UseSaveSnapshotOptions) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

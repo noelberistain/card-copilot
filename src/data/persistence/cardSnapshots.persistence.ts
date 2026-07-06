@@ -5,24 +5,23 @@ import { cardSnapshots } from "@/db/schema/cardSnapshots";
 import type { CardSnapshot } from "@/models/cards/card.types";
 
 export class SqliteCardSnapshotsPersistence {
-
   async update(snapshot: CardSnapshot): Promise<void> {
-  await db
-    .update(cardSnapshots)
-    .set({
-      capturedAt: snapshot.capturedAt,
-      currentBalance: snapshot.currentBalance,
-      statementBalance: snapshot.statementBalance,
-      minimumPayment: snapshot.minimumPayment,
-      paymentToAvoidInterest: snapshot.paymentToAvoidInterest,
-      lastCutoffDate: snapshot.lastCutoffDate,
-      paymentDueDate: snapshot.paymentDueDate,
-      notes: snapshot.notes,
-      updatedAt: snapshot.updatedAt,
-    })
-    .where(eq(cardSnapshots.id, snapshot.id));
-}
-  
+    await db
+      .update(cardSnapshots)
+      .set({
+        capturedAt: snapshot.capturedAt,
+        currentBalance: snapshot.currentBalance,
+        statementBalance: snapshot.statementBalance,
+        minimumPayment: snapshot.minimumPayment,
+        paymentToAvoidInterest: snapshot.paymentToAvoidInterest,
+        lastCutoffDate: snapshot.lastCutoffDate,
+        paymentDueDate: snapshot.paymentDueDate,
+        notes: snapshot.notes,
+        updatedAt: snapshot.updatedAt,
+      })
+      .where(eq(cardSnapshots.id, snapshot.id));
+  }
+
   async create(snapshot: CardSnapshot): Promise<void> {
     await db.insert(cardSnapshots).values(snapshot);
   }
