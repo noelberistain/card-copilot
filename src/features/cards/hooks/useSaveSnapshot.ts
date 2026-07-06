@@ -1,16 +1,20 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { SqliteCardSnapshotsPersistence } from "@/data/persistence/cardSnapshots.persistence";
-import type { SnapshotFormValues } from "@/features/cards/schemas/snapshotForm.schema";
-import { nowIso } from "@/lib/date/nowIso";
-import { createId } from "@/lib/ids/createId";
 import type { CardSnapshot } from "@/models/cards/card.types";
+import type { SnapshotFormValues } from "@/features/cards/schemas/snapshotForm.schema";
+import { createId } from "@/lib/ids/createId";
+import { nowIso } from "@/lib/date/nowIso";
 
 interface UseSaveSnapshotOptions {
   cardId: string;
+  initialSnapshot?: CardSnapshot;
 }
 
-export function useSaveSnapshot({ cardId }: UseSaveSnapshotOptions) {
+export function useSaveSnapshot({
+  cardId,
+  initialSnapshot,
+}: UseSaveSnapshotOptions) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,26 +28,42 @@ export function useSaveSnapshot({ cardId }: UseSaveSnapshotOptions) {
 
         const timestamp = nowIso();
 
-        const snapshot: CardSnapshot = {
-          id: createId(),
-          cardId,
-          capturedAt: timestamp,
+        const snapshot: CardSnapshot = initialSnapshot
+          ? {
+              ...initialSnapshot,
+              currentBalance: values.currentBalance,
+              statementBalance: values.statementBalance,
+              minimumPayment: values.minimumPayment,
+              paymentToAvoidInterest: values.paymentToAvoidInterest,
+              lastCutoffDate: values.lastCutoffDate,
+              paymentDueDate: values.paymentDueDate,
+              notes: values.notes,
+              updatedAt: timestamp,
+            }
+          : {
+              id: createId(),
+              cardId,
+              capturedAt: timestamp,
 
-          currentBalance: values.currentBalance,
-          statementBalance: values.statementBalance,
-          minimumPayment: values.minimumPayment,
-          paymentToAvoidInterest: values.paymentToAvoidInterest,
+              currentBalance: values.currentBalance,
+              statementBalance: values.statementBalance,
+              minimumPayment: values.minimumPayment,
+              paymentToAvoidInterest: values.paymentToAvoidInterest,
 
-          lastCutoffDate: values.lastCutoffDate,
-          paymentDueDate: values.paymentDueDate,
+              lastCutoffDate: values.lastCutoffDate,
+              paymentDueDate: values.paymentDueDate,
 
-          notes: values.notes,
+              notes: values.notes,
 
-          createdAt: timestamp,
-          updatedAt: timestamp,
-        };
+              createdAt: timestamp,
+              updatedAt: timestamp,
+            };
 
-        await persistence.create(snapshot);
+        if (initialSnapshot) {
+          await persistence.update(snapshot);
+        } else {
+          await persistence.create(snapshot);
+        }
 
         return snapshot;
       } catch (err) {
@@ -54,7 +74,7 @@ export function useSaveSnapshot({ cardId }: UseSaveSnapshotOptions) {
         setSaving(false);
       }
     },
-    [cardId, persistence]
+    [cardId, initialSnapshot, persistence]
   );
 
   return {
