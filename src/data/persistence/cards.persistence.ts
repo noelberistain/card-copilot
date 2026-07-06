@@ -43,7 +43,7 @@ export class SqliteCardsPersistence {
       .from(cards)
       .where(eq(cards.isActive, false))
       .orderBy(asc(cards.alias));
-  
+
     return rows.map(toCard);
   }
 

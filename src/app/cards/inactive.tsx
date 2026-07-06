@@ -1,5 +1,5 @@
-import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { router } from "expo-router";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
 
 import { AppButton, EmptyState, ScreenContainer } from "@/components/ui";
 import { CardListItem } from "@/features/cards/components/CardListItem";
@@ -8,11 +8,7 @@ import { useReactivateCard } from "@/features/cards/hooks/useReactivateCard";
 
 export default function InactiveCardsScreen() {
   const { cards, loading, error, refresh } = useInactiveCards();
-  const {
-    reactivate,
-    reactivating,
-    error: reactivateError,
-  } = useReactivateCard();
+  const { reactivate, reactivating, error: reactivateError } = useReactivateCard();
 
   function handleReactivate(cardId: string, cardAlias: string) {
     Alert.alert(
@@ -29,16 +25,12 @@ export default function InactiveCardsScreen() {
             try {
               await reactivate(cardId);
 
-              Alert.alert(
-                "Tarjeta reactivada",
-                "La tarjeta volvió a estar activa.",
-                [
-                  {
-                    text: "OK",
-                    onPress: refresh,
-                  },
-                ]
-              );
+              Alert.alert("Tarjeta reactivada", "La tarjeta volvió a estar activa.", [
+                {
+                  text: "OK",
+                  onPress: refresh,
+                },
+              ]);
             } catch {
               // El hook ya registra el error.
             }
@@ -52,13 +44,11 @@ export default function InactiveCardsScreen() {
     <ScreenContainer>
       <View className="gap-6">
         <View>
-          <Text className="text-3xl font-bold text-slate-950">
-            Tarjetas inactivas
-          </Text>
+          <Text className="text-3xl font-bold text-slate-950">Tarjetas inactivas</Text>
 
           <Text className="mt-2 text-base text-slate-500">
-            Aquí puedes ver tarjetas que desactivaste y reactivarlas si quieres
-            volver a usarlas sin perder su historial.
+            Aquí puedes ver tarjetas que desactivaste y reactivarlas si quieres volver a
+            usarlas sin perder su historial.
           </Text>
         </View>
 
@@ -102,9 +92,7 @@ export default function InactiveCardsScreen() {
         ) : null}
 
         {reactivateError ? (
-          <Text className="text-sm font-medium text-red-600">
-            {reactivateError}
-          </Text>
+          <Text className="text-sm font-medium text-red-600">{reactivateError}</Text>
         ) : null}
 
         {!loading && !error && cards.length > 0 ? (

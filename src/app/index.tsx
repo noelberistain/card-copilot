@@ -20,11 +20,8 @@ export default function HomeScreen() {
         </View>
 
         <View className="gap-3">
-          <AppButton
-            title="Agregar tarjeta"
-            onPress={() => router.push("/cards/new")}
-          />
-        
+          <AppButton title="Agregar tarjeta" onPress={() => router.push("/cards/new")} />
+
           {cards.length > 0 ? (
             <AppButton
               title="Simular compra"
@@ -36,7 +33,7 @@ export default function HomeScreen() {
               }
             />
           ) : null}
-        
+
           <AppButton
             title="Ver tarjetas inactivas"
             variant="secondary"
