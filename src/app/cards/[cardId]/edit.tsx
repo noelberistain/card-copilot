@@ -140,11 +140,23 @@ export default function EditCardScreen() {
           </Text>
         </View>
 
-        <LatestSnapshotPanel
-          snapshot={latestSnapshot}
-          loading={latestSnapshotLoading}
-          error={latestSnapshotError}
-        />
+         <LatestSnapshotPanel
+            snapshot={latestSnapshot}
+            loading={latestSnapshotLoading}
+            error={latestSnapshotError}
+            onEditSnapshot={
+              latestSnapshot
+                ? () =>
+                    router.push({
+                      pathname: "/cards/[cardId]/snapshots/[snapshotId]/edit",
+                      params: {
+                        cardId: card.id,
+                        snapshotId: latestSnapshot.id,
+                      },
+                    })
+                : undefined
+            }
+          />
 
         <CardForm
           defaultValues={defaultValues}
