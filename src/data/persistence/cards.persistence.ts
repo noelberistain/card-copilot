@@ -27,6 +27,26 @@ export class SqliteCardsPersistence {
       .where(eq(cards.id, card.id));
   }
 
+  async reactivate(cardId: string): Promise<void> {
+    await db
+      .update(cards)
+      .set({
+        isActive: true,
+        updatedAt: new Date().toISOString(),
+      })
+      .where(eq(cards.id, cardId));
+  }
+
+  async findInactive(): Promise<Card[]> {
+    const rows = await db
+      .select()
+      .from(cards)
+      .where(eq(cards.isActive, false))
+      .orderBy(asc(cards.alias));
+  
+    return rows.map(toCard);
+  }
+
   async deactivate(cardId: string): Promise<void> {
     await db
       .update(cards)
