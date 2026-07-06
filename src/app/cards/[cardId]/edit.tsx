@@ -60,7 +60,7 @@ export default function EditCardScreen() {
                 [
                   {
                     text: "OK",
-                    onPress: () => router.back(),
+                    onPress: () => router.replace({ pathname: "/" }),
                   },
                 ]
               );
