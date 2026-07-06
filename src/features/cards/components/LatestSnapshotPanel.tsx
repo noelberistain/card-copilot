@@ -1,5 +1,6 @@
 import { ActivityIndicator, Text, View } from "react-native";
 
+import { AppButton } from "@/components/ui";
 import { formatCurrency } from "@/lib/money/formatCurrency";
 import type { CardSnapshot } from "@/models/cards/card.types";
 
@@ -7,19 +8,24 @@ interface LatestSnapshotPanelProps {
   snapshot: CardSnapshot | null;
   loading?: boolean;
   error?: string | null;
+  onEditSnapshot?: () => void;
 }
 
 export function LatestSnapshotPanel({
   snapshot,
   loading = false,
   error,
+  onEditSnapshot,
 }: LatestSnapshotPanelProps) {
   if (loading) {
     return (
       <View className="rounded-3xl bg-white p-5">
         <View className="flex-row items-center gap-3">
           <ActivityIndicator />
-          <Text className="text-sm text-slate-500">Cargando último estado...</Text>
+
+          <Text className="text-sm text-slate-500">
+            Cargando último estado...
+          </Text>
         </View>
       </View>
     );
@@ -45,8 +51,8 @@ export function LatestSnapshotPanel({
         </Text>
 
         <Text className="mt-1 text-sm text-slate-500">
-          Captura el estado actual de esta tarjeta para empezar a ver saldos, pagos y
-          fechas importantes.
+          Captura el estado actual de esta tarjeta para empezar a ver saldos,
+          pagos y fechas importantes.
         </Text>
       </View>
     );
@@ -65,13 +71,17 @@ export function LatestSnapshotPanel({
       <View className="mt-4 gap-3">
         <View className="rounded-2xl bg-slate-100 p-4">
           <Text className="text-xs text-slate-500">Saldo actual</Text>
+
           <Text className="mt-1 text-xl font-bold text-slate-950">
             {formatCurrency(snapshot.currentBalance)}
           </Text>
         </View>
 
         <View className="rounded-2xl bg-slate-100 p-4">
-          <Text className="text-xs text-slate-500">Pago para no generar intereses</Text>
+          <Text className="text-xs text-slate-500">
+            Pago para no generar intereses
+          </Text>
+
           <Text className="mt-1 text-xl font-bold text-slate-950">
             {formatCurrency(snapshot.paymentToAvoidInterest)}
           </Text>
@@ -80,6 +90,7 @@ export function LatestSnapshotPanel({
         <View className="flex-row gap-3">
           <View className="flex-1 rounded-2xl bg-slate-100 p-4">
             <Text className="text-xs text-slate-500">Pago mínimo</Text>
+
             <Text className="mt-1 text-base font-semibold text-slate-950">
               {formatCurrency(snapshot.minimumPayment)}
             </Text>
@@ -87,6 +98,7 @@ export function LatestSnapshotPanel({
 
           <View className="flex-1 rounded-2xl bg-slate-100 p-4">
             <Text className="text-xs text-slate-500">Fecha límite</Text>
+
             <Text className="mt-1 text-base font-semibold text-slate-950">
               {snapshot.paymentDueDate}
             </Text>
@@ -96,8 +108,19 @@ export function LatestSnapshotPanel({
         {snapshot.notes ? (
           <View className="rounded-2xl bg-slate-100 p-4">
             <Text className="text-xs text-slate-500">Notas</Text>
-            <Text className="mt-1 text-sm text-slate-700">{snapshot.notes}</Text>
+
+            <Text className="mt-1 text-sm text-slate-700">
+              {snapshot.notes}
+            </Text>
           </View>
+        ) : null}
+
+        {onEditSnapshot ? (
+          <AppButton
+            title="Editar estado capturado"
+            variant="secondary"
+            onPress={onEditSnapshot}
+          />
         ) : null}
       </View>
     </View>
