@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { ActivityIndicator, Alert, Text, View } from "react-native";
 
-import { AppButton, EmptyState, ScreenContainer } from "@/components/ui";
+import { AppButton, EmptyState, ScreenContainer, ScreenHeader } from "@/components/ui";
 import { CardListItem } from "@/features/cards/components/CardListItem";
 import { useInactiveCards } from "@/features/cards/hooks/useInactiveCards";
 import { useReactivateCard } from "@/features/cards/hooks/useReactivateCard";
@@ -43,19 +43,11 @@ export default function InactiveCardsScreen() {
   return (
     <ScreenContainer>
       <View className="gap-6">
-        <View>
-          <Text className="text-3xl font-bold text-slate-950">Tarjetas inactivas</Text>
-
-          <Text className="mt-2 text-base text-slate-500">
-            Aquí puedes ver tarjetas que desactivaste y reactivarlas si quieres volver a
-            usarlas sin perder su historial.
-          </Text>
-        </View>
-
-        <AppButton
-          title="Volver al inicio"
-          variant="secondary"
-          onPress={() =>
+        <ScreenHeader
+          title="Tarjetas inactivas"
+          subtitle="Aquí puedes ver tarjetas que desactivaste y reactivarlas si quieres volver a usarlas sin perder su historial."
+          showBackButton
+          onBackPress={() =>
             router.replace({
               pathname: "/",
             })
