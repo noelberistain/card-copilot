@@ -1,16 +1,12 @@
-import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
 
-import {
-  AppButton,
-  EmptyState,
-  ScreenContainer,
-  ScreenHeader,
-} from "@/components/ui";
+import { AppButton, EmptyState, ScreenContainer, ScreenHeader } from "@/components/ui";
 import { CardDatesPanel } from "@/features/cards/components/CardDatesPanel";
 import { CardInsightsPanel } from "@/features/cards/components/CardInsightsPanel";
 import { CardSnapshotSummary } from "@/features/cards/components/CardSnapshotSummary";
 import { useCardDetail } from "@/features/cards/hooks/useCardDetail";
+import { useDeactivateCard } from "@/features/cards/hooks/useDeactivateCard";
 import { useReactivateCard } from "@/features/cards/hooks/useReactivateCard";
 
 export default function CardDetailScreen() {
@@ -18,11 +14,8 @@ export default function CardDetailScreen() {
   const cardId = Array.isArray(params.cardId) ? params.cardId[0] : params.cardId;
 
   const { detail, loading, error, refresh } = useCardDetail({ cardId });
-  const {
-    reactivate,
-    reactivating,
-    error: reactivateError,
-  } = useReactivateCard();
+  const { reactivate, reactivating, error: reactivateError } = useReactivateCard();
+  const { deactivate, deactivating, error: deactivateError } = useDeactivateCard();
 
   async function handleReactivate() {
     if (!detail) return;
@@ -41,9 +34,45 @@ export default function CardDetailScreen() {
             try {
               await reactivate(detail.card.id);
 
+              Alert.alert("Tarjeta reactivada", "La tarjeta volvió a estar activa.", [
+                {
+                  text: "OK",
+                  onPress: () =>
+                    router.replace({
+                      pathname: "/",
+                    }),
+                },
+              ]);
+            } catch {
+              // El hook ya registra el error.
+            }
+          },
+        },
+      ]
+    );
+  }
+
+  function handleDeactivate() {
+    if (!detail) return;
+
+    Alert.alert(
+      "Desactivar tarjeta",
+      `¿Quieres desactivar "${detail.card.alias}"? La tarjeta dejará de aparecer en Home, pero conservará su historial.`,
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Desactivar",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await deactivate(detail.card.id);
+
               Alert.alert(
-                "Tarjeta reactivada",
-                "La tarjeta volvió a estar activa.",
+                "Tarjeta desactivada",
+                "La tarjeta se desactivó correctamente.",
                 [
                   {
                     text: "OK",
@@ -69,9 +98,7 @@ export default function CardDetailScreen() {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
 
-          <Text className="mt-3 text-sm text-slate-500">
-            Cargando detalle...
-          </Text>
+          <Text className="mt-3 text-sm text-slate-500">Cargando detalle...</Text>
         </View>
       </ScreenContainer>
     );
@@ -107,8 +134,8 @@ export default function CardDetailScreen() {
             </Text>
 
             <Text className="mt-1 text-sm text-amber-700">
-              Esta tarjeta está desactivada. Puedes reactivarla para que vuelva
-              a aparecer en Home y siga usando su historial.
+              Esta tarjeta está desactivada. Puedes reactivarla para que vuelva a aparecer
+              en Home y siga usando su historial.
             </Text>
 
             {reactivateError ? (
@@ -155,7 +182,6 @@ export default function CardDetailScreen() {
                 })
               }
             />
-
             <AppButton
               title="Editar tarjeta"
               variant="secondary"
@@ -167,6 +193,15 @@ export default function CardDetailScreen() {
                   },
                 })
               }
+            />
+            (deactivateError ? (
+            <Text className="text-sm font-medium text-red-600">{deactivateError}</Text>
+            ) : null)
+            <AppButton
+              title={deactivating ? "Desactivando..." : "Desactivar tarjeta"}
+              variant="danger"
+              onPress={handleDeactivate}
+              disabled={deactivating}
             />
           </View>
         ) : null}
