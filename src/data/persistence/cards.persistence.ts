@@ -27,6 +27,11 @@ export class SqliteCardsPersistence {
       .where(eq(cards.id, card.id));
   }
 
+  
+  async remove(cardId: string): Promise<void> {
+    await db.delete(cards).where(eq(cards.id, cardId));
+  }
+
   async reactivate(cardId: string): Promise<void> {
     await db
       .update(cards)
