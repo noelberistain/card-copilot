@@ -1,5 +1,6 @@
 export * from './AppButton';
 export * from './AppIconButton';
+export * from "./AppTextButton";
 export * from './AppTextInput';
 export * from './AppDateInput';
 export * from './AppColorInput';
