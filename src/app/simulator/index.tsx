@@ -3,7 +3,13 @@ import { router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { ActivityIndicator, Text, View } from "react-native";
 
-import { AppButton, AppDateInput, AppTextInput, ScreenContainer, ScreenHeader } from "@/components/ui";
+import {
+  AppButton,
+  AppDateInput,
+  AppTextInput,
+  ScreenContainer,
+  ScreenHeader,
+} from "@/components/ui";
 import { usePurchaseSimulation } from "@/features/simulator/hooks/usePurchaseSimulation";
 import {
   purchaseSimulationSchema,

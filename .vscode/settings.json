@@ -1,8 +1,8 @@
 {
-	"editor.codeActionsOnSave": {
-		"source.fixAll": "explicit",
-		"source.organizeImports": "explicit",
-		"source.sortMembers": "explicit"
-	},
-	"cSpell.words": ["cardcopilot", "nativewind", "Pressable", "worklets"]
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit",
+    "source.sortMembers": "explicit"
+  },
+  "cSpell.words": ["cardcopilot", "datetimepicker", "nativewind", "Pressable", "worklets"]
 }

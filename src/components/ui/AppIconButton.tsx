@@ -6,11 +6,7 @@ interface AppIconButtonProps {
   disabled?: boolean;
 }
 
-export function AppIconButton({
-  label,
-  onPress,
-  disabled = false,
-}: AppIconButtonProps) {
+export function AppIconButton({ label, onPress, disabled = false }: AppIconButtonProps) {
   return (
     <Pressable
       accessibilityRole="button"

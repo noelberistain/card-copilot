@@ -1,5 +1,5 @@
-import { Text, View } from "react-native";
 import { router } from "expo-router";
+import { Text, View } from "react-native";
 
 import { AppIconButton } from "@/components/ui/AppIconButton";
 
@@ -28,9 +28,7 @@ export function ScreenHeader({
   return (
     <View className="gap-3">
       <View className="flex-row items-start gap-3">
-        {showBackButton ? (
-          <AppIconButton label="←" onPress={handleBackPress} />
-        ) : null}
+        {showBackButton ? <AppIconButton label="←" onPress={handleBackPress} /> : null}
 
         <View className="flex-1">
           <Text className="text-3xl font-bold text-slate-950">{title}</Text>
