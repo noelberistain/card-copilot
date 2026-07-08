@@ -28,7 +28,10 @@ export default function InactiveCardsScreen() {
               Alert.alert("Tarjeta reactivada", "La tarjeta volvió a estar activa.", [
                 {
                   text: "OK",
-                  onPress: refresh,
+                  onPress: () =>
+                    router.replace({
+                      pathname: "/",
+                    }),
                 },
               ]);
             } catch {
