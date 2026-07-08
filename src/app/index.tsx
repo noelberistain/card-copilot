@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { ActivityIndicator, Text, View } from "react-native";
 
-import { AppButton, EmptyState, ScreenContainer } from "@/components/ui";
+import { AppButton, AppTextButton, EmptyState, ScreenContainer } from "@/components/ui";
 import { CardListItem } from "@/features/cards/components/CardListItem";
 import { useCards } from "@/features/cards/hooks/useCards";
 
@@ -20,8 +20,11 @@ export default function HomeScreen() {
         </View>
 
         <View className="gap-3">
-          <AppButton title="Agregar tarjeta" onPress={() => router.push("/cards/new")} />
-
+          <AppButton
+            title="Agregar tarjeta"
+            onPress={() => router.push("/cards/new")}
+          />
+        
           {cards.length > 0 ? (
             <AppButton
               title="Simular compra"
@@ -33,8 +36,8 @@ export default function HomeScreen() {
               }
             />
           ) : null}
-
-          <AppButton
+        
+          <AppTextButton
             title="Ver tarjetas inactivas"
             variant="secondary"
             onPress={() =>
