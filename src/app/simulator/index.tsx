@@ -3,7 +3,7 @@ import { router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { ActivityIndicator, Text, View } from "react-native";
 
-import { AppButton, AppDateInput, AppTextInput, ScreenContainer } from "@/components/ui";
+import { AppButton, AppDateInput, AppTextInput, ScreenContainer, ScreenHeader } from "@/components/ui";
 import { usePurchaseSimulation } from "@/features/simulator/hooks/usePurchaseSimulation";
 import {
   purchaseSimulationSchema,
@@ -49,25 +49,16 @@ export default function SimulatorScreen() {
   return (
     <ScreenContainer>
       <View className="gap-6">
-        <View>
-          <Text className="text-3xl font-bold text-slate-950">Simulador de compra</Text>
-
-          <Text className="mt-2 text-base text-slate-500">
-            Ingresa una compra y te ayudamos a estimar con cuál tarjeta podrías tener más
-            tiempo para pagar.
-          </Text>
-        </View>
-
-        <AppButton
-          title="Volver al inicio"
-          variant="secondary"
-          onPress={() =>
+        <ScreenHeader
+          title="Simulador de compra"
+          subtitle="Ingresa una compra y te ayudamos a estimar con cuál tarjeta podrías tener más tiempo para pagar."
+          showBackButton
+          onBackPress={() =>
             router.replace({
               pathname: "/",
             })
           }
         />
-
         <View className="rounded-3xl bg-white p-5">
           <Text className="text-base font-semibold text-slate-900">
             Datos de la compra
