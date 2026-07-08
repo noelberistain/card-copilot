@@ -1,37 +1,61 @@
-import { Pressable, Text } from 'react-native';
+import { Pressable, Text } from "react-native";
 
-type AppButtonVariant = 'primary' | 'secondary' | 'danger';
+type AppButtonVariant = "primary" | "secondary" | "danger";
+type AppButtonSize = "sm" | "md" | "lg";
 
 interface AppButtonProps {
-	title: string;
-	onPress: () => void;
-	disabled?: boolean;
-	variant?: AppButtonVariant;
+  title: string;
+  onPress: () => void;
+  disabled?: boolean;
+  variant?: AppButtonVariant;
+  size?: AppButtonSize;
+  fullWidth?: boolean;
 }
 
 const variantClasses: Record<AppButtonVariant, string> = {
-	primary: 'bg-blue-600',
-	secondary: 'bg-slate-700',
-	danger: 'bg-red-600',
+  primary: "bg-blue-600",
+  secondary: "bg-slate-700",
+  danger: "bg-red-600",
+};
+
+const sizeContainerClasses: Record<AppButtonSize, string> = {
+  sm: "rounded-xl px-3 py-2",
+  md: "rounded-2xl px-4 py-3",
+  lg: "rounded-2xl px-4 py-4",
+};
+
+const sizeTextClasses: Record<AppButtonSize, string> = {
+  sm: "text-sm",
+  md: "text-base",
+  lg: "text-base",
 };
 
 export function AppButton({
-	title,
-	onPress,
-	disabled = false,
-	variant = 'primary',
+  title,
+  onPress,
+  disabled = false,
+  variant = "primary",
+  size = "lg",
+  fullWidth = true,
 }: AppButtonProps) {
-	return (
-		<Pressable
-			onPress={onPress}
-			disabled={disabled}
-			className={[
-				'w-full rounded-2xl px-4 py-4',
-				disabled ? 'bg-slate-400' : variantClasses[variant],
-			].join(' ')}>
-			<Text className='text-center text-base font-semibold text-white'>
-				{title}
-			</Text>
-		</Pressable>
-	);
+  return (
+    <Pressable
+      onPress={onPress}
+      disabled={disabled}
+      className={[
+        fullWidth ? "w-full" : "self-start",
+        sizeContainerClasses[size],
+        disabled ? "bg-slate-400" : variantClasses[variant],
+      ].join(" ")}
+    >
+      <Text
+        className={[
+          "text-center font-semibold text-white",
+          sizeTextClasses[size],
+        ].join(" ")}
+      >
+        {title}
+      </Text>
+    </Pressable>
+  );
 }
