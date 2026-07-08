@@ -28,12 +28,7 @@ export function AppTextButton({
       onPress={onPress}
       className={["self-start py-2", disabled ? "opacity-50" : ""].join(" ")}
     >
-      <Text
-        className={[
-          "text-sm font-semibold",
-          textVariantClasses[variant],
-        ].join(" ")}
-      >
+      <Text className={["text-sm font-semibold", textVariantClasses[variant]].join(" ")}>
         {title}
       </Text>
     </Pressable>
