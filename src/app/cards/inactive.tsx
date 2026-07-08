@@ -1,5 +1,5 @@
-import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { router } from "expo-router";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
 
 import {
   AppButton,
@@ -16,17 +16,9 @@ import { useReactivateCard } from "@/features/cards/hooks/useReactivateCard";
 export default function InactiveCardsScreen() {
   const { cards, loading, error, refresh } = useInactiveCards();
 
-  const {
-    reactivate,
-    reactivating,
-    error: reactivateError,
-  } = useReactivateCard();
+  const { reactivate, reactivating, error: reactivateError } = useReactivateCard();
 
-  const {
-    deleteCard,
-    deleting,
-    error: deleteError,
-  } = useDeleteCard();
+  const { deleteCard, deleting, error: deleteError } = useDeleteCard();
 
   function handleReactivate(cardId: string, cardAlias: string) {
     Alert.alert(
@@ -43,19 +35,15 @@ export default function InactiveCardsScreen() {
             try {
               await reactivate(cardId);
 
-              Alert.alert(
-                "Tarjeta reactivada",
-                "La tarjeta volvió a estar activa.",
-                [
-                  {
-                    text: "OK",
-                    onPress: () =>
-                      router.replace({
-                        pathname: "/",
-                      }),
-                  },
-                ]
-              );
+              Alert.alert("Tarjeta reactivada", "La tarjeta volvió a estar activa.", [
+                {
+                  text: "OK",
+                  onPress: () =>
+                    router.replace({
+                      pathname: "/",
+                    }),
+                },
+              ]);
             } catch {
               // El hook ya registra el error.
             }
@@ -81,16 +69,12 @@ export default function InactiveCardsScreen() {
             try {
               await deleteCard(cardId);
 
-              Alert.alert(
-                "Tarjeta eliminada",
-                "La tarjeta se eliminó correctamente.",
-                [
-                  {
-                    text: "OK",
-                    onPress: refresh,
-                  },
-                ]
-              );
+              Alert.alert("Tarjeta eliminada", "La tarjeta se eliminó correctamente.", [
+                {
+                  text: "OK",
+                  onPress: refresh,
+                },
+              ]);
             } catch {
               // El hook ya registra el error.
             }
@@ -144,15 +128,11 @@ export default function InactiveCardsScreen() {
         ) : null}
 
         {reactivateError ? (
-          <Text className="text-sm font-medium text-red-600">
-            {reactivateError}
-          </Text>
+          <Text className="text-sm font-medium text-red-600">{reactivateError}</Text>
         ) : null}
 
         {deleteError ? (
-          <Text className="text-sm font-medium text-red-600">
-            {deleteError}
-          </Text>
+          <Text className="text-sm font-medium text-red-600">{deleteError}</Text>
         ) : null}
 
         {!loading && !error && cards.length > 0 ? (
