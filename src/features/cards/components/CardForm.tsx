@@ -59,6 +59,7 @@ export function CardForm({
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
               label="Alias"
+              required
               placeholder="Ej. BBVA Azul"
               value={value}
               onChangeText={onChange}
@@ -75,6 +76,7 @@ export function CardForm({
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
               label="Banco"
+              required
               placeholder="Ej. BBVA"
               value={value}
               onChangeText={onChange}
@@ -91,6 +93,7 @@ export function CardForm({
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
               label="Línea de crédito"
+              required
               placeholder="Ej. 25000"
               value={value}
               onChangeText={onChange}
@@ -107,6 +110,7 @@ export function CardForm({
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
               label="Día de corte"
+              required
               placeholder="Ej. 20"
               value={value}
               onChangeText={onChange}
@@ -123,6 +127,7 @@ export function CardForm({
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
               label="Día de pago"
+              required
               placeholder="Ej. 10"
               value={value}
               onChangeText={onChange}
@@ -139,6 +144,7 @@ export function CardForm({
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
               label="Red de tarjeta"
+              optional
               placeholder="visa, mastercard, amex u other"
               value={value ?? ""}
               onChangeText={onChange}
@@ -155,6 +161,7 @@ export function CardForm({
           render={({ field: { value, onChange } }) => (
             <AppColorInput
               label="Color"
+              optional
               value={value}
               onChangeText={onChange}
               error={errors.color?.message}
