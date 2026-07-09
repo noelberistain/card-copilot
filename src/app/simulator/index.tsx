@@ -77,6 +77,7 @@ export default function SimulatorScreen() {
               render={({ field: { value, onChange, onBlur } }) => (
                 <AppTextInput
                   label="Monto de compra"
+                  required
                   placeholder="Ej. 3500"
                   value={value}
                   onChangeText={onChange}
@@ -93,6 +94,7 @@ export default function SimulatorScreen() {
               render={({ field: { value, onChange } }) => (
                 <AppDateInput
                   label="Fecha de compra"
+                  required
                   value={value}
                   onChangeText={onChange}
                   error={errors.purchaseDate?.message}
