@@ -122,6 +122,7 @@ export default function EditSnapshotScreen() {
           submitLabel="Guardar cambios"
           saving={saving}
           error={saveError}
+          disableSubmitUntilDirty
           onSubmit={handleSave}
         />
       </View>
