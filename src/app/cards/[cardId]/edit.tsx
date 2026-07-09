@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, Alert, Text, View } from "react-native";
 
-import { AppButton, ScreenContainer } from "@/components/ui";
+import { AppButton, ScreenContainer, ScreenHeader } from "@/components/ui";
 import { CardForm } from "@/features/cards/components/CardForm";
 import { LatestSnapshotPanel } from "@/features/cards/components/LatestSnapshotPanel";
 import { useCard } from "@/features/cards/hooks/useCard";
@@ -92,13 +92,11 @@ export default function EditCardScreen() {
   return (
     <ScreenContainer>
       <View className="gap-6">
-        <View>
-          <Text className="text-3xl font-bold text-slate-950">Editar tarjeta</Text>
-
-          <Text className="mt-2 text-base text-slate-500">
-            Actualiza la información base de esta tarjeta.
-          </Text>
-        </View>
+        <ScreenHeader
+          title="Editar tarjeta"
+          subtitle="Actualiza la información base de esta tarjeta."
+          showBackButton
+        />
 
         <LatestSnapshotPanel
           snapshot={latestSnapshot}
@@ -124,7 +122,6 @@ export default function EditCardScreen() {
           saving={saving}
           error={saveError}
           onSubmit={handleSave}
-          onCancel={() => router.back()}
         />
 
         <AppButton
