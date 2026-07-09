@@ -4,5 +4,12 @@
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit"
   },
-  "cSpell.words": ["cardcopilot", "datetimepicker", "nativewind", "Pressable", "worklets"]
+  "cSpell.words": [
+    "cardcopilot",
+    "datetimepicker",
+    "mastercard",
+    "nativewind",
+    "Pressable",
+    "worklets"
+  ]
 }

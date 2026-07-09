@@ -168,7 +168,7 @@ export function CardForm({
       <AppButton
         title={saving ? "Guardando..." : submitLabel}
         onPress={handleSubmit(onSubmit)}
-        disabled={saving}
+        disabled={saving || (disableSubmitUntilDirty && !isDirty)}
       />
 
       {onCancel ? (
