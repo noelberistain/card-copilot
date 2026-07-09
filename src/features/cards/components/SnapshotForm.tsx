@@ -59,6 +59,7 @@ export function SnapshotForm({
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
               label="Saldo actual"
+              required
               placeholder="Ej. 9648.03"
               value={value}
               onChangeText={onChange}
@@ -75,6 +76,7 @@ export function SnapshotForm({
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
               label="Saldo al corte"
+              required
               placeholder="Ej. 8862.63"
               value={value}
               onChangeText={onChange}
@@ -91,6 +93,7 @@ export function SnapshotForm({
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
               label="Pago mínimo"
+              required
               placeholder="Ej. 450"
               value={value}
               onChangeText={onChange}
@@ -107,6 +110,7 @@ export function SnapshotForm({
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
               label="Pago para no generar intereses"
+              required
               placeholder="Ej. 8862.63"
               value={value}
               onChangeText={onChange}
@@ -123,6 +127,7 @@ export function SnapshotForm({
           render={({ field: { value, onChange } }) => (
             <AppDateInput
               label="Fecha del último corte"
+              required
               value={value}
               onChangeText={onChange}
               error={errors.lastCutoffDate?.message}
@@ -136,6 +141,7 @@ export function SnapshotForm({
           render={({ field: { value, onChange } }) => (
             <AppDateInput
               label="Fecha límite de pago"
+              required
               value={value}
               onChangeText={onChange}
               error={errors.paymentDueDate?.message}
@@ -149,6 +155,7 @@ export function SnapshotForm({
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
               label="Notas"
+              optional
               placeholder="Opcional"
               value={value ?? ""}
               onChangeText={onChange}
