@@ -105,20 +105,18 @@ export function buildCardInsights({
     });
   }
 
+  if (hasPostCutoffBalance(snapshot)) {
+    const difference = getDifferenceBetweenCurrentAndNoInterest(snapshot);
 
-if (hasPostCutoffBalance(snapshot)) {
-  const difference = getDifferenceBetweenCurrentAndNoInterest(snapshot);
-
-  insights.push({
-    id: "post-cutoff-balance",
-    tone: "info",
-    title: "No todo tu saldo actual toca pagarlo ahora",
-    message: `Tu saldo actual es mayor que el pago para no generar intereses. La diferencia aproximada es de ${difference.toFixed(
-      2
-    )}. Esto normalmente puede pasar cuando hiciste compras después del último corte: esas compras ya aparecen en tu saldo actual, pero podrían pertenecer al siguiente ciclo. Para este ciclo, el monto clave para evitar intereses suele ser el pago para no generar intereses. Aun así, confirma siempre contra tu app bancaria.`,
-  });
-}
-
+    insights.push({
+      id: "post-cutoff-balance",
+      tone: "info",
+      title: "No todo tu saldo actual toca pagarlo ahora",
+      message: `Tu saldo actual es mayor que el pago para no generar intereses. La diferencia aproximada es de ${difference.toFixed(
+        2
+      )}. Esto normalmente puede pasar cuando hiciste compras después del último corte: esas compras ya aparecen en tu saldo actual, pero podrían pertenecer al siguiente ciclo. Para este ciclo, el monto clave para evitar intereses suele ser el pago para no generar intereses. Aun así, confirma siempre contra tu app bancaria.`,
+    });
+  }
 
   if (isMinimumPaymentLowerThanNoInterest(snapshot)) {
     const gap = getPaymentGap(snapshot);

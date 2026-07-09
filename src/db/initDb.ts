@@ -1,11 +1,11 @@
-import { sqlite } from '@/db/client';
+import { sqlite } from "@/db/client";
 
 let initialized = false;
 
 export function initDb() {
-	if (initialized) return;
+  if (initialized) return;
 
-	sqlite.execSync(`
+  sqlite.execSync(`
     PRAGMA foreign_keys = ON;
 
     CREATE TABLE IF NOT EXISTS cards (
@@ -45,5 +45,5 @@ export function initDb() {
       ON card_snapshots(captured_at);
   `);
 
-	initialized = true;
+  initialized = true;
 }

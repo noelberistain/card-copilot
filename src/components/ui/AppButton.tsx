@@ -49,10 +49,9 @@ export function AppButton({
       ].join(" ")}
     >
       <Text
-        className={[
-          "text-center font-semibold text-white",
-          sizeTextClasses[size],
-        ].join(" ")}
+        className={["text-center font-semibold text-white", sizeTextClasses[size]].join(
+          " "
+        )}
       >
         {title}
       </Text>

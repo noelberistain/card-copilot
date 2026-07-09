@@ -64,7 +64,11 @@ export function AppDateInput({
 
   return (
     <View className="w-full gap-2">
-      <Text className="text-sm font-medium text-slate-700">{label}</Text>
+      <Text className="text-sm font-medium text-slate-700">
+        {label}
+        {required ? <Text className="text-red-600"> *</Text> : null}
+        {!required && optional ? <Text className="text-slate-400"> opcional</Text> : null}
+      </Text>
 
       <Pressable
         disabled={disabled}

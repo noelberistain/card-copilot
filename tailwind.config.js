@@ -1,14 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	content: [
-		'./src/**/*.{js,jsx,ts,tsx}',
-		/** PODRIAN NO HACER FALTA */
-		// './app/**/*.{js,jsx,ts,tsx}',
-		// './components/**/*.{js,jsx,ts,tsx}',
-	],
-	presets: [require('nativewind/preset')],
-	theme: {
-		extend: {},
-	},
-	plugins: [],
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+    /** PODRIAN NO HACER FALTA */
+    // './app/**/*.{js,jsx,ts,tsx}',
+    // './components/**/*.{js,jsx,ts,tsx}',
+  ],
+  presets: [require("nativewind/preset")],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
 };
