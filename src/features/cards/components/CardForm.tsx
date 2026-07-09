@@ -14,6 +14,7 @@ interface CardFormProps {
   submitLabel: string;
   saving?: boolean;
   error?: string | null;
+  disableSubmitUntilDirty?: boolean;
   onSubmit: (values: CardFormValues) => Promise<void> | void;
   onCancel?: () => void;
 }
@@ -33,13 +34,14 @@ export function CardForm({
   submitLabel,
   saving = false,
   error,
+  disableSubmitUntilDirty = false,
   onSubmit,
   onCancel,
 }: CardFormProps) {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<CardFormInput, unknown, CardFormValues>({
     resolver: zodResolver(cardFormSchema),
     defaultValues: {
