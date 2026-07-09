@@ -8,12 +8,12 @@ import {
   ScreenContainer,
   ScreenHeader,
 } from "@/components/ui";
-import { isToday } from "@/lib/date/isToday";
 import { CardDatesPanel } from "@/features/cards/components/CardDatesPanel";
 import { CardInsightsPanel } from "@/features/cards/components/CardInsightsPanel";
 import { CardSnapshotSummary } from "@/features/cards/components/CardSnapshotSummary";
 import { useCardDetail } from "@/features/cards/hooks/useCardDetail";
 import { useDeactivateCard } from "@/features/cards/hooks/useDeactivateCard";
+import { isToday } from "@/lib/date/isToday";
 
 export default function CardDetailScreen() {
   const params = useLocalSearchParams<{ cardId?: string }>();
@@ -24,54 +24,54 @@ export default function CardDetailScreen() {
   const { deactivate, deactivating, error: deactivateError } = useDeactivateCard();
 
   function handleEditSnapshot() {
-  if (!detail || !detail.latestSnapshot) return;
+    if (!detail || !detail.latestSnapshot) return;
 
-  const snapshot = detail.latestSnapshot;
+    const snapshot = detail.latestSnapshot;
 
-  if (isToday(snapshot.capturedAt)) {
-    router.push({
-      pathname: "/cards/[cardId]/snapshots/[snapshotId]/edit",
-      params: {
-        cardId: detail.card.id,
-        snapshotId: snapshot.id,
-      },
-    });
+    if (isToday(snapshot.capturedAt)) {
+      router.push({
+        pathname: "/cards/[cardId]/snapshots/[snapshotId]/edit",
+        params: {
+          cardId: detail.card.id,
+          snapshotId: snapshot.id,
+        },
+      });
 
-    return;
+      return;
+    }
+
+    Alert.alert(
+      "¿Corregir o capturar nuevo estado?",
+      "Este estado fue capturado otro día. Si los datos actuales de tu tarjeta cambiaron, es mejor capturar un nuevo estado para conservar el historial. Usa “Corregir este estado” solo si capturaste mal un dato y quieres arreglar ese registro.",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Capturar nuevo estado",
+          onPress: () =>
+            router.push({
+              pathname: "/cards/[cardId]/snapshot",
+              params: {
+                cardId: detail.card.id,
+              },
+            }),
+        },
+        {
+          text: "Corregir este estado",
+          onPress: () =>
+            router.push({
+              pathname: "/cards/[cardId]/snapshots/[snapshotId]/edit",
+              params: {
+                cardId: detail.card.id,
+                snapshotId: snapshot.id,
+              },
+            }),
+        },
+      ]
+    );
   }
-
-  Alert.alert(
-    "¿Corregir o capturar nuevo estado?",
-    "Este estado fue capturado otro día. Si los datos actuales de tu tarjeta cambiaron, es mejor capturar un nuevo estado para conservar el historial. Usa “Corregir este estado” solo si capturaste mal un dato y quieres arreglar ese registro.",
-    [
-      {
-        text: "Cancelar",
-        style: "cancel",
-      },
-      {
-        text: "Capturar nuevo estado",
-        onPress: () =>
-          router.push({
-            pathname: "/cards/[cardId]/snapshot",
-            params: {
-              cardId: detail.card.id,
-            },
-          }),
-      },
-      {
-        text: "Corregir este estado",
-        onPress: () =>
-          router.push({
-            pathname: "/cards/[cardId]/snapshots/[snapshotId]/edit",
-            params: {
-              cardId: detail.card.id,
-              snapshotId: snapshot.id,
-            },
-          }),
-      },
-    ]
-  );
-}
 
   function handleDeactivate() {
     if (!detail) return;
@@ -177,7 +177,7 @@ export default function CardDetailScreen() {
               }
             />
 
-           {latestSnapshot ? (
+            {latestSnapshot ? (
               <AppTextButton
                 title="Editar estado"
                 variant="secondary"
