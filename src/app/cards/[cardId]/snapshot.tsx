@@ -87,6 +87,7 @@ export default function SnapshotScreen() {
           submitLabel="Guardar estado"
           saving={saving}
           error={saveError}
+          disableSubmitUntilDirty
           onSubmit={handleSave}
         />
       </View>
