@@ -88,23 +88,6 @@ export default function EditCardScreen() {
           showBackButton
         />
 
-        <View className="flex-row">
-          <AppButton
-            title="Capturar estado actual"
-            variant="secondary"
-            size="sm"
-            fullWidth={false}
-            onPress={() =>
-              router.push({
-                pathname: "/cards/[cardId]/snapshot",
-                params: {
-                  cardId: card.id,
-                },
-              })
-            }
-          />
-        </View>
-
         <CardForm
           defaultValues={defaultValues}
           submitLabel="Guardar cambios"
