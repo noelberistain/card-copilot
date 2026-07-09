@@ -7,6 +7,8 @@ interface AppColorInputProps {
   value: string | null | undefined;
   onChangeText: (value: string) => void;
   error?: string | null;
+  required?: boolean;
+  optional?: boolean;
 }
 
 export function AppColorInput({
@@ -14,10 +16,18 @@ export function AppColorInput({
   value: selectedColor,
   onChangeText,
   error,
+  required = false,
+  optional = false,
 }: AppColorInputProps) {
   return (
     <View className="w-full gap-2">
-      <Text className="text-sm font-medium text-slate-700">{label}</Text>
+      <Text className="text-sm font-medium text-slate-700">
+        {label}
+        {required ? <Text className="text-red-600"> *</Text> : null}
+        {!required && optional ? (
+          <Text className="text-slate-400"> opcional</Text>
+        ) : null}
+      </Text>
 
       <View className="flex-row flex-wrap gap-3">
         {CARD_COLOR_OPTIONS.map((colorOption) => {
