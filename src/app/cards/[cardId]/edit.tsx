@@ -1,5 +1,5 @@
-import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
 
 import { AppButton, ScreenContainer, ScreenHeader } from "@/components/ui";
 import { CardForm } from "@/features/cards/components/CardForm";
@@ -30,16 +30,12 @@ export default function EditCardScreen() {
     try {
       await save(values);
 
-      Alert.alert(
-        "Tarjeta actualizada",
-        "Los cambios se guardaron correctamente.",
-        [
-          {
-            text: "OK",
-            onPress: () => router.back(),
-          },
-        ]
-      );
+      Alert.alert("Tarjeta actualizada", "Los cambios se guardaron correctamente.", [
+        {
+          text: "OK",
+          onPress: () => router.back(),
+        },
+      ]);
     } catch {
       // El hook ya registra el error.
     }
@@ -51,9 +47,7 @@ export default function EditCardScreen() {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
 
-          <Text className="mt-3 text-sm text-slate-500">
-            Cargando tarjeta...
-          </Text>
+          <Text className="mt-3 text-sm text-slate-500">Cargando tarjeta...</Text>
         </View>
       </ScreenContainer>
     );
