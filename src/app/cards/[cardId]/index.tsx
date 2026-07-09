@@ -1,7 +1,13 @@
-import { router, useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, Alert, Text, View } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 
-import { AppButton, EmptyState, ScreenContainer, ScreenHeader } from "@/components/ui";
+import {
+  AppButton,
+  AppTextButton,
+  EmptyState,
+  ScreenContainer,
+  ScreenHeader,
+} from "@/components/ui";
 import { CardDatesPanel } from "@/features/cards/components/CardDatesPanel";
 import { CardInsightsPanel } from "@/features/cards/components/CardInsightsPanel";
 import { CardSnapshotSummary } from "@/features/cards/components/CardSnapshotSummary";
@@ -14,7 +20,11 @@ export default function CardDetailScreen() {
 
   const { detail, loading, error, refresh } = useCardDetail({ cardId });
 
-  const { deactivate, deactivating, error: deactivateError } = useDeactivateCard();
+  const {
+    deactivate,
+    deactivating,
+    error: deactivateError,
+  } = useDeactivateCard();
 
   function handleDeactivate() {
     if (!detail) return;
@@ -62,7 +72,9 @@ export default function CardDetailScreen() {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
 
-          <Text className="mt-3 text-sm text-slate-500">Cargando detalle...</Text>
+          <Text className="mt-3 text-sm text-slate-500">
+            Cargando detalle...
+          </Text>
         </View>
       </ScreenContainer>
     );
@@ -91,6 +103,50 @@ export default function CardDetailScreen() {
       <View className="gap-6">
         <ScreenHeader title={card.alias} subtitle={card.bank} showBackButton />
 
+        <View className="gap-3 rounded-3xl bg-white p-4">
+          <AppButton
+            title="Capturar estado actual"
+            size="sm"
+            fullWidth={false}
+            onPress={() =>
+              router.push({
+                pathname: "/cards/[cardId]/snapshot",
+                params: {
+                  cardId: card.id,
+                },
+              })
+            }
+          />
+
+          <View className="flex-row flex-wrap items-center gap-4">
+            <AppTextButton
+              title="Editar tarjeta"
+              variant="secondary"
+              onPress={() =>
+                router.push({
+                  pathname: "/cards/[cardId]/edit",
+                  params: {
+                    cardId: card.id,
+                  },
+                })
+              }
+            />
+
+            <AppTextButton
+              title={deactivating ? "Desactivando..." : "Desactivar tarjeta"}
+              variant="danger"
+              onPress={handleDeactivate}
+              disabled={deactivating}
+            />
+          </View>
+
+          {deactivateError ? (
+            <Text className="text-sm font-medium text-red-600">
+              {deactivateError}
+            </Text>
+          ) : null}
+        </View>
+
         {!latestSnapshot || !metrics ? (
           <EmptyState
             title="Sin estado capturado"
@@ -105,44 +161,6 @@ export default function CardDetailScreen() {
             <CardInsightsPanel insights={insights} />
           </>
         )}
-
-        <View className="gap-3">
-          <AppButton
-            title="Capturar estado actual"
-            onPress={() =>
-              router.push({
-                pathname: "/cards/[cardId]/snapshot",
-                params: {
-                  cardId: card.id,
-                },
-              })
-            }
-          />
-
-          <AppButton
-            title="Editar tarjeta"
-            variant="secondary"
-            onPress={() =>
-              router.push({
-                pathname: "/cards/[cardId]/edit",
-                params: {
-                  cardId: card.id,
-                },
-              })
-            }
-          />
-
-          {deactivateError ? (
-            <Text className="text-sm font-medium text-red-600">{deactivateError}</Text>
-          ) : null}
-
-          <AppButton
-            title={deactivating ? "Desactivando..." : "Desactivar tarjeta"}
-            variant="danger"
-            onPress={handleDeactivate}
-            disabled={deactivating}
-          />
-        </View>
       </View>
     </ScreenContainer>
   );
