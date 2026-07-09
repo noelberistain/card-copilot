@@ -5,7 +5,6 @@ import { AppButton, ScreenContainer } from "@/components/ui";
 import { CardForm } from "@/features/cards/components/CardForm";
 import { LatestSnapshotPanel } from "@/features/cards/components/LatestSnapshotPanel";
 import { useCard } from "@/features/cards/hooks/useCard";
-import { useDeactivateCard } from "@/features/cards/hooks/useDeactivateCard";
 import { useLatestSnapshot } from "@/features/cards/hooks/useLatestSnapshot";
 import { useSaveCard } from "@/features/cards/hooks/useSaveCard";
 
@@ -33,45 +32,6 @@ export default function EditCardScreen() {
   } = useSaveCard({
     initialCard: card ?? undefined,
   });
-
-  const { deactivate, deactivating, error: deactivateError } = useDeactivateCard();
-
-  function handleDeactivate() {
-    if (!card) return;
-
-    Alert.alert(
-      "Desactivar tarjeta",
-      "La tarjeta dejará de aparecer en Home, pero sus datos no se borrarán.",
-      [
-        {
-          text: "Cancelar",
-          style: "cancel",
-        },
-        {
-          text: "Desactivar",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await deactivate(card.id);
-
-              Alert.alert(
-                "Tarjeta desactivada",
-                "La tarjeta se desactivó correctamente.",
-                [
-                  {
-                    text: "OK",
-                    onPress: () => router.replace({ pathname: "/" }),
-                  },
-                ]
-              );
-            } catch {
-              // El hook ya registra el error.
-            }
-          },
-        },
-      ]
-    );
-  }
 
   async function handleSave(values: CardFormValues) {
     if (!card) return;
@@ -178,18 +138,7 @@ export default function EditCardScreen() {
               },
             })
           }
-          disabled={saving || deactivating}
-        />
-
-        {deactivateError ? (
-          <Text className="text-sm font-medium text-red-600">{deactivateError}</Text>
-        ) : null}
-
-        <AppButton
-          title={deactivating ? "Desactivando..." : "Desactivar tarjeta"}
-          variant="danger"
-          onPress={handleDeactivate}
-          disabled={saving || deactivating}
+          disabled={saving}
         />
       </View>
     </ScreenContainer>
