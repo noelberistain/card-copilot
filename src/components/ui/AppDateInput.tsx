@@ -10,6 +10,8 @@ interface AppDateInputProps {
   error?: string | null;
   placeholder?: string;
   disabled?: boolean;
+  required?: boolean;
+  optional?: boolean;
 }
 
 function dateFromValue(value: string) {
@@ -27,6 +29,8 @@ export function AppDateInput({
   error,
   placeholder = "YYYY-MM-DD",
   disabled = false,
+  required = false,
+  optional = false,
 }: AppDateInputProps) {
   const [showPicker, setShowPicker] = useState(false);
   const selectedDate = useMemo(() => dateFromValue(value), [value]);
