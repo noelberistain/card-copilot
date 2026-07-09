@@ -1,5 +1,5 @@
-import { router, useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, Alert, Text, View } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 
 import {
   AppButton,
@@ -20,7 +20,11 @@ export default function CardDetailScreen() {
 
   const { detail, loading, error, refresh } = useCardDetail({ cardId });
 
-  const { deactivate, deactivating, error: deactivateError } = useDeactivateCard();
+  const {
+    deactivate,
+    deactivating,
+    error: deactivateError,
+  } = useDeactivateCard();
 
   function handleDeactivate() {
     if (!detail) return;
@@ -68,7 +72,9 @@ export default function CardDetailScreen() {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
 
-          <Text className="mt-3 text-sm text-slate-500">Cargando detalle...</Text>
+          <Text className="mt-3 text-sm text-slate-500">
+            Cargando detalle...
+          </Text>
         </View>
       </ScreenContainer>
     );
@@ -126,6 +132,22 @@ export default function CardDetailScreen() {
               }
             />
 
+            {latestSnapshot ? (
+              <AppTextButton
+                title="Editar estado"
+                variant="secondary"
+                onPress={() =>
+                  router.push({
+                    pathname: "/cards/[cardId]/snapshots/[snapshotId]/edit",
+                    params: {
+                      cardId: card.id,
+                      snapshotId: latestSnapshot.id,
+                    },
+                  })
+                }
+              />
+            ) : null}
+
             <AppTextButton
               title={deactivating ? "Desactivando..." : "Desactivar"}
               variant="danger"
@@ -135,7 +157,9 @@ export default function CardDetailScreen() {
           </View>
 
           {deactivateError ? (
-            <Text className="text-sm font-medium text-red-600">{deactivateError}</Text>
+            <Text className="text-sm font-medium text-red-600">
+              {deactivateError}
+            </Text>
           ) : null}
         </View>
 
