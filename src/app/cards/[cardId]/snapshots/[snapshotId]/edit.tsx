@@ -1,7 +1,7 @@
-import { router, useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, Alert, Text, View } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 
-import { AppButton, ScreenContainer } from "@/components/ui";
+import { AppButton, ScreenContainer, ScreenHeader } from "@/components/ui";
 import { SnapshotForm } from "@/features/cards/components/SnapshotForm";
 import { useSaveSnapshot } from "@/features/cards/hooks/useSaveSnapshot";
 import { useSnapshot } from "@/features/cards/hooks/useSnapshot";
@@ -16,13 +16,20 @@ export default function EditSnapshotScreen() {
     snapshotId?: string;
   }>();
 
-  const cardId = Array.isArray(params.cardId) ? params.cardId[0] : params.cardId;
+  const cardId = Array.isArray(params.cardId)
+    ? params.cardId[0]
+    : params.cardId;
 
   const snapshotId = Array.isArray(params.snapshotId)
     ? params.snapshotId[0]
     : params.snapshotId;
 
-  const { snapshot, loading, error: loadError, refresh } = useSnapshot({ snapshotId });
+  const {
+    snapshot,
+    loading,
+    error: loadError,
+    refresh,
+  } = useSnapshot({ snapshotId });
 
   const {
     save,
@@ -72,15 +79,13 @@ export default function EditSnapshotScreen() {
     return (
       <ScreenContainer>
         <View className="gap-4">
-          <Text className="text-3xl font-bold text-slate-950">No se pudo cargar</Text>
-
-          <Text className="text-base text-slate-500">
-            {loadError ?? "No se encontró el estado capturado solicitado."}
-          </Text>
+          <ScreenHeader
+            title="No se pudo cargar"
+            subtitle={loadError ?? "No se encontró el estado capturado solicitado."}
+            showBackButton
+          />
 
           <AppButton title="Reintentar" onPress={refresh} />
-
-          <AppButton title="Volver" variant="secondary" onPress={() => router.back()} />
         </View>
       </ScreenContainer>
     );
@@ -99,16 +104,24 @@ export default function EditSnapshotScreen() {
   return (
     <ScreenContainer>
       <View className="gap-6">
-        <View>
-          <Text className="text-3xl font-bold text-slate-950">Editar estado</Text>
+        <ScreenHeader
+          title="Editar estado"
+          subtitle="Corrige los datos capturados si cometiste un error al registrar el estado de la tarjeta."
+          showBackButton
+        />
 
-          <Text className="mt-2 text-base text-slate-500">
-            Corrige los datos capturados si cometiste un error al registrar el estado de
-            la tarjeta.
+        <View className="rounded-3xl bg-white p-5">
+          <Text className="text-sm text-slate-500">
+            Capturado originalmente
           </Text>
 
-          <Text className="mt-2 text-sm text-slate-400">
-            Capturado originalmente: {snapshot.capturedAt}
+          <Text className="mt-1 text-base font-semibold text-slate-900">
+            {snapshot.capturedAt}
+          </Text>
+
+          <Text className="mt-2 text-sm text-slate-500">
+            Al guardar cambios, se conserva la fecha original de captura y solo
+            se actualizan los datos corregidos.
           </Text>
         </View>
 
@@ -118,7 +131,6 @@ export default function EditSnapshotScreen() {
           saving={saving}
           error={saveError}
           onSubmit={handleSave}
-          onCancel={() => router.back()}
         />
       </View>
     </ScreenContainer>
