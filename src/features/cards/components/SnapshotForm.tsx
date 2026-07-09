@@ -14,6 +14,7 @@ interface SnapshotFormProps {
   submitLabel: string;
   saving?: boolean;
   error?: string | null;
+  disableSubmitUntilDirty?: boolean;
   onSubmit: (values: SnapshotFormValues) => Promise<void> | void;
   onCancel?: () => void;
 }
@@ -33,13 +34,14 @@ export function SnapshotForm({
   submitLabel,
   saving = false,
   error,
+  disableSubmitUntilDirty = false,
   onSubmit,
   onCancel,
 }: SnapshotFormProps) {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<SnapshotFormInput, unknown, SnapshotFormValues>({
     resolver: zodResolver(snapshotFormSchema),
     defaultValues: {
@@ -163,7 +165,7 @@ export function SnapshotForm({
       <AppButton
         title={saving ? "Guardando..." : submitLabel}
         onPress={handleSubmit(onSubmit)}
-        disabled={saving}
+        disabled={saving || (disableSubmitUntilDirty && !isDirty)}
       />
 
       {onCancel ? (
