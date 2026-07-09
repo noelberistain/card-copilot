@@ -1,5 +1,5 @@
-import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
 
 import {
   AppButton,
@@ -21,11 +21,7 @@ export default function CardDetailScreen() {
 
   const { detail, loading, error, refresh } = useCardDetail({ cardId });
 
-  const {
-    deactivate,
-    deactivating,
-    error: deactivateError,
-  } = useDeactivateCard();
+  const { deactivate, deactivating, error: deactivateError } = useDeactivateCard();
 
   function handleEditSnapshot() {
   if (!detail || !detail.latestSnapshot) return;
@@ -123,9 +119,7 @@ export default function CardDetailScreen() {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
 
-          <Text className="mt-3 text-sm text-slate-500">
-            Cargando detalle...
-          </Text>
+          <Text className="mt-3 text-sm text-slate-500">Cargando detalle...</Text>
         </View>
       </ScreenContainer>
     );
@@ -200,9 +194,7 @@ export default function CardDetailScreen() {
           </View>
 
           {deactivateError ? (
-            <Text className="text-sm font-medium text-red-600">
-              {deactivateError}
-            </Text>
+            <Text className="text-sm font-medium text-red-600">{deactivateError}</Text>
           ) : null}
         </View>
 

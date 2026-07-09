@@ -1,5 +1,5 @@
-import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
 
 import { AppButton, ScreenContainer, ScreenHeader } from "@/components/ui";
 import { SnapshotForm } from "@/features/cards/components/SnapshotForm";
@@ -9,6 +9,7 @@ import type {
   SnapshotFormInput,
   SnapshotFormValues,
 } from "@/features/cards/schemas/snapshotForm.schema";
+import { formatHumanDateTime } from "@/lib/date/formatHumanDateTime";
 
 export default function EditSnapshotScreen() {
   const params = useLocalSearchParams<{
@@ -16,20 +17,13 @@ export default function EditSnapshotScreen() {
     snapshotId?: string;
   }>();
 
-  const cardId = Array.isArray(params.cardId)
-    ? params.cardId[0]
-    : params.cardId;
+  const cardId = Array.isArray(params.cardId) ? params.cardId[0] : params.cardId;
 
   const snapshotId = Array.isArray(params.snapshotId)
     ? params.snapshotId[0]
     : params.snapshotId;
 
-  const {
-    snapshot,
-    loading,
-    error: loadError,
-    refresh,
-  } = useSnapshot({ snapshotId });
+  const { snapshot, loading, error: loadError, refresh } = useSnapshot({ snapshotId });
 
   const {
     save,
@@ -111,17 +105,15 @@ export default function EditSnapshotScreen() {
         />
 
         <View className="rounded-3xl bg-white p-5">
-          <Text className="text-sm text-slate-500">
-            Capturado originalmente
-          </Text>
+          <Text className="text-sm text-slate-500">Capturado originalmente</Text>
 
           <Text className="mt-1 text-base font-semibold text-slate-900">
-            {snapshot.capturedAt}
+            {formatHumanDateTime(snapshot.capturedAt)}
           </Text>
 
           <Text className="mt-2 text-sm text-slate-500">
-            Al guardar cambios, se conserva la fecha original de captura y solo
-            se actualizan los datos corregidos.
+            Al guardar cambios, se conserva la fecha original de captura y solo se
+            actualizan los datos corregidos.
           </Text>
         </View>
 

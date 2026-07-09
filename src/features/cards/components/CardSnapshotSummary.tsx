@@ -1,6 +1,7 @@
 import { Text, View } from "react-native";
 
 import type { CardDetailMetrics } from "@/features/cards/services/buildCardDetailView";
+import { formatHumanDateTime } from "@/lib/date/formatHumanDateTime";
 import { formatCurrency } from "@/lib/money/formatCurrency";
 import type { CardSnapshot } from "@/models/cards/card.types";
 
@@ -15,7 +16,7 @@ export function CardSnapshotSummary({ snapshot, metrics }: CardSnapshotSummaryPr
       <Text className="text-base font-semibold text-slate-900">Resumen actual</Text>
 
       <Text className="mt-1 text-sm text-slate-500">
-        Capturado: {snapshot.capturedAt}
+        Capturado: {formatHumanDateTime(snapshot.capturedAt)}
       </Text>
 
       <View className="mt-5 gap-3">
