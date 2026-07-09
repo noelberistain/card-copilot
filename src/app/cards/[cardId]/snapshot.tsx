@@ -1,5 +1,5 @@
-import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
 
 import { AppButton, ScreenContainer, ScreenHeader } from "@/components/ui";
 import { SnapshotForm } from "@/features/cards/components/SnapshotForm";
@@ -27,16 +27,12 @@ export default function SnapshotScreen() {
     try {
       await save(values);
 
-      Alert.alert(
-        "Estado guardado",
-        "El estado de la tarjeta se guardó correctamente.",
-        [
-          {
-            text: "OK",
-            onPress: () => router.back(),
-          },
-        ]
-      );
+      Alert.alert("Estado guardado", "El estado de la tarjeta se guardó correctamente.", [
+        {
+          text: "OK",
+          onPress: () => router.back(),
+        },
+      ]);
     } catch {
       // El hook ya registra el error.
     }
@@ -48,9 +44,7 @@ export default function SnapshotScreen() {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
 
-          <Text className="mt-3 text-sm text-slate-500">
-            Cargando tarjeta...
-          </Text>
+          <Text className="mt-3 text-sm text-slate-500">Cargando tarjeta...</Text>
         </View>
       </ScreenContainer>
     );
@@ -84,9 +78,7 @@ export default function SnapshotScreen() {
         <View className="rounded-3xl bg-white p-5">
           <Text className="text-sm text-slate-500">Tarjeta</Text>
 
-          <Text className="mt-1 text-xl font-bold text-slate-950">
-            {card.alias}
-          </Text>
+          <Text className="mt-1 text-xl font-bold text-slate-950">{card.alias}</Text>
 
           <Text className="mt-1 text-sm text-slate-500">{card.bank}</Text>
         </View>
