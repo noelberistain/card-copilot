@@ -93,6 +93,7 @@ export default function EditCardScreen() {
           submitLabel="Guardar cambios"
           saving={saving}
           error={saveError}
+          disableSubmitUntilDirty
           onSubmit={handleSave}
         />
       </View>
