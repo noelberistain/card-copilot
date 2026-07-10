@@ -1,5 +1,5 @@
-import { Alert, View } from "react-native";
 import { router } from "expo-router";
+import { Alert, View } from "react-native";
 
 import { ScreenContainer, ScreenHeader } from "@/components/ui";
 import { CardForm } from "@/features/cards/components/CardForm";
@@ -37,6 +37,7 @@ export default function NewCardScreen() {
           submitLabel="Guardar tarjeta"
           saving={saving}
           error={error}
+          disableSubmitUntilDirty
           onSubmit={handleSave}
         />
       </View>
