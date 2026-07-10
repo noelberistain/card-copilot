@@ -56,9 +56,9 @@ export default function SimulatorScreen() {
     <ScreenContainer>
       <View className="gap-6">
         <ScreenHeader
-          title="Simulador de compra"
-          subtitle="Ingresa una compra y te ayudamos a estimar con cuál tarjeta podrías tener más tiempo para pagar."
           showBackButton
+          subtitle="Ingresa una compra y te ayudamos a estimar con cuál tarjeta podrías tener más tiempo para pagar."
+          title="Simulador de compra"
           onBackPress={() =>
             router.replace({
               pathname: "/",
@@ -76,14 +76,14 @@ export default function SimulatorScreen() {
               name="amount"
               render={({ field: { value, onChange, onBlur } }) => (
                 <AppTextInput
-                  label="Monto de compra"
-                  required
-                  placeholder="Ej. 3500"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
                   error={errors.amount?.message}
                   keyboardType="decimal-pad"
+                  label="Monto de compra"
+                  placeholder="Ej. 3500"
+                  required
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
                 />
               )}
             />
@@ -93,28 +93,28 @@ export default function SimulatorScreen() {
               name="purchaseDate"
               render={({ field: { value, onChange } }) => (
                 <AppDateInput
+                  error={errors.purchaseDate?.message}
                   label="Fecha de compra"
                   required
                   value={value}
                   onChangeText={onChange}
-                  error={errors.purchaseDate?.message}
                 />
               )}
             />
           </View>
           <View className="mt-6 gap-3">
             <AppButton
+              disabled={simulating || !isDirty}
               title={simulating ? "Simulando..." : "Simular compra"}
               onPress={handleSubmit(handleSimulation)}
-              disabled={simulating || !isDirty}
             />
 
             {result ? (
               <AppButton
+                disabled={simulating}
                 title="Limpiar resultado"
                 variant="secondary"
                 onPress={handleClear}
-                disabled={simulating}
               />
             ) : null}
           </View>
