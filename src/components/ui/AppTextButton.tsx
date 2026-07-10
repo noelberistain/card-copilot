@@ -26,6 +26,9 @@ export function AppTextButton({
       accessibilityRole="button"
       disabled={disabled}
       onPress={onPress}
+      style={({ pressed }) => ({
+        opacity: pressed && !disabled ? 0.6 : 1,
+      })}
       className={["self-start py-2", disabled ? "opacity-50" : ""].join(" ")}
     >
       <Text className={["text-sm font-semibold", textVariantClasses[variant]].join(" ")}>
