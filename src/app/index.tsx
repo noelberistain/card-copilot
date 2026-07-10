@@ -4,9 +4,11 @@ import { ActivityIndicator, Text, View } from "react-native";
 import { AppButton, AppTextButton, EmptyState, ScreenContainer } from "@/components/ui";
 import { CardListItem } from "@/features/cards/components/CardListItem";
 import { useCards } from "@/features/cards/hooks/useCards";
+import { useInactiveCards } from "@/features/cards/hooks/useInactiveCards";
 
 export default function HomeScreen() {
   const { cards, loading, error, refresh } = useCards();
+  const { cards: inactiveCards } = useInactiveCards();
 
   return (
     <ScreenContainer>
@@ -43,15 +45,17 @@ export default function HomeScreen() {
             ) : null}
           </View>
 
-          <AppTextButton
-            title="Ver tarjetas inactivas"
-            variant="secondary"
-            onPress={() =>
-              router.push({
-                pathname: "/cards/inactive",
-              })
-            }
-          />
+          {inactiveCards.length > 0 ? (
+            <AppTextButton
+              title="Ver tarjetas inactivas"
+              variant="secondary"
+              onPress={() =>
+                router.push({
+                  pathname: "/cards/inactive",
+                })
+              }
+            />
+          ) : null}
         </View>
 
         {loading ? (
