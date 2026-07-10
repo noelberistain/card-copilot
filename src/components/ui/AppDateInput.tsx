@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
-import { Modal, Platform, Pressable, Text, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, isValid, parseISO } from "date-fns";
+import { useMemo, useState } from "react";
+import { Modal, Platform, Pressable, Text, View } from "react-native";
 
 interface AppDateInputProps {
   label: string;
@@ -68,9 +68,7 @@ export function AppDateInput({
       <Text className="text-sm font-medium text-slate-700">
         {label}
         {required ? <Text className="text-red-600"> *</Text> : null}
-        {!required && optional ? (
-          <Text className="text-slate-400"> opcional</Text>
-        ) : null}
+        {!required && optional ? <Text className="text-slate-400"> opcional</Text> : null}
       </Text>
 
       <Pressable
@@ -83,10 +81,7 @@ export function AppDateInput({
         onPress={openPicker}
       >
         <Text
-          className={[
-            "text-base",
-            value ? "text-slate-900" : "text-slate-400",
-          ].join(" ")}
+          className={["text-base", value ? "text-slate-900" : "text-slate-400"].join(" ")}
         >
           {value || placeholder}
         </Text>
@@ -116,18 +111,14 @@ export function AppDateInput({
                   className="rounded-full bg-slate-200 px-4 py-2"
                   onPress={handleDismiss}
                 >
-                  <Text className="text-sm font-semibold text-slate-700">
-                    Cancelar
-                  </Text>
+                  <Text className="text-sm font-semibold text-slate-700">Cancelar</Text>
                 </Pressable>
 
                 <Pressable
                   className="rounded-full bg-blue-600 px-4 py-2"
                   onPress={confirmIosDate}
                 >
-                  <Text className="text-sm font-semibold text-white">
-                    Listo
-                  </Text>
+                  <Text className="text-sm font-semibold text-white">Listo</Text>
                 </Pressable>
               </View>
 
