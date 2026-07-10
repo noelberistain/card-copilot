@@ -59,11 +59,6 @@ export default function SimulatorScreen() {
           showBackButton
           subtitle="Ingresa una compra y te ayudamos a estimar con cuál tarjeta podrías tener más tiempo para pagar."
           title="Simulador de compra"
-          onBackPress={() =>
-            router.replace({
-              pathname: "/",
-            })
-          }
         />
         <View className="rounded-3xl bg-white p-5">
           <Text className="text-base font-semibold text-slate-900">
