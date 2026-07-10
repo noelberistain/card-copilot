@@ -1,4 +1,6 @@
-import { Pressable, Text } from "react-native";
+import { Text } from "react-native";
+
+import { AppPressable } from "@/components/ui/AppPressable";
 
 type AppButtonVariant = "primary" | "secondary" | "danger";
 type AppButtonSize = "sm" | "md" | "lg";
@@ -39,15 +41,11 @@ export function AppButton({
   fullWidth = true,
 }: AppButtonProps) {
   return (
-
-    <Pressable
+    <AppPressable
       accessibilityRole="button"
+      feedback="scale"
       onPress={onPress}
       disabled={disabled}
-      style={({ pressed }) => ({
-        opacity: pressed && !disabled ? 0.85 : 1,
-        transform: [{ scale: pressed && !disabled ? 0.98 : 1 }],
-      })}
       className={[
         fullWidth ? "w-full" : "self-start",
         sizeContainerClasses[size],
@@ -55,12 +53,13 @@ export function AppButton({
       ].join(" ")}
     >
       <Text
-        className={["text-center font-semibold text-white", sizeTextClasses[size]].join(
-          " "
-        )}
+        className={[
+          "text-center font-semibold text-white",
+          sizeTextClasses[size],
+        ].join(" ")}
       >
         {title}
       </Text>
-    </Pressable>
+    </AppPressable>
   );
 }
