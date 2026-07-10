@@ -39,9 +39,15 @@ export function AppButton({
   fullWidth = true,
 }: AppButtonProps) {
   return (
+
     <Pressable
+      accessibilityRole="button"
       onPress={onPress}
       disabled={disabled}
+      style={({ pressed }) => ({
+        opacity: pressed && !disabled ? 0.85 : 1,
+        transform: [{ scale: pressed && !disabled ? 0.98 : 1 }],
+      })}
       className={[
         fullWidth ? "w-full" : "self-start",
         sizeContainerClasses[size],
