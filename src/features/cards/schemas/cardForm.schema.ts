@@ -1,89 +1,104 @@
 import { z } from "zod";
 
-const cardNetworkEnum = z.enum(["visa", "mastercard", "amex", "other"]);
-
-function parsePositiveMoney(value: string) {
-  const normalized = value.replace(/,/g, "").trim();
-
-  if (!normalized) return value;
-
-  const num = Number(normalized);
-
-  if (Number.isNaN(num)) return value;
-
-  return num;
+function parseNumber(value: string) {
+  return Number(value.replace(/,/g, "").trim());
 }
 
-function parseDayOfMonth(value: string) {
-  const trimmed = value.trim();
+function isValidNumber(value: string) {
+  if (!value.trim()) return false;
 
-  if (!trimmed) return value;
+  const parsed = parseNumber(value);
 
-  const num = Number(trimmed);
-
-  if (Number.isNaN(num)) return value;
-
-  return num;
+  return Number.isFinite(parsed);
 }
+
+function isValidDay(value: string) {
+  if (!value.trim()) return false;
+
+  const parsed = Number(value.trim());
+
+  return Number.isInteger(parsed) && parsed >= 1 && parsed <= 31;
+}
+
+const optionalString = z
+  .string()
+  .trim()
+  .optional()
+  .transform((value) => value || null);
+
+const optionalNetwork = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .optional()
+  .transform((value) => value || null)
+  .refine(
+    (value) =>
+      value === null ||
+      value === "visa" ||
+      value === "mastercard" ||
+      value === "amex" ||
+      value === "other",
+    {
+      message: "La red debe ser visa, mastercard, amex u other.",
+    }
+  );
+
+const optionalColor = z
+  .string()
+  .trim()
+  .optional()
+  .transform((value) => value || null)
+  .refine((value) => value === null || /^#[0-9A-Fa-f]{6}$/.test(value), {
+    message: "El color debe tener formato hexadecimal. Ej. #2563eb.",
+  });
 
 export const cardFormSchema = z.object({
   alias: z
     .string()
     .trim()
-    .min(1, "El alias de la tarjeta es obligatorio.")
-    .max(50, "El alias no debe exceder 50 caracteres."),
+    .min(1, "El alias es obligatorio.")
+    .max(60, "El alias no puede tener más de 60 caracteres."),
 
   bank: z
     .string()
     .trim()
     .min(1, "El banco es obligatorio.")
-    .max(50, "El nombre del banco no debe exceder 50 caracteres."),
+    .max(60, "El banco no puede tener más de 60 caracteres."),
 
   creditLimit: z
     .string()
-    .transform(parsePositiveMoney)
-    .pipe(z.number().positive("La línea de crédito debe ser mayor a 0.")),
+    .trim()
+    .min(1, "La línea de crédito es obligatoria.")
+    .refine(isValidNumber, {
+      message: "La línea de crédito debe ser un número válido.",
+    })
+    .transform(parseNumber)
+    .refine((value) => value > 0, {
+      message: "La línea de crédito debe ser mayor a 0.",
+    }),
 
   cutoffDay: z
     .string()
-    .transform(parseDayOfMonth)
-    .pipe(
-      z
-        .number()
-        .int("El día de corte debe ser un número entero.")
-        .min(1, "El día de corte debe estar entre 1 y 31.")
-        .max(31, "El día de corte debe estar entre 1 y 31.")
-    ),
+    .trim()
+    .min(1, "El día de corte es obligatorio.")
+    .refine(isValidDay, {
+      message: "El día de corte debe ser un número entre 1 y 31.",
+    })
+    .transform((value) => Number(value.trim())),
 
   paymentDueDay: z
     .string()
-    .transform(parseDayOfMonth)
-    .pipe(
-      z
-        .number()
-        .int("El día de pago debe ser un número entero.")
-        .min(1, "El día de pago debe estar entre 1 y 31.")
-        .max(31, "El día de pago debe estar entre 1 y 31.")
-    ),
-
-  network: z
-    .string()
     .trim()
-    .optional()
-    .transform((value) => {
-      if (!value) return null;
-      return value;
+    .min(1, "El día de pago es obligatorio.")
+    .refine(isValidDay, {
+      message: "El día de pago debe ser un número entre 1 y 31.",
     })
-    .pipe(cardNetworkEnum.nullable()),
+    .transform((value) => Number(value.trim())),
 
-  color: z
-    .string()
-    .trim()
-    .optional()
-    .transform((value) => {
-      if (!value) return null;
-      return value;
-    }),
+  network: optionalNetwork,
+
+  color: optionalColor,
 });
 
 export type CardFormInput = z.input<typeof cardFormSchema>;
