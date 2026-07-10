@@ -20,12 +20,6 @@ function isValidDay(value: string) {
   return Number.isInteger(parsed) && parsed >= 1 && parsed <= 31;
 }
 
-const optionalString = z
-  .string()
-  .trim()
-  .optional()
-  .transform((value) => value || null);
-
 const optionalNetwork = z
   .string()
   .trim()
