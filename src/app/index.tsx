@@ -2,12 +2,13 @@ import { router } from "expo-router";
 import { ActivityIndicator, Text, View } from "react-native";
 
 import { AppButton, AppTextButton, EmptyState, ScreenContainer } from "@/components/ui";
-import { CardListItem } from "@/features/cards/components/CardListItem";
-import { useCards } from "@/features/cards/hooks/useCards";
+import { HomeCardListItem } from "@/features/cards/components/HomeCardListItem";
+import { useHomeCards } from "@/features/cards/hooks/useHomeCards";
 import { useInactiveCards } from "@/features/cards/hooks/useInactiveCards";
 
 export default function HomeScreen() {
   const { cards, loading, error, refresh } = useCards();
+  const { cards, loading, error, refresh } = useHomeCards();
   const { cards: inactiveCards } = useInactiveCards();
 
   return (
@@ -86,10 +87,10 @@ export default function HomeScreen() {
 
         {!loading && !error && cards.length > 0 ? (
           <View className="gap-4">
-            {cards.map((card) => (
-              <CardListItem
-                key={card.id}
-                card={card}
+            {cards.map((homeCard) => (
+              <HomeCardListItem
+                key={homecard.card.id}
+                view={homeCard}
                 onPress={() =>
                   router.push({
                     pathname: "/cards/[cardId]",
