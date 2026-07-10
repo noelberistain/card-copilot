@@ -5,10 +5,10 @@ import { CARD_COLOR_OPTIONS } from "@/constants/cardColors";
 interface AppColorInputProps {
   label: string;
   value: string | null | undefined;
-  onChangeText: (value: string) => void;
   error?: string | null;
   required?: boolean;
   optional?: boolean;
+  onChangeText: (value: string) => void;
 }
 
 export function AppColorInput({
