@@ -20,20 +20,29 @@ export default function HomeScreen() {
         </View>
 
         <View className="gap-3">
-          <AppButton title="Agregar tarjeta" onPress={() => router.push("/cards/new")} />
-
-          {cards.length > 0 ? (
+          <View className="flex-row flex-wrap gap-3">
             <AppButton
-              title="Simular compra"
-              variant="secondary"
-              onPress={() =>
-                router.push({
-                  pathname: "/simulator",
-                })
-              }
+              title="Agregar tarjeta"
+              size="sm"
+              fullWidth={false}
+              onPress={() => router.push("/cards/new")}
             />
-          ) : null}
-
+        
+            {cards.length > 0 ? (
+              <AppButton
+                title="Simular compra"
+                variant="secondary"
+                size="sm"
+                fullWidth={false}
+                onPress={() =>
+                  router.push({
+                    pathname: "/simulator",
+                  })
+                }
+              />
+            ) : null}
+          </View>
+        
           <AppTextButton
             title="Ver tarjetas inactivas"
             variant="secondary"
