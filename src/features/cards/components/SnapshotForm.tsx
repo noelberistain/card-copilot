@@ -11,30 +11,30 @@ import {
 
 interface SnapshotFormProps {
   defaultValues?: Partial<SnapshotFormInput>;
-  submitLabel: string;
-  saving?: boolean;
-  error?: string | null;
   disableSubmitUntilDirty?: boolean;
+  error?: string | null;
+  saving?: boolean;
+  submitLabel: string;
   onSubmit: (values: SnapshotFormValues) => Promise<void> | void;
   onCancel?: () => void;
 }
 
 const emptyDefaultValues: SnapshotFormInput = {
   currentBalance: "",
-  statementBalance: "",
-  minimumPayment: "",
-  paymentToAvoidInterest: "",
   lastCutoffDate: "",
-  paymentDueDate: "",
+  minimumPayment: "",
   notes: "",
+  paymentDueDate: "",
+  paymentToAvoidInterest: "",
+  statementBalance: "",
 };
 
 export function SnapshotForm({
   defaultValues,
-  submitLabel,
-  saving = false,
-  error,
   disableSubmitUntilDirty = false,
+  error,
+  saving = false,
+  submitLabel,
   onSubmit,
   onCancel,
 }: SnapshotFormProps) {
@@ -58,14 +58,14 @@ export function SnapshotForm({
           name="currentBalance"
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
-              label="Saldo actual"
-              required
-              placeholder="Ej. 9648.03"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
               error={errors.currentBalance?.message}
               keyboardType="decimal-pad"
+              label="Saldo actual"
+              placeholder="Ej. 9648.03"
+              required
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
             />
           )}
         />
@@ -75,14 +75,14 @@ export function SnapshotForm({
           name="statementBalance"
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
-              label="Saldo al corte"
-              required
-              placeholder="Ej. 8862.63"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
               error={errors.statementBalance?.message}
               keyboardType="decimal-pad"
+              label="Saldo al corte"
+              placeholder="Ej. 8862.63"
+              required
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
             />
           )}
         />
@@ -92,14 +92,14 @@ export function SnapshotForm({
           name="minimumPayment"
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
-              label="Pago mínimo"
-              required
-              placeholder="Ej. 450"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
               error={errors.minimumPayment?.message}
               keyboardType="decimal-pad"
+              label="Pago mínimo"
+              placeholder="Ej. 450"
+              required
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
             />
           )}
         />
@@ -109,14 +109,14 @@ export function SnapshotForm({
           name="paymentToAvoidInterest"
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
-              label="Pago para no generar intereses"
-              required
-              placeholder="Ej. 8862.63"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
               error={errors.paymentToAvoidInterest?.message}
               keyboardType="decimal-pad"
+              label="Pago para no generar intereses"
+              placeholder="Ej. 8862.63"
+              required
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
             />
           )}
         />
@@ -126,11 +126,11 @@ export function SnapshotForm({
           name="lastCutoffDate"
           render={({ field: { value, onChange } }) => (
             <AppDateInput
+              error={errors.lastCutoffDate?.message}
               label="Fecha del último corte"
               required
               value={value}
               onChangeText={onChange}
-              error={errors.lastCutoffDate?.message}
             />
           )}
         />
@@ -140,11 +140,11 @@ export function SnapshotForm({
           name="paymentDueDate"
           render={({ field: { value, onChange } }) => (
             <AppDateInput
+              error={errors.paymentDueDate?.message}
               label="Fecha límite de pago"
               required
               value={value}
               onChangeText={onChange}
-              error={errors.paymentDueDate?.message}
             />
           )}
         />
@@ -154,14 +154,14 @@ export function SnapshotForm({
           name="notes"
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
+              error={errors.notes?.message}
               label="Notas"
+              multiline
               optional
               placeholder="Opcional"
               value={value ?? ""}
-              onChangeText={onChange}
               onBlur={onBlur}
-              error={errors.notes?.message}
-              multiline
+              onChangeText={onChange}
             />
           )}
         />
