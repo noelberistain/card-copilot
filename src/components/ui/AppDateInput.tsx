@@ -33,6 +33,7 @@ export function AppDateInput({
   optional = false,
 }: AppDateInputProps) {
   const [showPicker, setShowPicker] = useState(false);
+
   const selectedDate = useMemo(() => dateFromValue(value), [value]);
   const [draftDate, setDraftDate] = useState(selectedDate);
 
@@ -67,21 +68,21 @@ export function AppDateInput({
       <Text className="text-sm font-medium text-slate-700">
         {label}
         {required ? <Text className="text-red-600"> *</Text> : null}
-        {!required*&& optional ? (
-          <Text cl*ssName="text-slate-400"> opcional<*Text>
+        {!required && optional ? (
+          <Text className="text-slate-400"> opcional</Text>
         ) : null}
-      </Te*t>
+      </Text>
 
       <Pressable
-        disab*ed={disabled}
-        onPress={ope*Picker}
         className={[
           "rounded-2xl border bg-white px-4 py-4",
           error ? "border-red-500" : "border-slate-300",
           disabled ? "opacity-60" : "",
         ].join(" ")}
+        disabled={disabled}
+        onPress={openPicker}
       >
-   *    <Text
+        <Text
           className={[
             "text-base",
             value ? "text-slate-900" : "text-slate-400",
@@ -93,27 +94,27 @@ export function AppDateInput({
 
       {Platform.OS === "android" && showPicker ? (
         <DateTimePicker
-          value={draftDate}
-          mode="date"
           display="default"
-          onValueChange={handleValueChange}
+          mode="date"
+          value={draftDate}
           onDismiss={handleDismiss}
+          onValueChange={handleValueChange}
         />
       ) : null}
 
       {Platform.OS === "ios" ? (
         <Modal
-          visible={showPicker}
-          transparent
           animationType="fade"
+          transparent
+          visible={showPicker}
           onRequestClose={handleDismiss}
         >
           <View className="flex-1 justify-end bg-black/30 px-4 pb-8">
             <View className="rounded-3xl bg-white p-5">
               <View className="mb-4 flex-row items-center justify-between">
                 <Pressable
-                  onPress={handleDismiss}
                   className="rounded-full bg-slate-200 px-4 py-2"
+                  onPress={handleDismiss}
                 >
                   <Text className="text-sm font-semibold text-slate-700">
                     Cancelar
@@ -121,8 +122,8 @@ export function AppDateInput({
                 </Pressable>
 
                 <Pressable
-                  onPress={confirmIosDate}
                   className="rounded-full bg-blue-600 px-4 py-2"
+                  onPress={confirmIosDate}
                 >
                   <Text className="text-sm font-semibold text-white">
                     Listo
@@ -131,11 +132,11 @@ export function AppDateInput({
               </View>
 
               <DateTimePicker
-                value={draftDate}
-                mode="date"
                 display="spinner"
-                onValueChange={handleValueChange}
+                mode="date"
+                value={draftDate}
                 onDismiss={handleDismiss}
+                onValueChange={handleValueChange}
               />
             </View>
           </View>
