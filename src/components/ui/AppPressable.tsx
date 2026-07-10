@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useState } from "react";
 import {
   Animated,
   Easing,
@@ -26,12 +26,12 @@ export function AppPressable({
   style,
   ...props
 }: AppPressableProps) {
-  const pressValue = useRef(new Animated.Value(0)).current;
+  const [pressValue] = useState(() => new Animated.Value(0));
 
   function animatePress(toValue: number) {
     Animated.timing(pressValue, {
       toValue,
-      duration: toValue === 1 ? 80 : 120,
+      duration: toValue === 1 ? 90 : 140,
       easing: Easing.out(Easing.quad),
       useNativeDriver: true,
     }).start();
