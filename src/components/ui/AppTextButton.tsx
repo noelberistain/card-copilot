@@ -1,4 +1,6 @@
-import { Pressable, Text } from "react-native";
+import { Text } from "react-native";
+
+import { AppPressable } from "@/components/ui/AppPressable";
 
 type AppTextButtonVariant = "primary" | "secondary" | "danger";
 
@@ -22,18 +24,21 @@ export function AppTextButton({
   variant = "primary",
 }: AppTextButtonProps) {
   return (
-    <Pressable
+    <AppPressable
       accessibilityRole="button"
+      feedback="opacity"
       disabled={disabled}
       onPress={onPress}
-      style={({ pressed }) => ({
-        opacity: pressed && !disabled ? 0.6 : 1,
-      })}
       className={["self-start py-2", disabled ? "opacity-50" : ""].join(" ")}
     >
-      <Text className={["text-sm font-semibold", textVariantClasses[variant]].join(" ")}>
+      <Text
+        className={[
+          "text-sm font-semibold",
+          textVariantClasses[variant],
+        ].join(" ")}
+      >
         {title}
       </Text>
-    </Pressable>
+    </AppPressable>
   );
 }
