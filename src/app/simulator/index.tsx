@@ -31,7 +31,7 @@ export default function SimulatorScreen() {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<PurchaseSimulationFormInput, unknown, PurchaseSimulationFormValues>({
     resolver: zodResolver(purchaseSimulationSchema),
     defaultValues: emptyDefaultValues,
@@ -106,7 +106,7 @@ export default function SimulatorScreen() {
             <AppButton
               title={simulating ? "Simulando..." : "Simular compra"}
               onPress={handleSubmit(handleSimulation)}
-              disabled={simulating}
+              disabled={simulating || !isDirty}
             />
 
             {result ? (
