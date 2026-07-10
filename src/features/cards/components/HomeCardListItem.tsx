@@ -31,10 +31,10 @@ export function HomeCardListItem({ view, onPress }: HomeCardListItemProps) {
   return (
     <AppPressable
       accessibilityRole="button"
+      className="rounded-3xl bg-white p-5"
       disabled={!onPress}
       feedback={onPress ? "scale" : "none"}
       onPress={onPress}
-      className="rounded-3xl bg-white p-5"
     >
       <View className="flex-row items-start gap-3">
         <View
@@ -49,9 +49,7 @@ export function HomeCardListItem({ view, onPress }: HomeCardListItemProps) {
 
           <View className="mt-4 flex-row gap-4">
             <View className="flex-1">
-              <Text className="text-xs text-slate-500">
-                {view.balanceLabel}
-              </Text>
+              <Text className="text-xs text-slate-500">{view.balanceLabel}</Text>
 
               <Text
                 className="mt-1 text-base font-semibold text-slate-950"
@@ -63,9 +61,7 @@ export function HomeCardListItem({ view, onPress }: HomeCardListItemProps) {
 
             <View className="flex-1">
               <Text
-                className={`text-xs ${getPaymentToneClasses(
-                  view.paymentTone
-                )}`}
+                className={`text-xs ${getPaymentToneClasses(view.paymentTone)}`}
                 numberOfLines={1}
               >
                 {view.paymentLabel}
@@ -85,10 +81,7 @@ export function HomeCardListItem({ view, onPress }: HomeCardListItemProps) {
               {view.cutoffText}
             </Text>
 
-            <Text
-              className="flex-1 text-xs text-slate-500"
-              numberOfLines={1}
-            >
+            <Text className="flex-1 text-xs text-slate-500" numberOfLines={1}>
               {view.dueText}
             </Text>
           </View>

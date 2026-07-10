@@ -7,7 +7,6 @@ import { useHomeCards } from "@/features/cards/hooks/useHomeCards";
 import { useInactiveCards } from "@/features/cards/hooks/useInactiveCards";
 
 export default function HomeScreen() {
-  const { cards, loading, error, refresh } = useCards();
   const { cards, loading, error, refresh } = useHomeCards();
   const { cards: inactiveCards } = useInactiveCards();
 
@@ -89,12 +88,12 @@ export default function HomeScreen() {
           <View className="gap-4">
             {cards.map((homeCard) => (
               <HomeCardListItem
-                key={homecard.card.id}
+                key={homeCard.card.id}
                 view={homeCard}
                 onPress={() =>
                   router.push({
                     pathname: "/cards/[cardId]",
-                    params: { cardId: card.id },
+                    params: { cardId: homeCard.card.id },
                   })
                 }
               />
