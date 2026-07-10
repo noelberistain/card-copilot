@@ -1,6 +1,6 @@
+import { isSameDay, parseISO } from "date-fns";
 import { router, useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, Alert, Text, View } from "react-native";
-import { isSameDay, parseISO } from "date-fns";
 
 import {
   AppButton,
@@ -14,7 +14,6 @@ import { CardInsightsPanel } from "@/features/cards/components/CardInsightsPanel
 import { CardSnapshotSummary } from "@/features/cards/components/CardSnapshotSummary";
 import { useCardDetail } from "@/features/cards/hooks/useCardDetail";
 import { useDeactivateCard } from "@/features/cards/hooks/useDeactivateCard";
-import { isToday } from "@/lib/date/isToday";
 
 export default function CardDetailScreen() {
   const params = useLocalSearchParams<{ cardId?: string }>();
@@ -25,50 +24,50 @@ export default function CardDetailScreen() {
   const { deactivate, deactivating, error: deactivateError } = useDeactivateCard();
 
   function handleEditSnapshot() {
-  if (!detail?.latestSnapshot) return;
+    if (!detail?.latestSnapshot) return;
 
-  const snapshot = detail.latestSnapshot;
-  const wasCapturedToday = isSameDay(parseISO(snapshot.capturedAt), new Date());
+    const snapshot = detail.latestSnapshot;
+    const wasCapturedToday = isSameDay(parseISO(snapshot.capturedAt), new Date());
 
-  const goToEditSnapshot = () =>
-    router.push({
-      pathname: "/cards/[cardId]/snapshots/[snapshotId]/edit",
-      params: {
-        cardId: detail.card.id,
-        snapshotId: snapshot.id,
-      },
-    });
+    const goToEditSnapshot = () =>
+      router.push({
+        pathname: "/cards/[cardId]/snapshots/[snapshotId]/edit",
+        params: {
+          cardId: detail.card.id,
+          snapshotId: snapshot.id,
+        },
+      });
 
-  if (wasCapturedToday) {
-    goToEditSnapshot();
-    return;
+    if (wasCapturedToday) {
+      goToEditSnapshot();
+      return;
+    }
+
+    Alert.alert(
+      "¿Corregir o capturar nuevo estado?",
+      "Este estado fue capturado otro día. Si los datos de tu tarjeta cambiaron desde entonces, es mejor capturar un nuevo estado para conservar el historial. Usa “Corregir este estado” solo si capturaste mal un dato.",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Capturar nuevo estado",
+          onPress: () =>
+            router.push({
+              pathname: "/cards/[cardId]/snapshot",
+              params: {
+                cardId: detail.card.id,
+              },
+            }),
+        },
+        {
+          text: "Corregir este estado",
+          onPress: goToEditSnapshot,
+        },
+      ]
+    );
   }
-
-  Alert.alert(
-    "¿Corregir o capturar nuevo estado?",
-    "Este estado fue capturado otro día. Si los datos de tu tarjeta cambiaron desde entonces, es mejor capturar un nuevo estado para conservar el historial. Usa “Corregir este estado” solo si capturaste mal un dato.",
-    [
-      {
-        text: "Cancelar",
-        style: "cancel",
-      },
-      {
-        text: "Capturar nuevo estado",
-        onPress: () =>
-          router.push({
-            pathname: "/cards/[cardId]/snapshot",
-            params: {
-              cardId: detail.card.id,
-            },
-          }),
-      },
-      {
-        text: "Corregir este estado",
-        onPress: goToEditSnapshot,
-      },
-    ]
-  );
-}
 
   function handleDeactivate() {
     if (!detail) return;
