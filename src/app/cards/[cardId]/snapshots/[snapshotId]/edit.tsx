@@ -74,9 +74,9 @@ export default function EditSnapshotScreen() {
       <ScreenContainer>
         <View className="gap-4">
           <ScreenHeader
-            title="No se pudo cargar"
-            subtitle={loadError ?? "No se encontró el estado capturado solicitado."}
             showBackButton
+            subtitle={loadError ?? "No se encontró el estado capturado solicitado."}
+            title="No se pudo cargar"
           />
 
           <AppButton title="Reintentar" onPress={refresh} />
@@ -99,9 +99,9 @@ export default function EditSnapshotScreen() {
     <ScreenContainer>
       <View className="gap-6">
         <ScreenHeader
-          title="Editar estado"
-          subtitle="Corrige los datos capturados si cometiste un error al registrar el estado de la tarjeta."
           showBackButton
+          subtitle="Corrige los datos capturados si cometiste un error al registrar el estado de la tarjeta."
+          title="Editar estado"
         />
 
         <View className="rounded-3xl bg-white p-5">
@@ -119,10 +119,10 @@ export default function EditSnapshotScreen() {
 
         <SnapshotForm
           defaultValues={defaultValues}
-          submitLabel="Guardar cambios"
-          saving={saving}
-          error={saveError}
           disableSubmitUntilDirty
+          error={saveError}
+          saving={saving}
+          submitLabel="Guardar cambios"
           onSubmit={handleSave}
         />
       </View>

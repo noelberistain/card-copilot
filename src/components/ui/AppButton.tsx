@@ -43,14 +43,14 @@ export function AppButton({
   return (
     <AppPressable
       accessibilityRole="button"
-      feedback="scale"
-      onPress={onPress}
-      disabled={disabled}
       className={[
         fullWidth ? "w-full" : "self-start",
         sizeContainerClasses[size],
         disabled ? "bg-slate-400" : variantClasses[variant],
       ].join(" ")}
+      disabled={disabled}
+      feedback="scale"
+      onPress={onPress}
     >
       <Text
         className={["text-center font-semibold text-white", sizeTextClasses[size]].join(

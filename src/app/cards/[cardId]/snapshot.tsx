@@ -55,9 +55,9 @@ export default function SnapshotScreen() {
       <ScreenContainer>
         <View className="gap-4">
           <ScreenHeader
-            title="No se pudo cargar"
-            subtitle={cardError ?? "No se encontró la tarjeta solicitada."}
             showBackButton
+            subtitle={cardError ?? "No se encontró la tarjeta solicitada."}
+            title="No se pudo cargar"
           />
 
           <AppButton title="Reintentar" onPress={refresh} />
@@ -70,9 +70,9 @@ export default function SnapshotScreen() {
     <ScreenContainer>
       <View className="gap-6">
         <ScreenHeader
-          title="Capturar estado"
-          subtitle={`Registra el estado actual de ${card.alias} para calcular pagos, saldos e insights más adelante.`}
           showBackButton
+          subtitle={`Registra el estado actual de ${card.alias} para calcular pagos, saldos e insights más adelante.`}
+          title="Capturar estado"
         />
 
         <View className="rounded-3xl bg-white p-5">
@@ -84,10 +84,10 @@ export default function SnapshotScreen() {
         </View>
 
         <SnapshotForm
-          submitLabel="Guardar estado"
-          saving={saving}
-          error={saveError}
           disableSubmitUntilDirty
+          error={saveError}
+          saving={saving}
+          submitLabel="Guardar estado"
           onSubmit={handleSave}
         />
       </View>

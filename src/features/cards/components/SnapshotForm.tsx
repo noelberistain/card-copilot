@@ -170,17 +170,17 @@ export function SnapshotForm({
       {error ? <Text className="text-sm font-medium text-red-600">{error}</Text> : null}
 
       <AppButton
+        disabled={saving || (disableSubmitUntilDirty && !isDirty)}
         title={saving ? "Guardando..." : submitLabel}
         onPress={handleSubmit(onSubmit)}
-        disabled={saving || (disableSubmitUntilDirty && !isDirty)}
       />
 
       {onCancel ? (
         <AppButton
+          disabled={saving}
           title="Cancelar"
           variant="secondary"
           onPress={onCancel}
-          disabled={saving}
         />
       ) : null}
     </View>

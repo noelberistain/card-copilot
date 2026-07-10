@@ -35,13 +35,13 @@ export function AppColorInput({
           return (
             <Pressable
               key={colorValue}
-              onPress={() => onChangeText(colorValue)}
+              accessibilityLabel={`Seleccionar color ${colorOption.label}`}
+              accessibilityRole="button"
               className={[
                 "h-12 w-12 items-center justify-center rounded-full border-2",
                 selected ? "border-slate-950" : "border-transparent",
               ].join(" ")}
-              accessibilityRole="button"
-              accessibilityLabel={`Seleccionar color ${colorOption.label}`}
+              onPress={() => onChangeText(colorValue)}
             >
               <View
                 className="h-9 w-9 rounded-full"

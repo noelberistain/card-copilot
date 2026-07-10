@@ -60,14 +60,14 @@ export default function HomeScreen() {
 
             <Text className="text-sm text-red-600">{error}</Text>
 
-            <AppButton title="Reintentar" onPress={refresh} variant="danger" />
+            <AppButton title="Reintentar" variant="danger" onPress={refresh} />
           </View>
         ) : null}
 
         {!loading && !error && cards.length === 0 ? (
           <EmptyState
-            title="Aún no tienes tarjetas"
             message="Agrega tu primera tarjeta para empezar a darle seguimiento. Después podrás simular compras y comparar qué tarjeta te conviene usar."
+            title="Aún no tienes tarjetas"
           />
         ) : null}
 

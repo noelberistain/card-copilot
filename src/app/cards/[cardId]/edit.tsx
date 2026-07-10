@@ -58,9 +58,9 @@ export default function EditCardScreen() {
       <ScreenContainer>
         <View className="gap-4">
           <ScreenHeader
-            title="No se pudo cargar"
-            subtitle={loadError ?? "No se encontró la tarjeta solicitada."}
             showBackButton
+            subtitle={loadError ?? "No se encontró la tarjeta solicitada."}
+            title="No se pudo cargar"
           />
 
           <AppButton title="Reintentar" onPress={refresh} />
@@ -83,17 +83,17 @@ export default function EditCardScreen() {
     <ScreenContainer>
       <View className="gap-6">
         <ScreenHeader
-          title="Editar tarjeta"
-          subtitle="Actualiza la información base de esta tarjeta."
           showBackButton
+          subtitle="Actualiza la información base de esta tarjeta."
+          title="Editar tarjeta"
         />
 
         <CardForm
           defaultValues={defaultValues}
-          submitLabel="Guardar cambios"
-          saving={saving}
-          error={saveError}
           disableSubmitUntilDirty
+          error={saveError}
+          saving={saving}
+          submitLabel="Guardar cambios"
           onSubmit={handleSave}
         />
       </View>

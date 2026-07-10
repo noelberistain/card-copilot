@@ -26,10 +26,10 @@ export function AppTextButton({
   return (
     <AppPressable
       accessibilityRole="button"
-      feedback="opacity"
-      disabled={disabled}
-      onPress={onPress}
       className={["self-start py-2", disabled ? "opacity-50" : ""].join(" ")}
+      disabled={disabled}
+      feedback="opacity"
+      onPress={onPress}
     >
       <Text className={["text-sm font-semibold", textVariantClasses[variant]].join(" ")}>
         {title}

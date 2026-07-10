@@ -58,14 +58,14 @@ export function CardForm({
           name="alias"
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
-              label="Alias"
-              required
-              placeholder="Ej. BBVA Azul"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              error={errors.alias?.message}
               autoCapitalize="words"
+              error={errors.alias?.message}
+              label="Alias"
+              placeholder="Ej. BBVA Azul"
+              required
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
             />
           )}
         />
@@ -75,14 +75,14 @@ export function CardForm({
           name="bank"
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
-              label="Banco"
-              required
-              placeholder="Ej. BBVA"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              error={errors.bank?.message}
               autoCapitalize="words"
+              error={errors.bank?.message}
+              label="Banco"
+              placeholder="Ej. BBVA"
+              required
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
             />
           )}
         />
@@ -92,14 +92,14 @@ export function CardForm({
           name="creditLimit"
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
-              label="Línea de crédito"
-              required
-              placeholder="Ej. 25000"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
               error={errors.creditLimit?.message}
               keyboardType="decimal-pad"
+              label="Línea de crédito"
+              placeholder="Ej. 25000"
+              required
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
             />
           )}
         />
@@ -109,14 +109,14 @@ export function CardForm({
           name="cutoffDay"
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
-              label="Día de corte"
-              required
-              placeholder="Ej. 20"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
               error={errors.cutoffDay?.message}
               keyboardType="number-pad"
+              label="Día de corte"
+              placeholder="Ej. 20"
+              required
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
             />
           )}
         />
@@ -126,14 +126,14 @@ export function CardForm({
           name="paymentDueDay"
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
-              label="Día de pago"
-              required
-              placeholder="Ej. 10"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
               error={errors.paymentDueDay?.message}
               keyboardType="number-pad"
+              label="Día de pago"
+              placeholder="Ej. 10"
+              required
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
             />
           )}
         />
@@ -143,14 +143,14 @@ export function CardForm({
           name="network"
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
+              autoCapitalize="none"
+              error={errors.network?.message}
               label="Red de tarjeta"
               optional
               placeholder="visa, mastercard, amex u other"
               value={value ?? ""}
-              onChangeText={onChange}
               onBlur={onBlur}
-              error={errors.network?.message}
-              autoCapitalize="none"
+              onChangeText={onChange}
             />
           )}
         />
@@ -160,11 +160,11 @@ export function CardForm({
           name="color"
           render={({ field: { value, onChange } }) => (
             <AppColorInput
+              error={errors.color?.message}
               label="Color"
               optional
               value={value}
               onChangeText={onChange}
-              error={errors.color?.message}
             />
           )}
         />
@@ -173,17 +173,17 @@ export function CardForm({
       {error ? <Text className="text-sm font-medium text-red-600">{error}</Text> : null}
 
       <AppButton
+        disabled={saving || (disableSubmitUntilDirty && !isDirty)}
         title={saving ? "Guardando..." : submitLabel}
         onPress={handleSubmit(onSubmit)}
-        disabled={saving || (disableSubmitUntilDirty && !isDirty)}
       />
 
       {onCancel ? (
         <AppButton
+          disabled={saving}
           title="Cancelar"
           variant="secondary"
           onPress={onCancel}
-          disabled={saving}
         />
       ) : null}
     </View>

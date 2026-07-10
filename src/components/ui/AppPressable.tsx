@@ -75,9 +75,9 @@ export function AppPressable({
     <AnimatedPressable
       {...props}
       disabled={disabled}
+      style={[animatedStyle, style]}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={[animatedStyle, style]}
     />
   );
 }

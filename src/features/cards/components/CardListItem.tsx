@@ -11,8 +11,8 @@ interface CardListItemProps {
 export function CardListItem({ card, onPress }: CardListItemProps) {
   return (
     <Pressable
-      onPress={onPress}
       className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+      onPress={onPress}
     >
       <View className="flex-row items-start justify-between gap-4">
         <View className="flex-1">

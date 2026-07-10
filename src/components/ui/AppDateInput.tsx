@@ -71,13 +71,13 @@ export function AppDateInput({
       </Text>
 
       <Pressable
-        disabled={disabled}
-        onPress={openPicker}
         className={[
           "rounded-2xl border bg-white px-4 py-4",
           error ? "border-red-500" : "border-slate-300",
           disabled ? "opacity-60" : "",
         ].join(" ")}
+        disabled={disabled}
+        onPress={openPicker}
       >
         <Text
           className={["text-base", value ? "text-slate-900" : "text-slate-400"].join(" ")}
@@ -89,25 +89,25 @@ export function AppDateInput({
       {showPicker ? (
         <View className="rounded-2xl bg-white p-3">
           <DateTimePicker
-            value={draftDate}
-            mode="date"
             display={Platform.OS === "ios" ? "compact" : "default"}
-            onValueChange={handleValueChange}
+            mode="date"
+            value={draftDate}
             onDismiss={handleDismiss}
+            onValueChange={handleValueChange}
           />
 
           {Platform.OS === "ios" ? (
             <View className="mt-3 flex-row gap-3">
               <Pressable
-                onPress={handleDismiss}
                 className="rounded-full bg-slate-200 px-4 py-2"
+                onPress={handleDismiss}
               >
                 <Text className="text-sm font-semibold text-slate-700">Cancelar</Text>
               </Pressable>
 
               <Pressable
-                onPress={confirmIosDate}
                 className="rounded-full bg-blue-600 px-4 py-2"
+                onPress={confirmIosDate}
               >
                 <Text className="text-sm font-semibold text-white">Listo</Text>
               </Pressable>

@@ -28,16 +28,16 @@ export default function NewCardScreen() {
     <ScreenContainer>
       <View className="gap-6">
         <ScreenHeader
-          title="Agregar tarjeta"
-          subtitle="Captura la información base de tu tarjeta para empezar a darle seguimiento."
           showBackButton
+          subtitle="Captura la información base de tu tarjeta para empezar a darle seguimiento."
+          title="Agregar tarjeta"
         />
 
         <CardForm
-          submitLabel="Guardar tarjeta"
-          saving={saving}
-          error={error}
           disableSubmitUntilDirty
+          error={error}
+          saving={saving}
+          submitLabel="Guardar tarjeta"
           onSubmit={handleSave}
         />
       </View>

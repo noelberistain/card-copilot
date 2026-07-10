@@ -88,9 +88,9 @@ export default function InactiveCardsScreen() {
     <ScreenContainer>
       <View className="gap-6">
         <ScreenHeader
-          title="Tarjetas inactivas"
-          subtitle="Aquí puedes ver tarjetas que desactivaste y reactivarlas si quieres volver a usarlas sin perder su historial."
           showBackButton
+          subtitle="Aquí puedes ver tarjetas que desactivaste y reactivarlas si quieres volver a usarlas sin perder su historial."
+          title="Tarjetas inactivas"
           onBackPress={() =>
             router.replace({
               pathname: "/",
@@ -116,14 +116,14 @@ export default function InactiveCardsScreen() {
 
             <Text className="text-sm text-red-600">{error}</Text>
 
-            <AppButton title="Reintentar" onPress={refresh} variant="danger" />
+            <AppButton title="Reintentar" variant="danger" onPress={refresh} />
           </View>
         ) : null}
 
         {!loading && !error && cards.length === 0 ? (
           <EmptyState
-            title="No tienes tarjetas inactivas"
             message="Cuando desactives una tarjeta, aparecerá aquí para que puedas consultarla o reactivarla después."
+            title="No tienes tarjetas inactivas"
           />
         ) : null}
 
@@ -143,19 +143,19 @@ export default function InactiveCardsScreen() {
 
                 <View className="flex-row items-center justify-between">
                   <AppButton
-                    title={reactivating ? "Reactivando..." : "Reactivar"}
-                    size="sm"
+                    disabled={reactivating || deleting}
                     fullWidth={false}
+                    size="sm"
+                    title={reactivating ? "Reactivando..." : "Reactivar"}
                     variant="secondary"
                     onPress={() => handleReactivate(card.id, card.alias)}
-                    disabled={reactivating || deleting}
                   />
 
                   <AppTextButton
+                    disabled={deleting || reactivating}
                     title={deleting ? "Eliminando..." : "Eliminar"}
                     variant="danger"
                     onPress={() => handleDelete(card.id, card.alias)}
-                    disabled={deleting || reactivating}
                   />
                 </View>
               </View>

@@ -130,9 +130,9 @@ export default function CardDetailScreen() {
       <ScreenContainer>
         <View className="gap-4">
           <ScreenHeader
-            title="No se pudo cargar"
-            subtitle={error ?? "No se encontró la tarjeta solicitada."}
             showBackButton
+            subtitle={error ?? "No se encontró la tarjeta solicitada."}
+            title="No se pudo cargar"
           />
 
           <AppButton title="Reintentar" onPress={refresh} />
@@ -146,13 +146,13 @@ export default function CardDetailScreen() {
   return (
     <ScreenContainer>
       <View className="gap-6">
-        <ScreenHeader title={card.alias} subtitle={card.bank} showBackButton />
+        <ScreenHeader showBackButton subtitle={card.bank} title={card.alias} />
 
         <View className="gap-3 rounded-3xl bg-white p-4">
           <AppButton
-            title="Capturar estado actual"
-            size="sm"
             fullWidth={false}
+            size="sm"
+            title="Capturar estado actual"
             onPress={() =>
               router.push({
                 pathname: "/cards/[cardId]/snapshot",
@@ -186,10 +186,10 @@ export default function CardDetailScreen() {
             ) : null}
 
             <AppTextButton
+              disabled={deactivating}
               title={deactivating ? "Desactivando..." : "Desactivar"}
               variant="danger"
               onPress={handleDeactivate}
-              disabled={deactivating}
             />
           </View>
 
@@ -200,12 +200,12 @@ export default function CardDetailScreen() {
 
         {!latestSnapshot || !metrics ? (
           <EmptyState
-            title="Sin estado capturado"
             message="Captura el estado actual de esta tarjeta para ver saldos, fechas e insights."
+            title="Sin estado capturado"
           />
         ) : (
           <>
-            <CardSnapshotSummary snapshot={latestSnapshot} metrics={metrics} />
+            <CardSnapshotSummary metrics={metrics} snapshot={latestSnapshot} />
 
             <CardDatesPanel metrics={metrics} status={status} />
 
