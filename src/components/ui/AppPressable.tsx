@@ -1,54 +1,83 @@
+import { useRef } from "react";
 import {
+  Animated,
+  Easing,
   Pressable,
+  type GestureResponderEvent,
   type PressableProps,
-  type PressableStateCallbackType,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
 
 type AppPressableFeedback = "scale" | "opacity" | "none";
 
-interface AppPressableProps extends PressableProps {
+interface AppPressableProps extends Omit<PressableProps, "style"> {
   feedback?: AppPressableFeedback;
+  style?: StyleProp<ViewStyle>;
 }
 
-function getFeedbackStyle(
-  pressed: boolean,
-  disabled: boolean | null | undefined,
-  feedback: AppPressableFeedback
-): StyleProp<ViewStyle> {
-  if (!pressed || disabled || feedback === "none") {
-    return {
-      opacity: 1,
-      transform: [{ scale: 1 }],
-    };
-  }
-
-  if (feedback === "opacity") {
-    return {
-      opacity: 0.55,
-      transform: [{ scale: 1 }],
-    };
-  }
-
-  return {
-    opacity: 0.72,
-    transform: [{ scale: 0.96 }],
-  };
-}
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function AppPressable({
   feedback = "scale",
   disabled = false,
+  onPressIn,
+  onPressOut,
   style,
   ...props
 }: AppPressableProps) {
-  function resolveStyle(state: PressableStateCallbackType): StyleProp<ViewStyle> {
-    const feedbackStyle = getFeedbackStyle(state.pressed, disabled, feedback);
-    const resolvedStyle = typeof style === "function" ? style(state) : style;
+  const pressValue = useRef(new Animated.Value(0)).current;
 
-    return [feedbackStyle, resolvedStyle];
+  function animatePress(toValue: number) {
+    Animated.timing(pressValue, {
+      toValue,
+      duration: toValue === 1 ? 80 : 120,
+      easing: Easing.out(Easing.quad),
+      useNativeDriver: true,
+    }).start();
   }
 
-  return <Pressable disabled={disabled} style={resolveStyle} {...props} />;
+  function handlePressIn(event: GestureResponderEvent) {
+    if (!disabled && feedback !== "none") {
+      animatePress(1);
+    }
+
+    onPressIn?.(event);
+  }
+
+  function handlePressOut(event: GestureResponderEvent) {
+    if (!disabled && feedback !== "none") {
+      animatePress(0);
+    }
+
+    onPressOut?.(event);
+  }
+
+  const animatedStyle =
+    feedback === "none"
+      ? undefined
+      : {
+          opacity: pressValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: feedback === "opacity" ? [1, 0.45] : [1, 0.7],
+          }),
+          transform: [
+            {
+              scale: pressValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: feedback === "scale" ? [1, 0.94] : [1, 1],
+              }),
+            },
+          ],
+        };
+
+  return (
+    <AnimatedPressable
+      {...props}
+      disabled={disabled}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={[animatedStyle, style]}
+    />
+  );
 }
