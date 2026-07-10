@@ -1,7 +1,7 @@
+import { useMemo, useState } from "react";
+import { Modal, Platform, Pressable, Text, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, isValid, parseISO } from "date-fns";
-import { useMemo, useState } from "react";
-import { Platform, Pressable, Text, View } from "react-native";
 
 interface AppDateInputProps {
   label: string;
@@ -67,53 +67,79 @@ export function AppDateInput({
       <Text className="text-sm font-medium text-slate-700">
         {label}
         {required ? <Text className="text-red-600"> *</Text> : null}
-        {!required && optional ? <Text className="text-slate-400"> opcional</Text> : null}
-      </Text>
+        {!required*&& optional ? (
+          <Text cl*ssName="text-slate-400"> opcional<*Text>
+        ) : null}
+      </Te*t>
 
       <Pressable
+        disab*ed={disabled}
+        onPress={ope*Picker}
         className={[
           "rounded-2xl border bg-white px-4 py-4",
           error ? "border-red-500" : "border-slate-300",
           disabled ? "opacity-60" : "",
         ].join(" ")}
-        disabled={disabled}
-        onPress={openPicker}
       >
-        <Text
-          className={["text-base", value ? "text-slate-900" : "text-slate-400"].join(" ")}
+   *    <Text
+          className={[
+            "text-base",
+            value ? "text-slate-900" : "text-slate-400",
+          ].join(" ")}
         >
           {value || placeholder}
         </Text>
       </Pressable>
 
-      {showPicker ? (
-        <View className="rounded-2xl bg-white p-3">
-          <DateTimePicker
-            display={Platform.OS === "ios" ? "compact" : "default"}
-            mode="date"
-            value={draftDate}
-            onDismiss={handleDismiss}
-            onValueChange={handleValueChange}
-          />
+      {Platform.OS === "android" && showPicker ? (
+        <DateTimePicker
+          value={draftDate}
+          mode="date"
+          display="default"
+          onValueChange={handleValueChange}
+          onDismiss={handleDismiss}
+        />
+      ) : null}
 
-          {Platform.OS === "ios" ? (
-            <View className="mt-3 flex-row gap-3">
-              <Pressable
-                className="rounded-full bg-slate-200 px-4 py-2"
-                onPress={handleDismiss}
-              >
-                <Text className="text-sm font-semibold text-slate-700">Cancelar</Text>
-              </Pressable>
+      {Platform.OS === "ios" ? (
+        <Modal
+          visible={showPicker}
+          transparent
+          animationType="fade"
+          onRequestClose={handleDismiss}
+        >
+          <View className="flex-1 justify-end bg-black/30 px-4 pb-8">
+            <View className="rounded-3xl bg-white p-5">
+              <View className="mb-4 flex-row items-center justify-between">
+                <Pressable
+                  onPress={handleDismiss}
+                  className="rounded-full bg-slate-200 px-4 py-2"
+                >
+                  <Text className="text-sm font-semibold text-slate-700">
+                    Cancelar
+                  </Text>
+                </Pressable>
 
-              <Pressable
-                className="rounded-full bg-blue-600 px-4 py-2"
-                onPress={confirmIosDate}
-              >
-                <Text className="text-sm font-semibold text-white">Listo</Text>
-              </Pressable>
+                <Pressable
+                  onPress={confirmIosDate}
+                  className="rounded-full bg-blue-600 px-4 py-2"
+                >
+                  <Text className="text-sm font-semibold text-white">
+                    Listo
+                  </Text>
+                </Pressable>
+              </View>
+
+              <DateTimePicker
+                value={draftDate}
+                mode="date"
+                display="spinner"
+                onValueChange={handleValueChange}
+                onDismiss={handleDismiss}
+              />
             </View>
-          ) : null}
-        </View>
+          </View>
+        </Modal>
       ) : null}
 
       {error ? <Text className="text-sm text-red-600">{error}</Text> : null}
