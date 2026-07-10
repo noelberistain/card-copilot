@@ -43,9 +43,7 @@ export function AppPressable({
   style,
   ...props
 }: AppPressableProps) {
-  function resolveStyle(
-    state: PressableStateCallbackType
-  ): StyleProp<ViewStyle> {
+  function resolveStyle(state: PressableStateCallbackType): StyleProp<ViewStyle> {
     const feedbackStyle = getFeedbackStyle(state.pressed, disabled, feedback);
     const resolvedStyle = typeof style === "function" ? style(state) : style;
 
