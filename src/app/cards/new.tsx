@@ -1,7 +1,7 @@
+import { Alert, View } from "react-native";
 import { router } from "expo-router";
-import { Alert, Text, View } from "react-native";
 
-import { ScreenContainer } from "@/components/ui";
+import { ScreenContainer, ScreenHeader } from "@/components/ui";
 import { CardForm } from "@/features/cards/components/CardForm";
 import { useSaveCard } from "@/features/cards/hooks/useSaveCard";
 import type { CardFormValues } from "@/features/cards/schemas/cardForm.schema";
@@ -27,20 +27,17 @@ export default function NewCardScreen() {
   return (
     <ScreenContainer>
       <View className="gap-6">
-        <View>
-          <Text className="text-3xl font-bold text-slate-950">Agregar tarjeta</Text>
-
-          <Text className="mt-2 text-base text-slate-500">
-            Captura la información base de tu tarjeta para empezar a darle seguimiento.
-          </Text>
-        </View>
+        <ScreenHeader
+          title="Agregar tarjeta"
+          subtitle="Captura la información base de tu tarjeta para empezar a darle seguimiento."
+          showBackButton
+        />
 
         <CardForm
           submitLabel="Guardar tarjeta"
           saving={saving}
           error={error}
           onSubmit={handleSave}
-          onCancel={() => router.back()}
         />
       </View>
     </ScreenContainer>
