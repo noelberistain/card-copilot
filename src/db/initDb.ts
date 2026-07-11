@@ -3,9 +3,7 @@ import { sqlite } from "@/db/client";
 let initialized = false;
 
 function hasColumn(tableName: string, columnName: string) {
-  const columns = sqlite.getAllSync<{ name: string }>(
-    `PRAGMA table_info(${tableName});`
-  );
+  const columns = sqlite.getAllSync<{ name: string }>(`PRAGMA table_info(${tableName});`);
 
   return columns.some((column) => column.name === columnName);
 }
