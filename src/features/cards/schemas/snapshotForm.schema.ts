@@ -10,6 +10,22 @@ function parseMoney(value: string) {
   return Number.isNaN(num) ? value : num;
 }
 
+function isValidOptionalMoney(value: string) {
+  const normalized = value.replace(/,/g, "").trim();
+
+  if (!normalized) return true;
+
+  return Number.isFinite(Number(normalized));
+}
+
+function parseOptionalMoney(value: string) {
+  const normalized = value.replace(/,/g, "").trim();
+
+  if (!normalized) return null;
+
+  return Number(normalized);
+}
+
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
 export const snapshotFormSchema = z
@@ -24,6 +40,17 @@ export const snapshotFormSchema = z
           })
           .min(0, "El saldo actual no puede ser negativo.")
       ),
+
+    reportedAvailableCredit: z
+      .string()
+      .trim()
+      .refine(isValidOptionalMoney, {
+        message: "El crédito disponible reportado debe ser un número válido.",
+      })
+      .transform(parseOptionalMoney)
+      .refine((value) => value === null || value >= 0, {
+        message: "El crédito disponible reportado no puede ser negativo.",
+      }),
 
     statementBalance: z
       .string()
@@ -58,9 +85,15 @@ export const snapshotFormSchema = z
           .min(0, "El pago para no generar intereses no puede ser negativo.")
       ),
 
-    lastCutoffDate: z.string().trim().regex(datePattern, "Usa formato YYYY-MM-DD."),
+    lastCutoffDate: z
+      .string()
+      .trim()
+      .regex(datePattern, "Usa formato YYYY-MM-DD."),
 
-    paymentDueDate: z.string().trim().regex(datePattern, "Usa formato YYYY-MM-DD."),
+    paymentDueDate: z
+      .string()
+      .trim()
+      .regex(datePattern, "Usa formato YYYY-MM-DD."),
 
     notes: z
       .string()
