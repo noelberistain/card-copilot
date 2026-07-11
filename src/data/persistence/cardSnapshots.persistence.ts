@@ -4,6 +4,8 @@ import { db } from "@/db/client";
 import { cardSnapshots } from "@/db/schema/cardSnapshots";
 import type { CardSnapshot } from "@/models/cards/card.types";
 
+import { toCardSnapshot, toNewCardSnapshotRow } from "@/data/mappers/cardSnapshot.mapper";
+
 export class SqliteCardSnapshotsPersistence {
   async update(snapshot: CardSnapshot): Promise<void> {
     await db
@@ -14,6 +16,7 @@ export class SqliteCardSnapshotsPersistence {
         statementBalance: snapshot.statementBalance,
         minimumPayment: snapshot.minimumPayment,
         paymentToAvoidInterest: snapshot.paymentToAvoidInterest,
+        reportedAvailableCredit: snapshot.reportedAvailableCredit ?? null,
         lastCutoffDate: snapshot.lastCutoffDate,
         paymentDueDate: snapshot.paymentDueDate,
         notes: snapshot.notes,
@@ -23,7 +26,7 @@ export class SqliteCardSnapshotsPersistence {
   }
 
   async create(snapshot: CardSnapshot): Promise<void> {
-    await db.insert(cardSnapshots).values(snapshot);
+    await db.insert(cardSnapshots).values(toNewCardSnapshotRow(snapshot));
   }
 
   async findById(snapshotId: string): Promise<CardSnapshot | null> {
@@ -33,7 +36,9 @@ export class SqliteCardSnapshotsPersistence {
       .where(eq(cardSnapshots.id, snapshotId))
       .limit(1);
 
-    return rows[0] ?? null;
+    const row = result[0];
+
+    return row ? toCardSnapshot(row) : null;
   }
 
   async findAllByCardId(cardId: string): Promise<CardSnapshot[]> {
@@ -52,6 +57,8 @@ export class SqliteCardSnapshotsPersistence {
       .orderBy(desc(cardSnapshots.capturedAt))
       .limit(1);
 
-    return rows[0] ?? null;
+    const row = result[0];
+
+    return row ? toCardSnapshot(row) : null;
   }
 }
