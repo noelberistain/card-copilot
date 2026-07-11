@@ -17,6 +17,8 @@ export const cardSnapshots = sqliteTable(
     minimumPayment: real("minimum_payment").notNull(),
     paymentToAvoidInterest: real("payment_to_avoid_interest").notNull(),
 
+    reportedAvailableCredit: real("reported_available_credit"),
+
     lastCutoffDate: text("last_cutoff_date").notNull(),
     paymentDueDate: text("payment_due_date").notNull(),
 
