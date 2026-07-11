@@ -57,12 +57,11 @@ export function SnapshotForm({
         <Controller
           control={control}
           name="currentBalance"
-          render={({ field: { value, onChange, onBlur } }) => (
-            <AppTextInput
+          render={({ field: { onBlur, onChange, value } }) => (
+            <AppMoneyInput
               error={errors.currentBalance?.message}
-              keyboardType="decimal-pad"
               label="Saldo actual"
-              placeholder="Ej. 9648.03"
+              placeholder="Ej. 10,000"
               required
               value={value}
               onBlur={onBlur}
@@ -74,29 +73,27 @@ export function SnapshotForm({
         <Controller
           control={control}
           name="reportedAvailableCredit"
-          render={({ field: { value, onChange, onBlur } }) => (
-            <AppTextInput
+          render={({ field: { onBlur, onChange, value } }) => (
+            <AppMoneyInput
               error={errors.reportedAvailableCredit?.message}
-              keyboardType="decimal-pad"
               label="Crédito disponible reportado"
               optional
-              placeholder="Ej. 183894"
+              placeholder="Ej. 183,894"
               value={value ?? ""}
               onBlur={onBlur}
               onChangeText={onChange}
             />
           )}
-        />
+        />  
 
         <Controller
           control={control}
           name="statementBalance"
-          render={({ field: { value, onChange, onBlur } }) => (
-            <AppTextInput
+          render={({ field: { onBlur, onChange, value } }) => (
+            <AppMoneyInput
               error={errors.statementBalance?.message}
-              keyboardType="decimal-pad"
               label="Saldo al corte"
-              placeholder="Ej. 8862.63"
+              placeholder="Ej. 8,000"
               required
               value={value}
               onBlur={onBlur}
@@ -108,12 +105,11 @@ export function SnapshotForm({
         <Controller
           control={control}
           name="minimumPayment"
-          render={({ field: { value, onChange, onBlur } }) => (
-            <AppTextInput
+          render={({ field: { onBlur, onChange, value } }) => (
+            <AppMoneyInput
               error={errors.minimumPayment?.message}
-              keyboardType="decimal-pad"
               label="Pago mínimo"
-              placeholder="Ej. 450"
+              placeholder="Ej. 400"
               required
               value={value}
               onBlur={onBlur}
@@ -125,12 +121,11 @@ export function SnapshotForm({
         <Controller
           control={control}
           name="paymentToAvoidInterest"
-          render={({ field: { value, onChange, onBlur } }) => (
-            <AppTextInput
+          render={({ field: { onBlur, onChange, value } }) => (
+            <AppMoneyInput
               error={errors.paymentToAvoidInterest?.message}
-              keyboardType="decimal-pad"
               label="Pago para no generar intereses"
-              placeholder="Ej. 8862.63"
+              placeholder="Ej. 8,000"
               required
               value={value}
               onBlur={onBlur}
