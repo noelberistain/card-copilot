@@ -36,7 +36,7 @@ export class SqliteCardSnapshotsPersistence {
       .where(eq(cardSnapshots.id, snapshotId))
       .limit(1);
 
-    const row = result[0];
+    const row = rows[0];
 
     return row ? toCardSnapshot(row) : null;
   }
@@ -57,7 +57,7 @@ export class SqliteCardSnapshotsPersistence {
       .orderBy(desc(cardSnapshots.capturedAt))
       .limit(1);
 
-    const row = result[0];
+    const row = rows[0];
 
     return row ? toCardSnapshot(row) : null;
   }
