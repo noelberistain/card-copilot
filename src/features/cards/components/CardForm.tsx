@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 
-import { AppButton, AppColorInput, AppTextInput } from "@/components/ui";
+import { AppButton, AppColorInput, AppMoneyInput, AppTextInput } from "@/components/ui";
 import {
   cardFormSchema,
   type CardFormInput,
@@ -90,12 +90,11 @@ export function CardForm({
         <Controller
           control={control}
           name="creditLimit"
-          render={({ field: { value, onChange, onBlur } }) => (
-            <AppTextInput
+          render={({ field: { onBlur, onChange, value } }) => (
+            <AppMoneyInput
               error={errors.creditLimit?.message}
-              keyboardType="decimal-pad"
               label="Línea de crédito"
-              placeholder="Ej. 25000"
+              placeholder="Ej. 25,000"
               required
               value={value}
               onBlur={onBlur}
