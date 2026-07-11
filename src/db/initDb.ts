@@ -2,6 +2,14 @@ import { sqlite } from "@/db/client";
 
 let initialized = false;
 
+function hasColumn(tableName: string, columnName: string) {
+  const columns = sqlite.getAllSync<{ name: string }>(
+    `PRAGMA table_info(${tableName});`
+  );
+
+  return columns.some((column) => column.name === columnName);
+}
+
 export function initDb() {
   if (initialized) return;
 
@@ -30,6 +38,7 @@ export function initDb() {
       statement_balance REAL NOT NULL,
       minimum_payment REAL NOT NULL,
       payment_to_avoid_interest REAL NOT NULL,
+      reported_available_credit REAL,
       last_cutoff_date TEXT NOT NULL,
       payment_due_date TEXT NOT NULL,
       notes TEXT,
@@ -44,6 +53,13 @@ export function initDb() {
     CREATE INDEX IF NOT EXISTS idx_card_snapshots_captured_at
       ON card_snapshots(captured_at);
   `);
+
+  if (!hasColumn("card_snapshots", "reported_available_credit")) {
+    sqlite.execSync(`
+      ALTER TABLE card_snapshots
+      ADD COLUMN reported_available_credit REAL;
+    `);
+  }
 
   initialized = true;
 }
