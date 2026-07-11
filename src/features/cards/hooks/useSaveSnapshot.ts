@@ -32,6 +32,7 @@ export function useSaveSnapshot({ cardId, initialSnapshot }: UseSaveSnapshotOpti
               statementBalance: values.statementBalance,
               minimumPayment: values.minimumPayment,
               paymentToAvoidInterest: values.paymentToAvoidInterest,
+              reportedAvailableCredit: values.reportedAvailableCredit,
               lastCutoffDate: values.lastCutoffDate,
               paymentDueDate: values.paymentDueDate,
               notes: values.notes,
@@ -46,6 +47,7 @@ export function useSaveSnapshot({ cardId, initialSnapshot }: UseSaveSnapshotOpti
               statementBalance: values.statementBalance,
               minimumPayment: values.minimumPayment,
               paymentToAvoidInterest: values.paymentToAvoidInterest,
+              reportedAvailableCredit: values.reportedAvailableCredit,
 
               lastCutoffDate: values.lastCutoffDate,
               paymentDueDate: values.paymentDueDate,
