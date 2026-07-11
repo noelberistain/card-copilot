@@ -1,4 +1,5 @@
 export * from "./AppButton";
+export * from "./AppMoneyInput";
 export * from "./AppTextInput";
 export * from "./AppDateInput";
 export * from "./AppColorInput";
