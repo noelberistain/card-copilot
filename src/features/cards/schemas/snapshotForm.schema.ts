@@ -85,15 +85,9 @@ export const snapshotFormSchema = z
           .min(0, "El pago para no generar intereses no puede ser negativo.")
       ),
 
-    lastCutoffDate: z
-      .string()
-      .trim()
-      .regex(datePattern, "Usa formato YYYY-MM-DD."),
+    lastCutoffDate: z.string().trim().regex(datePattern, "Usa formato YYYY-MM-DD."),
 
-    paymentDueDate: z
-      .string()
-      .trim()
-      .regex(datePattern, "Usa formato YYYY-MM-DD."),
+    paymentDueDate: z.string().trim().regex(datePattern, "Usa formato YYYY-MM-DD."),
 
     notes: z
       .string()

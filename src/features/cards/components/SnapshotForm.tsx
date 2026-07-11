@@ -26,6 +26,7 @@ const emptyDefaultValues: SnapshotFormInput = {
   notes: "",
   paymentDueDate: "",
   paymentToAvoidInterest: "",
+  reportedAvailableCredit: "",
   statementBalance: "",
 };
 
