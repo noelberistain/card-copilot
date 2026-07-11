@@ -6,6 +6,7 @@ import { ActivityIndicator, Text, View } from "react-native";
 import {
   AppButton,
   AppDateInput,
+  AppMoneyInput,
   AppTextInput,
   ScreenContainer,
   ScreenHeader,
@@ -69,12 +70,11 @@ export default function SimulatorScreen() {
             <Controller
               control={control}
               name="amount"
-              render={({ field: { value, onChange, onBlur } }) => (
-                <AppTextInput
+              render={({ field: { onBlur, onChange, value } }) => (
+                <AppMoneyInput
                   error={errors.amount?.message}
-                  keyboardType="decimal-pad"
                   label="Monto de compra"
-                  placeholder="Ej. 3500"
+                  placeholder="Ej. 3,500"
                   required
                   value={value}
                   onBlur={onBlur}
