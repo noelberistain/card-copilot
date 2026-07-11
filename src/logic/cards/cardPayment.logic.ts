@@ -1,7 +1,17 @@
 import type { Card, CardSnapshot } from "@/models/cards/card.types";
 
 export function getAvailableCredit(card: Card, snapshot: CardSnapshot) {
-  return Math.max(card.creditLimit - snapshot.currentBalance, 0);
+  const reportedAvailableCredit = snapshot.reportedAvailableCredit;
+
+  if (
+    typeof reportedAvailableCredit === "number" &&
+    Number.isFinite(reportedAvailableCredit) &&
+    reportedAvailableCredit >= 0
+  ) {
+    return reportedAvailableCredit;
+  }
+
+  return card.creditLimit - snapshot.currentBalance;
 }
 
 export function getCreditUsagePercentage(card: Card, snapshot: CardSnapshot) {
