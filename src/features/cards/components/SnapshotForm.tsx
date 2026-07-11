@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 
-import { AppButton, AppDateInput, AppTextInput } from "@/components/ui";
+import { AppButton, AppDateInput, AppMoneyInput, AppTextInput } from "@/components/ui";
 import {
   snapshotFormSchema,
   type SnapshotFormInput,
@@ -84,7 +84,7 @@ export function SnapshotForm({
               onChangeText={onChange}
             />
           )}
-        />  
+        />
 
         <Controller
           control={control}
