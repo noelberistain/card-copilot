@@ -12,6 +12,7 @@ export function AppMoneyInput({
   label,
   optional = false,
   required = false,
+  style,
   ...props
 }: AppMoneyInputProps) {
   return (
@@ -19,22 +20,28 @@ export function AppMoneyInput({
       <Text className="text-sm font-medium text-slate-700">
         {label}
         {required ? <Text className="text-red-600"> *</Text> : null}
-        {!required && optional ? <Text className="text-slate-400"> opcional</Text> : null}
+        {!required && optional ? (
+          <Text className="text-slate-400"> opcional</Text>
+        ) : null}
       </Text>
 
       <View
         className={[
-          "flex-row items-center rounded-2xl border bg-white px-4 py-4",
+          "min-h-14 flex-row items-center rounded-2xl border bg-white px-4",
           error ? "border-red-500" : "border-slate-300",
           props.editable === false ? "opacity-60" : "",
         ].join(" ")}
       >
-        <Text className="mr-2 text-base font-semibold text-slate-500">$</Text>
+        <Text className="mr-2 text-base font-semibold leading-5 text-slate-500">
+          $
+        </Text>
 
         <TextInput
-          className="flex-1 text-base text-slate-900"
+          className="h-6 flex-1 p-0 text-base leading-5 text-slate-900"
           keyboardType="decimal-pad"
           placeholderTextColor="#94a3b8"
+          style={[{ paddingVertical: 0 }, style]}
+          textAlignVertical="center"
           {...props}
         />
       </View>
