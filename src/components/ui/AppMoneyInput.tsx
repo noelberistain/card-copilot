@@ -20,9 +20,7 @@ export function AppMoneyInput({
       <Text className="text-sm font-medium text-slate-700">
         {label}
         {required ? <Text className="text-red-600"> *</Text> : null}
-        {!required && optional ? (
-          <Text className="text-slate-400"> opcional</Text>
-        ) : null}
+        {!required && optional ? <Text className="text-slate-400"> opcional</Text> : null}
       </Text>
 
       <View
@@ -32,9 +30,7 @@ export function AppMoneyInput({
           props.editable === false ? "opacity-60" : "",
         ].join(" ")}
       >
-        <Text className="mr-2 text-base font-semibold leading-5 text-slate-500">
-          $
-        </Text>
+        <Text className="mr-2 text-base font-semibold leading-5 text-slate-500">$</Text>
 
         <TextInput
           className="h-6 flex-1 p-0 text-base leading-5 text-slate-900"
