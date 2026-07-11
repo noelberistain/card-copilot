@@ -87,6 +87,11 @@ export default function EditSnapshotScreen() {
 
   const defaultValues: Partial<SnapshotFormInput> = {
     currentBalance: String(snapshot.currentBalance),
+    reportedAvailableCredit:
+      snapshot.reportedAvailableCredit === null ||
+      snapshot.reportedAvailableCredit === undefined
+        ? ""
+        : String(snapshot.reportedAvailableCredit),
     statementBalance: String(snapshot.statementBalance),
     minimumPayment: String(snapshot.minimumPayment),
     paymentToAvoidInterest: String(snapshot.paymentToAvoidInterest),
