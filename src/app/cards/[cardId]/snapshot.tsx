@@ -71,17 +71,16 @@ export default function SnapshotScreen() {
       <View className="gap-6">
         <ScreenHeader
           showBackButton
-          subtitle={`Registra el estado actual de ${card.alias} para calcular pagos, saldos e insights más adelante.`}
+          subtitle={
+            <Text className="mt-2 text-base text-slate-500">
+              Registra el estado actual de{" "}
+              <Text className="font-bold text-slate-950">{card.alias}</Text> para calcular
+              pagos, saldos e insights más adelante.
+            </Text>
+          }
+
           title="Capturar estado"
         />
-
-        <View className="rounded-3xl bg-white p-5">
-          <Text className="text-sm text-slate-500">Tarjeta</Text>
-
-          <Text className="mt-1 text-xl font-bold text-slate-950">{card.alias}</Text>
-
-          <Text className="mt-1 text-sm text-slate-500">{card.bank}</Text>
-        </View>
 
         <SnapshotForm
           disableSubmitUntilDirty

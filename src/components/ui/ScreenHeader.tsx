@@ -5,7 +5,7 @@ import { AppIconButton } from "@/components/ui/AppIconButton";
 
 interface ScreenHeaderProps {
   title: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   showBackButton?: boolean;
   onBackPress?: () => void;
 }
