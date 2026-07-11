@@ -1,7 +1,7 @@
 import type {
   CardSnapshotRow,
   NewCardSnapshotRow,
-} from "@/db/schema/cards";
+} from "@/db/schema/cardSnapshots";
 import type { CardSnapshot } from "@/models/cards/card.types";
 
 export function toCardSnapshot(row: CardSnapshotRow): CardSnapshot {
