@@ -24,10 +24,12 @@ export interface CardSnapshot {
   minimumPayment: number;
   paymentToAvoidInterest: number;
 
+  reportedAvailableCredit?: number | null;
+
   lastCutoffDate: string;
   paymentDueDate: string;
 
-  notes: string | null;
+  notes?: string | null;
 
   createdAt: string;
   updatedAt: string;
