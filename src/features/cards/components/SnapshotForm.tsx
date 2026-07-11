@@ -73,6 +73,23 @@ export function SnapshotForm({
 
         <Controller
           control={control}
+          name="reportedAvailableCredit"
+          render={({ field: { value, onChange, onBlur } }) => (
+            <AppTextInput
+              error={errors.reportedAvailableCredit?.message}
+              keyboardType="decimal-pad"
+              label="Crédito disponible reportado"
+              optional
+              placeholder="Ej. 183894"
+              value={value ?? ""}
+              onBlur={onBlur}
+              onChangeText={onChange}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
           name="statementBalance"
           render={({ field: { value, onChange, onBlur } }) => (
             <AppTextInput
