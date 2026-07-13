@@ -1,10 +1,15 @@
 import type { Card, CardSnapshot } from "@/models/cards/card.types";
 import { getDaysUntilPayment } from "@/logic/cards/cardDates.logic";
 import { hasNoPaymentDue } from "@/logic/cards/cardPayment.logic";
+import { hasGeneratedStatement } from "@/logic/cards/cardSnapshotStatus.logic";
 import { formatShortDate } from "@/lib/date/formatShortDate";
 import { formatCurrency } from "@/lib/money/formatCurrency";
 
-export type HomeCardPaymentTone = "default" | "danger" | "warning" | "success";
+export type HomeCardPaymentTone =
+  | "default"
+  | "danger"
+  | "warning"
+  | "success";
 
 export interface HomeCardView {
   card: Card;
@@ -28,7 +33,10 @@ function getTodayIsoDate() {
   return new Date().toISOString().slice(0, 10);
 }
 
-function buildPaymentDisplay(snapshot: CardSnapshot, todayIso: string) {
+function buildGeneratedPaymentDisplay(
+  snapshot: CardSnapshot,
+  todayIso: string
+) {
   if (hasNoPaymentDue(snapshot)) {
     return {
       paymentLabel: "Sin pago requerido",
@@ -37,14 +45,19 @@ function buildPaymentDisplay(snapshot: CardSnapshot, todayIso: string) {
     };
   }
 
-  const daysUntilPayment = getDaysUntilPayment(todayIso, snapshot.paymentDueDate);
+  const daysUntilPayment = getDaysUntilPayment(
+    todayIso,
+    snapshot.paymentDueDate
+  );
 
   const paymentAmount = formatCurrency(snapshot.paymentToAvoidInterest);
 
   if (daysUntilPayment < 0) {
     return {
       paymentLabel: "Pago vencido",
-      paymentValue: `${paymentAmount} · hace ${Math.abs(daysUntilPayment)} día(s)`,
+      paymentValue: `${paymentAmount} · hace ${Math.abs(
+        daysUntilPayment
+      )} día(s)`,
       paymentTone: "danger" as const,
     };
   }
@@ -72,6 +85,14 @@ function buildPaymentDisplay(snapshot: CardSnapshot, todayIso: string) {
   };
 }
 
+function buildPartialPaymentDisplay() {
+  return {
+    paymentLabel: "Estado parcial",
+    paymentValue: "Faltan pagos",
+    paymentTone: "warning" as const,
+  };
+}
+
 export function buildHomeCardView({
   card,
   latestSnapshot,
@@ -91,9 +112,31 @@ export function buildHomeCardView({
     };
   }
 
-  const paymentDisplay = buildPaymentDisplay(latestSnapshot, todayIso);
+  if (!hasGeneratedStatement(latestSnapshot)) {
+    return {
+      card,
+      latestSnapshot,
+      balanceLabel: "Saldo actual",
+      balanceValue: formatCurrency(latestSnapshot.currentBalance),
+      paymentLabel: buildPartialPaymentDisplay().paymentLabel,
+      paymentValue: buildPartialPaymentDisplay().paymentValue,
+      cutoffText: latestSnapshot.nextCutoffDate
+        ? `Próximo corte ${formatShortDate(latestSnapshot.nextCutoffDate)}`
+        : "Corte pendiente",
+      dueText: "Límite pendiente",
+      paymentTone: "warning",
+    };
+  }
 
-  const daysUntilPayment = getDaysUntilPayment(todayIso, latestSnapshot.paymentDueDate);
+  const paymentDisplay = buildGeneratedPaymentDisplay(
+    latestSnapshot,
+    todayIso
+  );
+
+  const daysUntilPayment = getDaysUntilPayment(
+    todayIso,
+    latestSnapshot.paymentDueDate
+  );
 
   const dueText =
     daysUntilPayment === 0
