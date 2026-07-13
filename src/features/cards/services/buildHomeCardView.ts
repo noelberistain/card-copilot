@@ -4,11 +4,7 @@ import { hasNoPaymentDue } from "@/logic/cards/cardPayment.logic";
 import { formatShortDate } from "@/lib/date/formatShortDate";
 import { formatCurrency } from "@/lib/money/formatCurrency";
 
-export type HomeCardPaymentTone =
-  | "default"
-  | "danger"
-  | "warning"
-  | "success";
+export type HomeCardPaymentTone = "default" | "danger" | "warning" | "success";
 
 export interface HomeCardView {
   card: Card;
@@ -41,19 +37,14 @@ function buildPaymentDisplay(snapshot: CardSnapshot, todayIso: string) {
     };
   }
 
-  const daysUntilPayment = getDaysUntilPayment(
-    todayIso,
-    snapshot.paymentDueDate
-  );
+  const daysUntilPayment = getDaysUntilPayment(todayIso, snapshot.paymentDueDate);
 
   const paymentAmount = formatCurrency(snapshot.paymentToAvoidInterest);
 
   if (daysUntilPayment < 0) {
     return {
       paymentLabel: "Pago vencido",
-      paymentValue: `${paymentAmount} · hace ${Math.abs(
-        daysUntilPayment
-      )} día(s)`,
+      paymentValue: `${paymentAmount} · hace ${Math.abs(daysUntilPayment)} día(s)`,
       paymentTone: "danger" as const,
     };
   }
@@ -102,10 +93,7 @@ export function buildHomeCardView({
 
   const paymentDisplay = buildPaymentDisplay(latestSnapshot, todayIso);
 
-  const daysUntilPayment = getDaysUntilPayment(
-    todayIso,
-    latestSnapshot.paymentDueDate
-  );
+  const daysUntilPayment = getDaysUntilPayment(todayIso, latestSnapshot.paymentDueDate);
 
   const dueText =
     daysUntilPayment === 0

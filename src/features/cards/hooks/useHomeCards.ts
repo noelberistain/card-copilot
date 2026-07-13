@@ -14,10 +14,7 @@ export function useHomeCards() {
   const [error, setError] = useState<string | null>(null);
 
   const cardsPersistence = useMemo(() => new SqliteCardsPersistence(), []);
-  const snapshotsPersistence = useMemo(
-    () => new SqliteCardSnapshotsPersistence(),
-    []
-  );
+  const snapshotsPersistence = useMemo(() => new SqliteCardSnapshotsPersistence(), []);
 
   const loadCards = useCallback(async () => {
     try {
@@ -28,8 +25,7 @@ export function useHomeCards() {
 
       const homeCards = await Promise.all(
         activeCards.map(async (card) => {
-          const latestSnapshot =
-            await snapshotsPersistence.findLatestByCardId(card.id);
+          const latestSnapshot = await snapshotsPersistence.findLatestByCardId(card.id);
 
           return buildHomeCardView({
             card,

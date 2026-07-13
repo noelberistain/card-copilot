@@ -87,22 +87,22 @@ export default function EditSnapshotScreen() {
 
   const defaultValues: Partial<SnapshotFormInput> = {
     statementStatus: snapshot.statementStatus,
-  
+
     currentBalance: String(snapshot.currentBalance),
     reportedAvailableCredit:
       snapshot.reportedAvailableCredit === null ||
       snapshot.reportedAvailableCredit === undefined
         ? ""
         : String(snapshot.reportedAvailableCredit),
-  
+
     statementBalance: String(snapshot.statementBalance),
     minimumPayment: String(snapshot.minimumPayment),
     paymentToAvoidInterest: String(snapshot.paymentToAvoidInterest),
-  
+
     lastCutoffDate: snapshot.lastCutoffDate,
     nextCutoffDate: snapshot.nextCutoffDate ?? "",
     paymentDueDate: snapshot.paymentDueDate,
-  
+
     notes: snapshot.notes ?? "",
   };
 

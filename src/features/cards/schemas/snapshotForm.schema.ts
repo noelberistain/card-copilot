@@ -26,11 +26,7 @@ function parseOptionalMoneyNumber(value: string | undefined) {
   return Number.isFinite(num) ? num : null;
 }
 
-function addIssue(
-  ctx: z.RefinementCtx,
-  path: string[],
-  message: string
-) {
+function addIssue(ctx: z.RefinementCtx, path: string[], message: string) {
   ctx.addIssue({
     code: z.ZodIssueCode.custom,
     message,
@@ -84,10 +80,7 @@ export const snapshotFormSchema = z
         ["reportedAvailableCredit"],
         "El crédito disponible reportado debe ser un número válido."
       );
-    } else if (
-      reportedAvailableCredit !== null &&
-      reportedAvailableCredit < 0
-    ) {
+    } else if (reportedAvailableCredit !== null && reportedAvailableCredit < 0) {
       addIssue(
         ctx,
         ["reportedAvailableCredit"],
@@ -105,36 +98,18 @@ export const snapshotFormSchema = z
 
     const statementBalance = parseMoneyNumber(values.statementBalance);
     const minimumPayment = parseMoneyNumber(values.minimumPayment);
-    const paymentToAvoidInterest = parseMoneyNumber(
-      values.paymentToAvoidInterest
-    );
+    const paymentToAvoidInterest = parseMoneyNumber(values.paymentToAvoidInterest);
 
     if (statementBalance === null) {
-      addIssue(
-        ctx,
-        ["statementBalance"],
-        "El saldo al corte debe ser un número válido."
-      );
+      addIssue(ctx, ["statementBalance"], "El saldo al corte debe ser un número válido.");
     } else if (statementBalance < 0) {
-      addIssue(
-        ctx,
-        ["statementBalance"],
-        "El saldo al corte no puede ser negativo."
-      );
+      addIssue(ctx, ["statementBalance"], "El saldo al corte no puede ser negativo.");
     }
 
     if (minimumPayment === null) {
-      addIssue(
-        ctx,
-        ["minimumPayment"],
-        "El pago mínimo debe ser un número válido."
-      );
+      addIssue(ctx, ["minimumPayment"], "El pago mínimo debe ser un número válido.");
     } else if (minimumPayment < 0) {
-      addIssue(
-        ctx,
-        ["minimumPayment"],
-        "El pago mínimo no puede ser negativo."
-      );
+      addIssue(ctx, ["minimumPayment"], "El pago mínimo no puede ser negativo.");
     }
 
     if (paymentToAvoidInterest === null) {
@@ -206,29 +181,25 @@ export const snapshotFormSchema = z
 
       currentBalance: parseMoneyNumber(values.currentBalance) ?? 0,
 
-      reportedAvailableCredit: parseOptionalMoneyNumber(
-        values.reportedAvailableCredit
-      ),
+      reportedAvailableCredit: parseOptionalMoneyNumber(values.reportedAvailableCredit),
 
       statementBalance:
         statementStatus === "generated"
-          ? parseMoneyNumber(values.statementBalance) ?? 0
+          ? (parseMoneyNumber(values.statementBalance) ?? 0)
           : 0,
 
       minimumPayment:
         statementStatus === "generated"
-          ? parseMoneyNumber(values.minimumPayment) ?? 0
+          ? (parseMoneyNumber(values.minimumPayment) ?? 0)
           : 0,
 
       paymentToAvoidInterest:
         statementStatus === "generated"
-          ? parseMoneyNumber(values.paymentToAvoidInterest) ?? 0
+          ? (parseMoneyNumber(values.paymentToAvoidInterest) ?? 0)
           : 0,
 
       lastCutoffDate:
-        statementStatus === "generated"
-          ? normalizeString(values.lastCutoffDate)
-          : "",
+        statementStatus === "generated" ? normalizeString(values.lastCutoffDate) : "",
 
       nextCutoffDate:
         statementStatus === "not-generated"
@@ -236,9 +207,7 @@ export const snapshotFormSchema = z
           : null,
 
       paymentDueDate:
-        statementStatus === "generated"
-          ? normalizeString(values.paymentDueDate)
-          : "",
+        statementStatus === "generated" ? normalizeString(values.paymentDueDate) : "",
 
       notes: normalizeString(values.notes) || null,
     };

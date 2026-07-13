@@ -2,10 +2,7 @@ import { desc, eq } from "drizzle-orm";
 
 import { db } from "@/db/client";
 import { cardSnapshots } from "@/db/schema/cardSnapshots";
-import {
-  toCardSnapshot,
-  toNewCardSnapshotRow,
-} from "@/data/mappers/cardSnapshot.mapper";
+import { toCardSnapshot, toNewCardSnapshotRow } from "@/data/mappers/cardSnapshot.mapper";
 import type { CardSnapshot } from "@/models/cards/card.types";
 
 export class SqliteCardSnapshotsPersistence {

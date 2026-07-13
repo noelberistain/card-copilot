@@ -11,10 +11,7 @@ interface UseSaveSnapshotOptions {
   initialSnapshot?: CardSnapshot;
 }
 
-export function useSaveSnapshot({
-  cardId,
-  initialSnapshot,
-}: UseSaveSnapshotOptions) {
+export function useSaveSnapshot({ cardId, initialSnapshot }: UseSaveSnapshotOptions) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

@@ -140,7 +140,8 @@ export default function CardDetailScreen() {
 
   const { card, latestSnapshot, metrics, insights, status } = detail;
 
-  const canShowGeneratedStatementPanels = latestSnapshot && metrics && hasGeneratedStatement(latestSnapshot);
+  const canShowGeneratedStatementPanels =
+    latestSnapshot && metrics && hasGeneratedStatement(latestSnapshot);
 
   return (
     <ScreenContainer>
@@ -199,19 +200,19 @@ export default function CardDetailScreen() {
 
         {!latestSnapshot || !metrics ? (
           <EmptyState
-            title="Sin estado capturado"
             message="Captura el estado actual de esta tarjeta para ver saldos, fechas e insights."
+            title="Sin estado capturado"
           />
         ) : (
           <>
-            <CardSnapshotSummary snapshot={latestSnapshot} metrics={metrics} />
-        
+            <CardSnapshotSummary metrics={metrics} snapshot={latestSnapshot} />
+
             {!hasGeneratedStatement(latestSnapshot) ? (
               <View className="rounded-3xl bg-amber-50 p-5">
                 <Text className="text-base font-semibold text-amber-800">
                   Estado parcial
                 </Text>
-        
+
                 <Text className="mt-1 text-sm text-amber-700">
                   Esta tarjeta todavía no tiene un estado de cuenta generado. Por ahora
                   usaremos el saldo actual y el crédito disponible reportado para
@@ -220,11 +221,11 @@ export default function CardDetailScreen() {
                 </Text>
               </View>
             ) : null}
-        
+
             {canShowGeneratedStatementPanels ? (
               <>
                 <CardDatesPanel metrics={metrics} status={status} />
-        
+
                 <CardInsightsPanel insights={insights} />
               </>
             ) : null}

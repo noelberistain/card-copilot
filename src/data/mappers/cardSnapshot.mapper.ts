@@ -1,7 +1,4 @@
-import type {
-  CardSnapshotRow,
-  NewCardSnapshotRow,
-} from "@/db/schema/cardSnapshots";
+import type { CardSnapshotRow, NewCardSnapshotRow } from "@/db/schema/cardSnapshots";
 import type {
   CardSnapshot,
   CardSnapshotStatementStatus,
@@ -42,9 +39,7 @@ export function toCardSnapshot(row: CardSnapshotRow): CardSnapshot {
   };
 }
 
-export function toNewCardSnapshotRow(
-  snapshot: CardSnapshot
-): NewCardSnapshotRow {
+export function toNewCardSnapshotRow(snapshot: CardSnapshot): NewCardSnapshotRow {
   return {
     id: snapshot.id,
     cardId: snapshot.cardId,

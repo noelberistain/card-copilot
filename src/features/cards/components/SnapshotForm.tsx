@@ -64,12 +64,12 @@ function StatementStatusOption({
   return (
     <AppPressable
       accessibilityRole="button"
-      feedback="scale"
-      onPress={onPress}
       className={[
         "flex-1 rounded-2xl border p-4",
         active ? "border-blue-600 bg-blue-50" : "border-slate-200 bg-white",
       ].join(" ")}
+      feedback="scale"
+      onPress={onPress}
     >
       <Text
         className={[
@@ -81,10 +81,9 @@ function StatementStatusOption({
       </Text>
 
       <Text
-        className={[
-          "mt-1 text-xs",
-          active ? "text-blue-700" : "text-slate-500",
-        ].join(" ")}
+        className={["mt-1 text-xs", active ? "text-blue-700" : "text-slate-500"].join(
+          " "
+        )}
       >
         {description}
       </Text>
@@ -92,15 +91,10 @@ function StatementStatusOption({
   );
 }
 
-function StatementStatusSelector({
-  value,
-  onChange,
-}: StatementStatusSelectorProps) {
+function StatementStatusSelector({ value, onChange }: StatementStatusSelectorProps) {
   return (
     <View className="gap-2">
-      <Text className="text-sm font-medium text-slate-700">
-        Estado de cuenta *
-      </Text>
+      <Text className="text-sm font-medium text-slate-700">Estado de cuenta *</Text>
 
       <View className="flex-row gap-3">
         <StatementStatusOption
@@ -151,22 +145,17 @@ export function SnapshotForm({
         control={control}
         name="statementStatus"
         render={({ field: { onChange, value } }) => (
-          <StatementStatusSelector
-            value={value ?? "generated"}
-            onChange={onChange}
-          />
+          <StatementStatusSelector value={value ?? "generated"} onChange={onChange} />
         )}
       />
 
       {statementStatus === "not-generated" ? (
         <View className="rounded-2xl bg-amber-50 p-4">
-          <Text className="text-sm font-semibold text-amber-800">
-            Estado parcial
-          </Text>
+          <Text className="text-sm font-semibold text-amber-800">Estado parcial</Text>
 
           <Text className="mt-1 text-sm text-amber-700">
-            Usa esta opción cuando tu tarjeta todavía no ha cortado y aún no
-            existe saldo al corte, pago mínimo o pago para no generar intereses.
+            Usa esta opción cuando tu tarjeta todavía no ha cortado y aún no existe saldo
+            al corte, pago mínimo o pago para no generar intereses.
           </Text>
         </View>
       ) : null}
@@ -304,10 +293,10 @@ export function SnapshotForm({
           <AppTextInput
             error={errors.notes?.message}
             label="Notas"
+            multiline
             optional
             placeholder="Ej. Datos tomados de la app bancaria"
             value={value ?? ""}
-            multiline
             onBlur={onBlur}
             onChangeText={onChange}
           />
