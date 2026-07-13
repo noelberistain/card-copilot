@@ -1,5 +1,7 @@
 export type CardNetwork = "visa" | "mastercard" | "amex" | "other";
 
+export type CardSnapshotStatementStatus = "generated" | "not-generated";
+
 export interface Card {
   id: string;
   alias: string;
@@ -19,14 +21,16 @@ export interface CardSnapshot {
   cardId: string;
   capturedAt: string;
 
+  statementStatus: CardSnapshotStatementStatus;
+
   currentBalance: number;
   statementBalance: number;
   minimumPayment: number;
   paymentToAvoidInterest: number;
-
   reportedAvailableCredit?: number | null;
 
   lastCutoffDate: string;
+  nextCutoffDate?: string | null;
   paymentDueDate: string;
 
   notes?: string | null;
