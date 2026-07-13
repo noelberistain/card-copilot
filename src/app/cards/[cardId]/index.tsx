@@ -20,9 +20,53 @@ export default function CardDetailScreen() {
   const params = useLocalSearchParams<{ cardId?: string }>();
   const cardId = Array.isArray(params.cardId) ? params.cardId[0] : params.cardId;
 
-  const { detail, loading, error, refresh } = useCardDetail({ cardId });
+  const { detail, error, loading, refresh } = useCardDetail({ cardId });
 
-  const { deactivate, deactivating, error: deactivateError } = useDeactivateCard();
+  const {
+    deactivate,
+    deactivating,
+    error: deactivateError,
+  } = useDeactivateCard();
+
+  function handleDeactivate() {
+    if (!detail) return;
+
+    Alert.alert(
+      "Desactivar tarjeta",
+      `¿Quieres desactivar "${detail.card.alias}"? La tarjeta dejará de aparecer en Home, pero conservará su historial.`,
+      [
+        {
+          style: "cancel",
+          text: "Cancelar",
+        },
+        {
+          onPress: async () => {
+            try {
+              await deactivate(detail.card.id);
+
+              Alert.alert(
+                "Tarjeta desactivada",
+                "La tarjeta se desactivó correctamente.",
+                [
+                  {
+                    onPress: () =>
+                      router.replace({
+                        pathname: "/",
+                      }),
+                    text: "OK",
+                  },
+                ]
+              );
+            } catch {
+              // El hook ya registra el error.
+            }
+          },
+          style: "destructive",
+          text: "Desactivar",
+        },
+      ]
+    );
+  }
 
   function handleEditSnapshot() {
     if (!detail?.latestSnapshot) return;
@@ -32,11 +76,11 @@ export default function CardDetailScreen() {
 
     const goToEditSnapshot = () =>
       router.push({
-        pathname: "/cards/[cardId]/snapshots/[snapshotId]/edit",
         params: {
           cardId: detail.card.id,
           snapshotId: snapshot.id,
         },
+        pathname: "/cards/[cardId]/snapshots/[snapshotId]/edit",
       });
 
     if (wasCapturedToday) {
@@ -49,62 +93,22 @@ export default function CardDetailScreen() {
       "Este estado fue capturado otro día. Si los datos de tu tarjeta cambiaron desde entonces, es mejor capturar un nuevo estado para conservar el historial. Usa “Corregir este estado” solo si capturaste mal un dato.",
       [
         {
-          text: "Cancelar",
           style: "cancel",
+          text: "Cancelar",
         },
         {
-          text: "Capturar nuevo estado",
           onPress: () =>
             router.push({
-              pathname: "/cards/[cardId]/snapshot",
               params: {
                 cardId: detail.card.id,
               },
+              pathname: "/cards/[cardId]/snapshot",
             }),
+          text: "Capturar nuevo estado",
         },
         {
-          text: "Corregir este estado",
           onPress: goToEditSnapshot,
-        },
-      ]
-    );
-  }
-
-  function handleDeactivate() {
-    if (!detail) return;
-
-    Alert.alert(
-      "Desactivar tarjeta",
-      `¿Quieres desactivar "${detail.card.alias}"? La tarjeta dejará de aparecer en Home, pero conservará su historial.`,
-      [
-        {
-          text: "Cancelar",
-          style: "cancel",
-        },
-        {
-          text: "Desactivar",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              await deactivate(detail.card.id);
-
-              Alert.alert(
-                "Tarjeta desactivada",
-                "La tarjeta se desactivó correctamente.",
-                [
-                  {
-                    text: "OK",
-                    onPress: () =>
-                      router.replace({
-                        pathname: "/",
-                      }),
-                  },
-                ]
-              );
-            } catch {
-              // El hook ya registra el error.
-            }
-          },
+          text: "Corregir este estado",
         },
       ]
     );
@@ -116,7 +120,9 @@ export default function CardDetailScreen() {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
 
-          <Text className="mt-3 text-sm text-slate-500">Cargando detalle...</Text>
+          <Text className="mt-3 text-sm text-slate-500">
+            Cargando detalle...
+          </Text>
         </View>
       </ScreenContainer>
     );
@@ -138,8 +144,9 @@ export default function CardDetailScreen() {
     );
   }
 
-  const { card, latestSnapshot, metrics, insights, status } = detail;
+  const { card, insights, latestSnapshot, metrics, status } = detail;
 
+  const hasSnapshot = Boolean(latestSnapshot && metrics);
   const canShowGeneratedStatementPanels =
     latestSnapshot && metrics && hasGeneratedStatement(latestSnapshot);
 
@@ -155,10 +162,10 @@ export default function CardDetailScreen() {
             title="Capturar estado actual"
             onPress={() =>
               router.push({
-                pathname: "/cards/[cardId]/snapshot",
                 params: {
                   cardId: card.id,
                 },
+                pathname: "/cards/[cardId]/snapshot",
               })
             }
           />
@@ -169,10 +176,10 @@ export default function CardDetailScreen() {
               variant="secondary"
               onPress={() =>
                 router.push({
-                  pathname: "/cards/[cardId]/edit",
                   params: {
                     cardId: card.id,
                   },
+                  pathname: "/cards/[cardId]/edit",
                 })
               }
             />
@@ -194,18 +201,20 @@ export default function CardDetailScreen() {
           </View>
 
           {deactivateError ? (
-            <Text className="text-sm font-medium text-red-600">{deactivateError}</Text>
+            <Text className="text-sm font-medium text-red-600">
+              {deactivateError}
+            </Text>
           ) : null}
         </View>
 
-        {!latestSnapshot || !metrics ? (
+        {!hasSnapshot ? (
           <EmptyState
             message="Captura el estado actual de esta tarjeta para ver saldos, fechas e insights."
             title="Sin estado capturado"
           />
         ) : (
           <>
-            <CardSnapshotSummary metrics={metrics} snapshot={latestSnapshot} />
+            <CardSnapshotSummary snapshot={latestSnapshot} metrics={metrics} />
 
             {!hasGeneratedStatement(latestSnapshot) ? (
               <View className="rounded-3xl bg-amber-50 p-5">
@@ -214,10 +223,11 @@ export default function CardDetailScreen() {
                 </Text>
 
                 <Text className="mt-1 text-sm text-amber-700">
-                  Esta tarjeta todavía no tiene un estado de cuenta generado. Por ahora
-                  usaremos el saldo actual y el crédito disponible reportado para
-                  estimaciones, pero aún no hay pago mínimo, pago para no generar
-                  intereses ni fecha límite de pago de este ciclo.
+                  Esta tarjeta todavía no tiene información completa de estado
+                  de cuenta. Por ahora usaremos el saldo actual y el crédito
+                  disponible reportado para estimaciones, pero aún no hay pago
+                  mínimo, pago para no generar intereses ni fecha límite de pago
+                  de este ciclo.
                 </Text>
               </View>
             ) : null}
