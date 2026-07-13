@@ -2,12 +2,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import {
-  AppButton,
-  AppDateInput,
-  AppMoneyInput,
-  AppTextInput,
-} from "@/components/ui";
+import { AppButton, AppDateInput, AppMoneyInput, AppTextInput } from "@/components/ui";
 import {
   snapshotFormSchema,
   type SnapshotFormInput,
@@ -69,9 +64,9 @@ export function SnapshotForm({
         </Text>
 
         <Text className="mt-1 text-sm text-blue-700">
-          Ingresa los datos que aparezcan en tu app bancaria. Si algún dato aún
-          no aparece, puedes dejarlo vacío. No inventes montos: mientras más
-          información real captures, mejores serán los insights.
+          Ingresa los datos que aparezcan en tu app bancaria. Si algún dato aún no
+          aparece, puedes dejarlo vacío. No inventes montos: mientras más información real
+          captures, mejores serán los insights.
         </Text>
       </View>
 
@@ -113,8 +108,8 @@ export function SnapshotForm({
         </Text>
 
         <Text className="mt-1 text-sm text-slate-500">
-          Si tu app ya muestra saldo al corte, pagos y fecha límite, captúralos.
-          Si todavía no aparecen, déjalos vacíos.
+          Si tu app ya muestra saldo al corte, pagos y fecha límite, captúralos. Si
+          todavía no aparecen, déjalos vacíos.
         </Text>
       </View>
 
@@ -215,10 +210,10 @@ export function SnapshotForm({
           <AppTextInput
             error={errors.notes?.message}
             label="Notas"
+            multiline
             optional
             placeholder="Ej. Datos tomados de la app bancaria"
             value={value ?? ""}
-            multiline
             onBlur={onBlur}
             onChangeText={onChange}
           />

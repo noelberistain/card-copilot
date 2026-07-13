@@ -22,11 +22,7 @@ export default function CardDetailScreen() {
 
   const { detail, error, loading, refresh } = useCardDetail({ cardId });
 
-  const {
-    deactivate,
-    deactivating,
-    error: deactivateError,
-  } = useDeactivateCard();
+  const { deactivate, deactivating, error: deactivateError } = useDeactivateCard();
 
   function handleDeactivate() {
     if (!detail) return;
@@ -120,9 +116,7 @@ export default function CardDetailScreen() {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
 
-          <Text className="mt-3 text-sm text-slate-500">
-            Cargando detalle...
-          </Text>
+          <Text className="mt-3 text-sm text-slate-500">Cargando detalle...</Text>
         </View>
       </ScreenContainer>
     );
@@ -197,9 +191,7 @@ export default function CardDetailScreen() {
           </View>
 
           {deactivateError ? (
-            <Text className="text-sm font-medium text-red-600">
-              {deactivateError}
-            </Text>
+            <Text className="text-sm font-medium text-red-600">{deactivateError}</Text>
           ) : null}
         </View>
 
@@ -210,7 +202,7 @@ export default function CardDetailScreen() {
           />
         ) : (
           <>
-            <CardSnapshotSummary snapshot={latestSnapshot} metrics={metrics} />
+            <CardSnapshotSummary metrics={metrics} snapshot={latestSnapshot} />
 
             {!hasGeneratedStatement(latestSnapshot) ? (
               <View className="rounded-3xl bg-amber-50 p-5">
@@ -219,11 +211,10 @@ export default function CardDetailScreen() {
                 </Text>
 
                 <Text className="mt-1 text-sm text-amber-700">
-                  Esta tarjeta todavía no tiene información completa de estado
-                  de cuenta. Por ahora usaremos el saldo actual y el crédito
-                  disponible reportado para estimaciones, pero aún no hay pago
-                  mínimo, pago para no generar intereses ni fecha límite de pago
-                  de este ciclo.
+                  Esta tarjeta todavía no tiene información completa de estado de cuenta.
+                  Por ahora usaremos el saldo actual y el crédito disponible reportado
+                  para estimaciones, pero aún no hay pago mínimo, pago para no generar
+                  intereses ni fecha límite de pago de este ciclo.
                 </Text>
               </View>
             ) : null}

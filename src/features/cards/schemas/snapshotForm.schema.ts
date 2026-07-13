@@ -77,25 +77,13 @@ export const snapshotFormSchema = z
     if (!currentBalanceInput) {
       addIssue(ctx, ["currentBalance"], "El saldo actual es obligatorio.");
     } else if (currentBalance === null) {
-      addIssue(
-        ctx,
-        ["currentBalance"],
-        "El saldo actual debe ser un número válido."
-      );
+      addIssue(ctx, ["currentBalance"], "El saldo actual debe ser un número válido.");
     } else if (currentBalance < 0) {
-      addIssue(
-        ctx,
-        ["currentBalance"],
-        "El saldo actual no puede ser negativo."
-      );
+      addIssue(ctx, ["currentBalance"], "El saldo actual no puede ser negativo.");
     }
 
-    const reportedAvailableCreditInput = normalizeString(
-      values.reportedAvailableCredit
-    );
-    const reportedAvailableCredit = parseMoneyNumber(
-      values.reportedAvailableCredit
-    );
+    const reportedAvailableCreditInput = normalizeString(values.reportedAvailableCredit);
+    const reportedAvailableCredit = parseMoneyNumber(values.reportedAvailableCredit);
 
     if (reportedAvailableCreditInput && reportedAvailableCredit === null) {
       addIssue(
@@ -103,10 +91,7 @@ export const snapshotFormSchema = z
         ["reportedAvailableCredit"],
         "El crédito disponible reportado debe ser un número válido."
       );
-    } else if (
-      reportedAvailableCredit !== null &&
-      reportedAvailableCredit < 0
-    ) {
+    } else if (reportedAvailableCredit !== null && reportedAvailableCredit < 0) {
       addIssue(
         ctx,
         ["reportedAvailableCredit"],
@@ -116,9 +101,7 @@ export const snapshotFormSchema = z
 
     const statementBalance = parseMoneyNumber(values.statementBalance);
     const minimumPayment = parseMoneyNumber(values.minimumPayment);
-    const paymentToAvoidInterest = parseMoneyNumber(
-      values.paymentToAvoidInterest
-    );
+    const paymentToAvoidInterest = parseMoneyNumber(values.paymentToAvoidInterest);
 
     if (hasValue(values.statementBalance)) {
       if (statementBalance === null) {
@@ -128,27 +111,15 @@ export const snapshotFormSchema = z
           "El saldo al corte debe ser un número válido."
         );
       } else if (statementBalance < 0) {
-        addIssue(
-          ctx,
-          ["statementBalance"],
-          "El saldo al corte no puede ser negativo."
-        );
+        addIssue(ctx, ["statementBalance"], "El saldo al corte no puede ser negativo.");
       }
     }
 
     if (hasValue(values.minimumPayment)) {
       if (minimumPayment === null) {
-        addIssue(
-          ctx,
-          ["minimumPayment"],
-          "El pago mínimo debe ser un número válido."
-        );
+        addIssue(ctx, ["minimumPayment"], "El pago mínimo debe ser un número válido.");
       } else if (minimumPayment < 0) {
-        addIssue(
-          ctx,
-          ["minimumPayment"],
-          "El pago mínimo no puede ser negativo."
-        );
+        addIssue(ctx, ["minimumPayment"], "El pago mínimo no puede ser negativo.");
       }
     }
 
@@ -192,24 +163,15 @@ export const snapshotFormSchema = z
       );
     }
 
-    if (
-      hasValue(values.lastCutoffDate) &&
-      !isValidDateInput(values.lastCutoffDate)
-    ) {
+    if (hasValue(values.lastCutoffDate) && !isValidDateInput(values.lastCutoffDate)) {
       addIssue(ctx, ["lastCutoffDate"], "Usa formato YYYY-MM-DD.");
     }
 
-    if (
-      hasValue(values.nextCutoffDate) &&
-      !isValidDateInput(values.nextCutoffDate)
-    ) {
+    if (hasValue(values.nextCutoffDate) && !isValidDateInput(values.nextCutoffDate)) {
       addIssue(ctx, ["nextCutoffDate"], "Usa formato YYYY-MM-DD.");
     }
 
-    if (
-      hasValue(values.paymentDueDate) &&
-      !isValidDateInput(values.paymentDueDate)
-    ) {
+    if (hasValue(values.paymentDueDate) && !isValidDateInput(values.paymentDueDate)) {
       addIssue(ctx, ["paymentDueDate"], "Usa formato YYYY-MM-DD.");
     }
 
@@ -229,24 +191,24 @@ export const snapshotFormSchema = z
     }
   })
   .transform((values) => {
-    const statementStatus: "generated" | "not-generated" =
-      hasCompleteStatementData(values) ? "generated" : "not-generated";
+    const statementStatus: "generated" | "not-generated" = hasCompleteStatementData(
+      values
+    )
+      ? "generated"
+      : "not-generated";
 
     return {
       statementStatus,
 
       currentBalance: parseMoneyNumber(values.currentBalance) ?? 0,
 
-      reportedAvailableCredit: parseMoneyNumber(
-        values.reportedAvailableCredit
-      ),
+      reportedAvailableCredit: parseMoneyNumber(values.reportedAvailableCredit),
 
       statementBalance: parseMoneyNumber(values.statementBalance) ?? 0,
 
       minimumPayment: parseMoneyNumber(values.minimumPayment) ?? 0,
 
-      paymentToAvoidInterest:
-        parseMoneyNumber(values.paymentToAvoidInterest) ?? 0,
+      paymentToAvoidInterest: parseMoneyNumber(values.paymentToAvoidInterest) ?? 0,
 
       lastCutoffDate: normalizeString(values.lastCutoffDate),
 

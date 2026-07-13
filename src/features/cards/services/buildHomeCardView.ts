@@ -5,11 +5,7 @@ import { hasGeneratedStatement } from "@/logic/cards/cardSnapshotStatus.logic";
 import { formatShortDate } from "@/lib/date/formatShortDate";
 import { formatCurrency } from "@/lib/money/formatCurrency";
 
-export type HomeCardPaymentTone =
-  | "default"
-  | "danger"
-  | "warning"
-  | "success";
+export type HomeCardPaymentTone = "default" | "danger" | "warning" | "success";
 
 export interface HomeCardView {
   card: Card;
@@ -33,10 +29,7 @@ function getTodayIsoDate() {
   return new Date().toISOString().slice(0, 10);
 }
 
-function buildGeneratedPaymentDisplay(
-  snapshot: CardSnapshot,
-  todayIso: string
-) {
+function buildGeneratedPaymentDisplay(snapshot: CardSnapshot, todayIso: string) {
   if (hasNoPaymentDue(snapshot)) {
     return {
       paymentLabel: "Sin pago requerido",
@@ -45,19 +38,14 @@ function buildGeneratedPaymentDisplay(
     };
   }
 
-  const daysUntilPayment = getDaysUntilPayment(
-    todayIso,
-    snapshot.paymentDueDate
-  );
+  const daysUntilPayment = getDaysUntilPayment(todayIso, snapshot.paymentDueDate);
 
   const paymentAmount = formatCurrency(snapshot.paymentToAvoidInterest);
 
   if (daysUntilPayment < 0) {
     return {
       paymentLabel: "Pago vencido",
-      paymentValue: `${paymentAmount} · hace ${Math.abs(
-        daysUntilPayment
-      )} día(s)`,
+      paymentValue: `${paymentAmount} · hace ${Math.abs(daysUntilPayment)} día(s)`,
       paymentTone: "danger" as const,
     };
   }
@@ -128,15 +116,9 @@ export function buildHomeCardView({
     };
   }
 
-  const paymentDisplay = buildGeneratedPaymentDisplay(
-    latestSnapshot,
-    todayIso
-  );
+  const paymentDisplay = buildGeneratedPaymentDisplay(latestSnapshot, todayIso);
 
-  const daysUntilPayment = getDaysUntilPayment(
-    todayIso,
-    latestSnapshot.paymentDueDate
-  );
+  const daysUntilPayment = getDaysUntilPayment(todayIso, latestSnapshot.paymentDueDate);
 
   const dueText =
     daysUntilPayment === 0
