@@ -14,6 +14,7 @@ import { CardInsightsPanel } from "@/features/cards/components/CardInsightsPanel
 import { CardSnapshotSummary } from "@/features/cards/components/CardSnapshotSummary";
 import { useCardDetail } from "@/features/cards/hooks/useCardDetail";
 import { useDeactivateCard } from "@/features/cards/hooks/useDeactivateCard";
+import { hasGeneratedStatement } from "@/logic/cards/cardSnapshotStatus.logic";
 
 export default function CardDetailScreen() {
   const params = useLocalSearchParams<{ cardId?: string }>();
@@ -139,6 +140,8 @@ export default function CardDetailScreen() {
 
   const { card, latestSnapshot, metrics, insights, status } = detail;
 
+  const canShowGeneratedStatementPanels = latestSnapshot && metrics && hasGeneratedStatement(latestSnapshot);
+
   return (
     <ScreenContainer>
       <View className="gap-6">
@@ -196,16 +199,35 @@ export default function CardDetailScreen() {
 
         {!latestSnapshot || !metrics ? (
           <EmptyState
-            message="Captura el estado actual de esta tarjeta para ver saldos, fechas e insights."
             title="Sin estado capturado"
+            message="Captura el estado actual de esta tarjeta para ver saldos, fechas e insights."
           />
         ) : (
           <>
-            <CardSnapshotSummary metrics={metrics} snapshot={latestSnapshot} />
-
-            <CardDatesPanel metrics={metrics} status={status} />
-
-            <CardInsightsPanel insights={insights} />
+            <CardSnapshotSummary snapshot={latestSnapshot} metrics={metrics} />
+        
+            {!hasGeneratedStatement(latestSnapshot) ? (
+              <View className="rounded-3xl bg-amber-50 p-5">
+                <Text className="text-base font-semibold text-amber-800">
+                  Estado parcial
+                </Text>
+        
+                <Text className="mt-1 text-sm text-amber-700">
+                  Esta tarjeta todavía no tiene un estado de cuenta generado. Por ahora
+                  usaremos el saldo actual y el crédito disponible reportado para
+                  estimaciones, pero aún no hay pago mínimo, pago para no generar
+                  intereses ni fecha límite de pago de este ciclo.
+                </Text>
+              </View>
+            ) : null}
+        
+            {canShowGeneratedStatementPanels ? (
+              <>
+                <CardDatesPanel metrics={metrics} status={status} />
+        
+                <CardInsightsPanel insights={insights} />
+              </>
+            ) : null}
           </>
         )}
       </View>
