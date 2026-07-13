@@ -26,10 +26,26 @@ function parseOptionalMoney(value: string) {
   return Number(normalized);
 }
 
+function normalizeOptionalDate(value: string | undefined) {
+  const normalized = value?.trim();
+
+  return normalized || null;
+}
+
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+const optionalDateSchema = z
+  .string()
+  .optional()
+  .transform(normalizeOptionalDate)
+  .refine((value) => value === null || datePattern.test(value), {
+    message: "Usa formato YYYY-MM-DD.",
+  });
 
 export const snapshotFormSchema = z
   .object({
+    statementStatus: z.enum(["generated", "not-generated"]).default("generated"),
+
     currentBalance: z
       .string()
       .transform(parseMoney)
@@ -85,9 +101,17 @@ export const snapshotFormSchema = z
           .min(0, "El pago para no generar intereses no puede ser negativo.")
       ),
 
-    lastCutoffDate: z.string().trim().regex(datePattern, "Usa formato YYYY-MM-DD."),
+    lastCutoffDate: z
+      .string()
+      .trim()
+      .regex(datePattern, "Usa formato YYYY-MM-DD."),
 
-    paymentDueDate: z.string().trim().regex(datePattern, "Usa formato YYYY-MM-DD."),
+    nextCutoffDate: optionalDateSchema,
+
+    paymentDueDate: z
+      .string()
+      .trim()
+      .regex(datePattern, "Usa formato YYYY-MM-DD."),
 
     notes: z
       .string()
