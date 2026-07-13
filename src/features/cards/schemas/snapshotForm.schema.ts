@@ -192,15 +192,24 @@ export const snapshotFormSchema = z
       );
     }
 
-    if (hasValue(values.lastCutoffDate) && !isValidDateInput(values.lastCutoffDate)) {
+    if (
+      hasValue(values.lastCutoffDate) &&
+      !isValidDateInput(values.lastCutoffDate)
+    ) {
       addIssue(ctx, ["lastCutoffDate"], "Usa formato YYYY-MM-DD.");
     }
 
-    if (hasValue(values.nextCutoffDate) && !isValidDateInput(values.nextCutoffDate)) {
+    if (
+      hasValue(values.nextCutoffDate) &&
+      !isValidDateInput(values.nextCutoffDate)
+    ) {
       addIssue(ctx, ["nextCutoffDate"], "Usa formato YYYY-MM-DD.");
     }
 
-    if (hasValue(values.paymentDueDate) && !isValidDateInput(values.paymentDueDate)) {
+    if (
+      hasValue(values.paymentDueDate) &&
+      !isValidDateInput(values.paymentDueDate)
+    ) {
       addIssue(ctx, ["paymentDueDate"], "Usa formato YYYY-MM-DD.");
     }
 
@@ -220,25 +229,29 @@ export const snapshotFormSchema = z
     }
   })
   .transform((values) => {
-    const statementStatus = hasCompleteStatementData(values)
-      ? "generated"
-      : "not-generated";
+    const statementStatus: "generated" | "not-generated" =
+      hasCompleteStatementData(values) ? "generated" : "not-generated";
 
     return {
       statementStatus,
 
       currentBalance: parseMoneyNumber(values.currentBalance) ?? 0,
+
       reportedAvailableCredit: parseMoneyNumber(
         values.reportedAvailableCredit
       ),
 
       statementBalance: parseMoneyNumber(values.statementBalance) ?? 0,
+
       minimumPayment: parseMoneyNumber(values.minimumPayment) ?? 0,
+
       paymentToAvoidInterest:
         parseMoneyNumber(values.paymentToAvoidInterest) ?? 0,
 
       lastCutoffDate: normalizeString(values.lastCutoffDate),
+
       nextCutoffDate: normalizeString(values.nextCutoffDate) || null,
+
       paymentDueDate: normalizeString(values.paymentDueDate),
 
       notes: normalizeString(values.notes) || null,
