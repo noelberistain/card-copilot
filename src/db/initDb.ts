@@ -3,7 +3,9 @@ import { sqlite } from "@/db/client";
 let initialized = false;
 
 function hasColumn(tableName: string, columnName: string) {
-  const columns = sqlite.getAllSync<{ name: string }>(`PRAGMA table_info(${tableName});`);
+  const columns = sqlite.getAllSync<{ name: string }>(
+    `PRAGMA table_info(${tableName});`
+  );
 
   return columns.some((column) => column.name === columnName);
 }
@@ -32,12 +34,14 @@ export function initDb() {
       id TEXT PRIMARY KEY NOT NULL,
       card_id TEXT NOT NULL,
       captured_at TEXT NOT NULL,
+      statement_status TEXT NOT NULL DEFAULT 'generated',
       current_balance REAL NOT NULL,
       statement_balance REAL NOT NULL,
       minimum_payment REAL NOT NULL,
       payment_to_avoid_interest REAL NOT NULL,
       reported_available_credit REAL,
       last_cutoff_date TEXT NOT NULL,
+      next_cutoff_date TEXT,
       payment_due_date TEXT NOT NULL,
       notes TEXT,
       created_at TEXT NOT NULL,
@@ -56,6 +60,20 @@ export function initDb() {
     sqlite.execSync(`
       ALTER TABLE card_snapshots
       ADD COLUMN reported_available_credit REAL;
+    `);
+  }
+
+  if (!hasColumn("card_snapshots", "statement_status")) {
+    sqlite.execSync(`
+      ALTER TABLE card_snapshots
+      ADD COLUMN statement_status TEXT NOT NULL DEFAULT 'generated';
+    `);
+  }
+
+  if (!hasColumn("card_snapshots", "next_cutoff_date")) {
+    sqlite.execSync(`
+      ALTER TABLE card_snapshots
+      ADD COLUMN next_cutoff_date TEXT;
     `);
   }
 
