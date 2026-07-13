@@ -1,9 +1,9 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { SqliteCardSnapshotsPersistence } from "@/data/persistence/cardSnapshots.persistence";
-import type { SnapshotFormValues } from "@/features/cards/schemas/snapshotForm.schema";
 import { nowIso } from "@/lib/date/nowIso";
 import { createId } from "@/lib/ids/createId";
+import type { SnapshotFormValues } from "@/features/cards/schemas/snapshotForm.schema";
 import type { CardSnapshot } from "@/models/cards/card.types";
 
 interface UseSaveSnapshotOptions {
@@ -11,7 +11,10 @@ interface UseSaveSnapshotOptions {
   initialSnapshot?: CardSnapshot;
 }
 
-export function useSaveSnapshot({ cardId, initialSnapshot }: UseSaveSnapshotOptions) {
+export function useSaveSnapshot({
+  cardId,
+  initialSnapshot,
+}: UseSaveSnapshotOptions) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,14 +31,21 @@ export function useSaveSnapshot({ cardId, initialSnapshot }: UseSaveSnapshotOpti
         const snapshot: CardSnapshot = initialSnapshot
           ? {
               ...initialSnapshot,
+
+              statementStatus: values.statementStatus,
+
               currentBalance: values.currentBalance,
               statementBalance: values.statementBalance,
               minimumPayment: values.minimumPayment,
               paymentToAvoidInterest: values.paymentToAvoidInterest,
               reportedAvailableCredit: values.reportedAvailableCredit,
+
               lastCutoffDate: values.lastCutoffDate,
+              nextCutoffDate: values.nextCutoffDate,
               paymentDueDate: values.paymentDueDate,
+
               notes: values.notes,
+
               updatedAt: timestamp,
             }
           : {
@@ -43,6 +53,8 @@ export function useSaveSnapshot({ cardId, initialSnapshot }: UseSaveSnapshotOpti
               cardId,
               capturedAt: timestamp,
 
+              statementStatus: values.statementStatus,
+
               currentBalance: values.currentBalance,
               statementBalance: values.statementBalance,
               minimumPayment: values.minimumPayment,
@@ -50,6 +62,7 @@ export function useSaveSnapshot({ cardId, initialSnapshot }: UseSaveSnapshotOpti
               reportedAvailableCredit: values.reportedAvailableCredit,
 
               lastCutoffDate: values.lastCutoffDate,
+              nextCutoffDate: values.nextCutoffDate,
               paymentDueDate: values.paymentDueDate,
 
               notes: values.notes,
