@@ -1,5 +1,5 @@
-import { router, useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, Alert, Text, View } from "react-native";
+import { router, useLocalSearchParams } from "expo-router";
 
 import { AppButton, ScreenContainer, ScreenHeader } from "@/components/ui";
 import { SnapshotForm } from "@/features/cards/components/SnapshotForm";
@@ -17,13 +17,20 @@ export default function EditSnapshotScreen() {
     snapshotId?: string;
   }>();
 
-  const cardId = Array.isArray(params.cardId) ? params.cardId[0] : params.cardId;
+  const cardId = Array.isArray(params.cardId)
+    ? params.cardId[0]
+    : params.cardId;
 
   const snapshotId = Array.isArray(params.snapshotId)
     ? params.snapshotId[0]
     : params.snapshotId;
 
-  const { snapshot, loading, error: loadError, refresh } = useSnapshot({ snapshotId });
+  const {
+    snapshot,
+    loading,
+    error: loadError,
+    refresh,
+  } = useSnapshot({ snapshotId });
 
   const {
     save,
@@ -74,9 +81,11 @@ export default function EditSnapshotScreen() {
       <ScreenContainer>
         <View className="gap-4">
           <ScreenHeader
-            showBackButton
-            subtitle={loadError ?? "No se encontró el estado capturado solicitado."}
             title="No se pudo cargar"
+            subtitle={
+              loadError ?? "No se encontró el estado capturado solicitado."
+            }
+            showBackButton
           />
 
           <AppButton title="Reintentar" onPress={refresh} />
@@ -86,22 +95,41 @@ export default function EditSnapshotScreen() {
   }
 
   const defaultValues: Partial<SnapshotFormInput> = {
-    statementStatus: snapshot.statementStatus,
-
     currentBalance: String(snapshot.currentBalance),
+
     reportedAvailableCredit:
       snapshot.reportedAvailableCredit === null ||
       snapshot.reportedAvailableCredit === undefined
         ? ""
         : String(snapshot.reportedAvailableCredit),
 
-    statementBalance: String(snapshot.statementBalance),
-    minimumPayment: String(snapshot.minimumPayment),
-    paymentToAvoidInterest: String(snapshot.paymentToAvoidInterest),
+    statementBalance:
+      snapshot.statementBalance === 0 && snapshot.statementStatus === "not-generated"
+        ? ""
+        : String(snapshot.statementBalance),
 
-    lastCutoffDate: snapshot.lastCutoffDate,
+    minimumPayment:
+      snapshot.minimumPayment === 0 && snapshot.statementStatus === "not-generated"
+        ? ""
+        : String(snapshot.minimumPayment),
+
+    paymentToAvoidInterest:
+      snapshot.paymentToAvoidInterest === 0 &&
+      snapshot.statementStatus === "not-generated"
+        ? ""
+        : String(snapshot.paymentToAvoidInterest),
+
+    lastCutoffDate:
+      snapshot.lastCutoffDate && snapshot.statementStatus === "generated"
+        ? snapshot.lastCutoffDate
+        : "",
+
     nextCutoffDate: snapshot.nextCutoffDate ?? "",
-    paymentDueDate: snapshot.paymentDueDate,
+
+    paymentDueDate:
+      snapshot.paymentDueDate && snapshot.statementStatus === "generated"
+        ? snapshot.paymentDueDate
+        : "",
 
     notes: snapshot.notes ?? "",
   };
@@ -110,30 +138,32 @@ export default function EditSnapshotScreen() {
     <ScreenContainer>
       <View className="gap-6">
         <ScreenHeader
-          showBackButton
-          subtitle="Corrige los datos capturados si cometiste un error al registrar el estado de la tarjeta."
           title="Editar estado"
+          subtitle="Corrige los datos capturados si cometiste un error al registrar el estado de la tarjeta."
+          showBackButton
         />
 
         <View className="rounded-3xl bg-white p-5">
-          <Text className="text-sm text-slate-500">Capturado originalmente</Text>
+          <Text className="text-sm text-slate-500">
+            Capturado originalmente
+          </Text>
 
           <Text className="mt-1 text-base font-semibold text-slate-900">
             {formatHumanDateTime(snapshot.capturedAt)}
           </Text>
 
           <Text className="mt-2 text-sm text-slate-500">
-            Al guardar cambios, se conserva la fecha original de captura y solo se
-            actualizan los datos corregidos.
+            Al guardar cambios, se conserva la fecha original de captura y solo
+            se actualizan los datos corregidos.
           </Text>
         </View>
 
         <SnapshotForm
           defaultValues={defaultValues}
-          disableSubmitUntilDirty
-          error={saveError}
-          saving={saving}
           submitLabel="Guardar cambios"
+          saving={saving}
+          error={saveError}
+          disableSubmitUntilDirty
           onSubmit={handleSave}
         />
       </View>
