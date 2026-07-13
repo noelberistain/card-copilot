@@ -6,7 +6,6 @@ import {
   AppButton,
   AppDateInput,
   AppMoneyInput,
-  AppPressable,
   AppTextInput,
 } from "@/components/ui";
 import {
@@ -14,12 +13,10 @@ import {
   type SnapshotFormInput,
   type SnapshotFormValues,
 } from "@/features/cards/schemas/snapshotForm.schema";
-import type { CardSnapshotStatementStatus } from "@/models/cards/card.types";
 
 const emptyDefaultValues: SnapshotFormInput = {
-  statementStatus: "generated",
-
   currentBalance: "",
+
   reportedAvailableCredit: "",
 
   statementBalance: "",
@@ -43,78 +40,6 @@ interface SnapshotFormProps {
   onCancel?: () => void;
 }
 
-interface StatementStatusSelectorProps {
-  value: CardSnapshotStatementStatus;
-  onChange: (value: CardSnapshotStatementStatus) => void;
-}
-
-interface StatementStatusOptionProps {
-  active: boolean;
-  description: string;
-  label: string;
-  onPress: () => void;
-}
-
-function StatementStatusOption({
-  active,
-  description,
-  label,
-  onPress,
-}: StatementStatusOptionProps) {
-  return (
-    <AppPressable
-      accessibilityRole="button"
-      className={[
-        "flex-1 rounded-2xl border p-4",
-        active ? "border-blue-600 bg-blue-50" : "border-slate-200 bg-white",
-      ].join(" ")}
-      feedback="scale"
-      onPress={onPress}
-    >
-      <Text
-        className={[
-          "text-sm font-semibold",
-          active ? "text-blue-800" : "text-slate-900",
-        ].join(" ")}
-      >
-        {label}
-      </Text>
-
-      <Text
-        className={["mt-1 text-xs", active ? "text-blue-700" : "text-slate-500"].join(
-          " "
-        )}
-      >
-        {description}
-      </Text>
-    </AppPressable>
-  );
-}
-
-function StatementStatusSelector({ value, onChange }: StatementStatusSelectorProps) {
-  return (
-    <View className="gap-2">
-      <Text className="text-sm font-medium text-slate-700">Estado de cuenta *</Text>
-
-      <View className="flex-row gap-3">
-        <StatementStatusOption
-          active={value === "generated"}
-          description="Ya hay saldo al corte, pagos y fecha límite."
-          label="Ya generado"
-          onPress={() => onChange("generated")}
-        />
-
-        <StatementStatusOption
-          active={value === "not-generated"}
-          description="Aún no hay pago generado para este ciclo."
-          label="Aún no ha cortado"
-          onPress={() => onChange("not-generated")}
-        />
-      </View>
-    </View>
-  );
-}
-
 export function SnapshotForm({
   defaultValues,
   disableSubmitUntilDirty = false,
@@ -127,7 +52,6 @@ export function SnapshotForm({
   const {
     control,
     handleSubmit,
-    watch,
     formState: { errors, isDirty },
   } = useForm<SnapshotFormInput, unknown, SnapshotFormValues>({
     resolver: zodResolver(snapshotFormSchema),
@@ -137,28 +61,19 @@ export function SnapshotForm({
     },
   });
 
-  const statementStatus = watch("statementStatus");
-
   return (
     <View className="gap-5 rounded-3xl bg-white p-5">
-      <Controller
-        control={control}
-        name="statementStatus"
-        render={({ field: { onChange, value } }) => (
-          <StatementStatusSelector value={value ?? "generated"} onChange={onChange} />
-        )}
-      />
+      <View className="rounded-2xl bg-blue-50 p-4">
+        <Text className="text-sm font-semibold text-blue-800">
+          Captura lo que veas hoy
+        </Text>
 
-      {statementStatus === "not-generated" ? (
-        <View className="rounded-2xl bg-amber-50 p-4">
-          <Text className="text-sm font-semibold text-amber-800">Estado parcial</Text>
-
-          <Text className="mt-1 text-sm text-amber-700">
-            Usa esta opción cuando tu tarjeta todavía no ha cortado y aún no existe saldo
-            al corte, pago mínimo o pago para no generar intereses.
-          </Text>
-        </View>
-      ) : null}
+        <Text className="mt-1 text-sm text-blue-700">
+          Ingresa los datos que aparezcan en tu app bancaria. Si algún dato aún
+          no aparece, puedes dejarlo vacío. No inventes montos: mientras más
+          información real captures, mejores serán los insights.
+        </Text>
+      </View>
 
       <Controller
         control={control}
@@ -192,99 +107,106 @@ export function SnapshotForm({
         )}
       />
 
-      {statementStatus === "generated" ? (
-        <>
-          <Controller
-            control={control}
-            name="statementBalance"
-            render={({ field: { onBlur, onChange, value } }) => (
-              <AppMoneyInput
-                error={errors.statementBalance?.message}
-                label="Saldo al corte"
-                placeholder="Ej. 8,000"
-                required
-                value={value ?? ""}
-                onBlur={onBlur}
-                onChangeText={onChange}
-              />
-            )}
-          />
+      <View className="rounded-2xl bg-slate-50 p-4">
+        <Text className="text-sm font-semibold text-slate-800">
+          Datos del estado de cuenta
+        </Text>
 
-          <Controller
-            control={control}
-            name="minimumPayment"
-            render={({ field: { onBlur, onChange, value } }) => (
-              <AppMoneyInput
-                error={errors.minimumPayment?.message}
-                label="Pago mínimo"
-                placeholder="Ej. 400"
-                required
-                value={value ?? ""}
-                onBlur={onBlur}
-                onChangeText={onChange}
-              />
-            )}
-          />
+        <Text className="mt-1 text-sm text-slate-500">
+          Si tu app ya muestra saldo al corte, pagos y fecha límite, captúralos.
+          Si todavía no aparecen, déjalos vacíos.
+        </Text>
+      </View>
 
-          <Controller
-            control={control}
-            name="paymentToAvoidInterest"
-            render={({ field: { onBlur, onChange, value } }) => (
-              <AppMoneyInput
-                error={errors.paymentToAvoidInterest?.message}
-                label="Pago para no generar intereses"
-                placeholder="Ej. 8,000"
-                required
-                value={value ?? ""}
-                onBlur={onBlur}
-                onChangeText={onChange}
-              />
-            )}
+      <Controller
+        control={control}
+        name="statementBalance"
+        render={({ field: { onBlur, onChange, value } }) => (
+          <AppMoneyInput
+            error={errors.statementBalance?.message}
+            label="Saldo al corte"
+            optional
+            placeholder="Ej. 8,000"
+            value={value ?? ""}
+            onBlur={onBlur}
+            onChangeText={onChange}
           />
+        )}
+      />
 
-          <Controller
-            control={control}
-            name="lastCutoffDate"
-            render={({ field: { onChange, value } }) => (
-              <AppDateInput
-                error={errors.lastCutoffDate?.message}
-                label="Fecha del último corte"
-                required
-                value={value ?? ""}
-                onChangeText={onChange}
-              />
-            )}
+      <Controller
+        control={control}
+        name="minimumPayment"
+        render={({ field: { onBlur, onChange, value } }) => (
+          <AppMoneyInput
+            error={errors.minimumPayment?.message}
+            label="Pago mínimo"
+            optional
+            placeholder="Ej. 400"
+            value={value ?? ""}
+            onBlur={onBlur}
+            onChangeText={onChange}
           />
+        )}
+      />
 
-          <Controller
-            control={control}
-            name="paymentDueDate"
-            render={({ field: { onChange, value } }) => (
-              <AppDateInput
-                error={errors.paymentDueDate?.message}
-                label="Fecha límite de pago"
-                required
-                value={value ?? ""}
-                onChangeText={onChange}
-              />
-            )}
+      <Controller
+        control={control}
+        name="paymentToAvoidInterest"
+        render={({ field: { onBlur, onChange, value } }) => (
+          <AppMoneyInput
+            error={errors.paymentToAvoidInterest?.message}
+            label="Pago para no generar intereses"
+            optional
+            placeholder="Ej. 8,000"
+            value={value ?? ""}
+            onBlur={onBlur}
+            onChangeText={onChange}
           />
-        </>
-      ) : (
-        <Controller
-          control={control}
-          name="nextCutoffDate"
-          render={({ field: { onChange, value } }) => (
-            <AppDateInput
-              error={errors.nextCutoffDate?.message}
-              label="Próximo corte"
-              required
-              value={value ?? ""}
-              onChangeText={onChange}
-            />
-          )}
-        />
-      )}
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="lastCutoffDate"
+        render={({ field: { onChange, value } }) => (
+          <AppDateInput
+            error={errors.lastCutoffDate?.message}
+            label="Fecha del último corte"
+            optional
+            value={value ?? ""}
+            onChangeText={onChange}
+          />
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="nextCutoffDate"
+        render={({ field: { onChange, value } }) => (
+          <AppDateInput
+            error={errors.nextCutoffDate?.message}
+            label="Próximo corte"
+            optional
+            value={value ?? ""}
+            onChangeText={onChange}
+          />
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="paymentDueDate"
+        render={({ field: { onChange, value } }) => (
+          <AppDateInput
+            error={errors.paymentDueDate?.message}
+            label="Fecha límite de pago"
+            optional
+            value={value ?? ""}
+            onChangeText={onChange}
+          />
+        )}
+      />
 
       <Controller
         control={control}
@@ -293,10 +215,10 @@ export function SnapshotForm({
           <AppTextInput
             error={errors.notes?.message}
             label="Notas"
-            multiline
             optional
             placeholder="Ej. Datos tomados de la app bancaria"
             value={value ?? ""}
+            multiline
             onBlur={onBlur}
             onChangeText={onChange}
           />
