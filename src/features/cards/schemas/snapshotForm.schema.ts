@@ -1,135 +1,247 @@
 import { z } from "zod";
 
-function parseMoney(value: string) {
-  const normalized = value.replace(/,/g, "").trim();
+const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
-  if (!normalized) return value;
-
-  const num = Number(normalized);
-
-  return Number.isNaN(num) ? value : num;
+function normalizeString(value: string | undefined) {
+  return value?.trim() ?? "";
 }
 
-function isValidOptionalMoney(value: string) {
-  const normalized = value.replace(/,/g, "").trim();
-
-  if (!normalized) return true;
-
-  return Number.isFinite(Number(normalized));
-}
-
-function parseOptionalMoney(value: string) {
-  const normalized = value.replace(/,/g, "").trim();
+function parseMoneyNumber(value: string | undefined) {
+  const normalized = normalizeString(value).replace(/,/g, "");
 
   if (!normalized) return null;
 
-  return Number(normalized);
+  const num = Number(normalized);
+
+  return Number.isFinite(num) ? num : null;
 }
 
-function normalizeOptionalDate(value: string | undefined) {
-  const normalized = value?.trim();
+function parseOptionalMoneyNumber(value: string | undefined) {
+  const normalized = normalizeString(value).replace(/,/g, "");
 
-  return normalized || null;
+  if (!normalized) return null;
+
+  const num = Number(normalized);
+
+  return Number.isFinite(num) ? num : null;
 }
 
-const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-
-const optionalDateSchema = z
-  .string()
-  .optional()
-  .transform(normalizeOptionalDate)
-  .refine((value) => value === null || datePattern.test(value), {
-    message: "Usa formato YYYY-MM-DD.",
+function addIssue(
+  ctx: z.RefinementCtx,
+  path: string[],
+  message: string
+) {
+  ctx.addIssue({
+    code: z.ZodIssueCode.custom,
+    message,
+    path,
   });
+}
+
+function isValidDateInput(value: string | undefined) {
+  const normalized = normalizeString(value);
+
+  return datePattern.test(normalized);
+}
 
 export const snapshotFormSchema = z
   .object({
     statementStatus: z.enum(["generated", "not-generated"]).default("generated"),
 
-    currentBalance: z
-      .string()
-      .transform(parseMoney)
-      .pipe(
-        z
-          .number({
-            message: "El saldo actual debe ser un número válido.",
-          })
-          .min(0, "El saldo actual no puede ser negativo.")
-      ),
+    currentBalance: z.string(),
 
-    reportedAvailableCredit: z
-      .string()
-      .trim()
-      .refine(isValidOptionalMoney, {
-        message: "El crédito disponible reportado debe ser un número válido.",
-      })
-      .transform(parseOptionalMoney)
-      .refine((value) => value === null || value >= 0, {
-        message: "El crédito disponible reportado no puede ser negativo.",
-      }),
+    reportedAvailableCredit: z.string().optional(),
 
-    statementBalance: z
-      .string()
-      .transform(parseMoney)
-      .pipe(
-        z
-          .number({
-            message: "El saldo al corte debe ser un número válido.",
-          })
-          .min(0, "El saldo al corte no puede ser negativo.")
-      ),
+    statementBalance: z.string().optional(),
+    minimumPayment: z.string().optional(),
+    paymentToAvoidInterest: z.string().optional(),
 
-    minimumPayment: z
-      .string()
-      .transform(parseMoney)
-      .pipe(
-        z
-          .number({
-            message: "El pago mínimo debe ser un número válido.",
-          })
-          .min(0, "El pago mínimo no puede ser negativo.")
-      ),
+    lastCutoffDate: z.string().optional(),
+    nextCutoffDate: z.string().optional(),
+    paymentDueDate: z.string().optional(),
 
-    paymentToAvoidInterest: z
-      .string()
-      .transform(parseMoney)
-      .pipe(
-        z
-          .number({
-            message: "El pago para no generar intereses debe ser un número válido.",
-          })
-          .min(0, "El pago para no generar intereses no puede ser negativo.")
-      ),
-
-    lastCutoffDate: z
-      .string()
-      .trim()
-      .regex(datePattern, "Usa formato YYYY-MM-DD."),
-
-    nextCutoffDate: optionalDateSchema,
-
-    paymentDueDate: z
-      .string()
-      .trim()
-      .regex(datePattern, "Usa formato YYYY-MM-DD."),
-
-    notes: z
-      .string()
-      .trim()
-      .optional()
-      .transform((value) => value || null),
+    notes: z.string().optional(),
   })
-  .refine((values) => values.minimumPayment <= values.currentBalance, {
-    message: "El pago mínimo no puede ser mayor al saldo actual.",
-    path: ["minimumPayment"],
+  .superRefine((values, ctx) => {
+    const currentBalance = parseMoneyNumber(values.currentBalance);
+
+    if (currentBalance === null) {
+      addIssue(ctx, ["currentBalance"], "El saldo actual debe ser un número válido.");
+    } else if (currentBalance < 0) {
+      addIssue(ctx, ["currentBalance"], "El saldo actual no puede ser negativo.");
+    }
+
+    const reportedAvailableCredit = parseOptionalMoneyNumber(
+      values.reportedAvailableCredit
+    );
+
+    if (
+      normalizeString(values.reportedAvailableCredit) &&
+      reportedAvailableCredit === null
+    ) {
+      addIssue(
+        ctx,
+        ["reportedAvailableCredit"],
+        "El crédito disponible reportado debe ser un número válido."
+      );
+    } else if (
+      reportedAvailableCredit !== null &&
+      reportedAvailableCredit < 0
+    ) {
+      addIssue(
+        ctx,
+        ["reportedAvailableCredit"],
+        "El crédito disponible reportado no puede ser negativo."
+      );
+    }
+
+    if (values.statementStatus === "not-generated") {
+      if (!isValidDateInput(values.nextCutoffDate)) {
+        addIssue(ctx, ["nextCutoffDate"], "Usa formato YYYY-MM-DD.");
+      }
+
+      return;
+    }
+
+    const statementBalance = parseMoneyNumber(values.statementBalance);
+    const minimumPayment = parseMoneyNumber(values.minimumPayment);
+    const paymentToAvoidInterest = parseMoneyNumber(
+      values.paymentToAvoidInterest
+    );
+
+    if (statementBalance === null) {
+      addIssue(
+        ctx,
+        ["statementBalance"],
+        "El saldo al corte debe ser un número válido."
+      );
+    } else if (statementBalance < 0) {
+      addIssue(
+        ctx,
+        ["statementBalance"],
+        "El saldo al corte no puede ser negativo."
+      );
+    }
+
+    if (minimumPayment === null) {
+      addIssue(
+        ctx,
+        ["minimumPayment"],
+        "El pago mínimo debe ser un número válido."
+      );
+    } else if (minimumPayment < 0) {
+      addIssue(
+        ctx,
+        ["minimumPayment"],
+        "El pago mínimo no puede ser negativo."
+      );
+    }
+
+    if (paymentToAvoidInterest === null) {
+      addIssue(
+        ctx,
+        ["paymentToAvoidInterest"],
+        "El pago para no generar intereses debe ser un número válido."
+      );
+    } else if (paymentToAvoidInterest < 0) {
+      addIssue(
+        ctx,
+        ["paymentToAvoidInterest"],
+        "El pago para no generar intereses no puede ser negativo."
+      );
+    }
+
+    if (
+      currentBalance !== null &&
+      minimumPayment !== null &&
+      minimumPayment > currentBalance
+    ) {
+      addIssue(
+        ctx,
+        ["minimumPayment"],
+        "El pago mínimo no puede ser mayor al saldo actual."
+      );
+    }
+
+    if (
+      currentBalance !== null &&
+      paymentToAvoidInterest !== null &&
+      paymentToAvoidInterest > currentBalance
+    ) {
+      addIssue(
+        ctx,
+        ["paymentToAvoidInterest"],
+        "El pago para no generar intereses no puede ser mayor al saldo actual."
+      );
+    }
+
+    if (!isValidDateInput(values.lastCutoffDate)) {
+      addIssue(ctx, ["lastCutoffDate"], "Usa formato YYYY-MM-DD.");
+    }
+
+    if (!isValidDateInput(values.paymentDueDate)) {
+      addIssue(ctx, ["paymentDueDate"], "Usa formato YYYY-MM-DD.");
+    }
+
+    const lastCutoffDate = normalizeString(values.lastCutoffDate);
+    const paymentDueDate = normalizeString(values.paymentDueDate);
+
+    if (
+      datePattern.test(lastCutoffDate) &&
+      datePattern.test(paymentDueDate) &&
+      paymentDueDate <= lastCutoffDate
+    ) {
+      addIssue(
+        ctx,
+        ["paymentDueDate"],
+        "La fecha límite debe ser posterior al último corte."
+      );
+    }
   })
-  .refine((values) => values.paymentToAvoidInterest <= values.currentBalance, {
-    message: "El pago para no generar intereses no puede ser mayor al saldo actual.",
-    path: ["paymentToAvoidInterest"],
-  })
-  .refine((values) => values.paymentDueDate > values.lastCutoffDate, {
-    message: "La fecha límite debe ser posterior al último corte.",
-    path: ["paymentDueDate"],
+  .transform((values) => {
+    const statementStatus = values.statementStatus;
+
+    return {
+      statementStatus,
+
+      currentBalance: parseMoneyNumber(values.currentBalance) ?? 0,
+
+      reportedAvailableCredit: parseOptionalMoneyNumber(
+        values.reportedAvailableCredit
+      ),
+
+      statementBalance:
+        statementStatus === "generated"
+          ? parseMoneyNumber(values.statementBalance) ?? 0
+          : 0,
+
+      minimumPayment:
+        statementStatus === "generated"
+          ? parseMoneyNumber(values.minimumPayment) ?? 0
+          : 0,
+
+      paymentToAvoidInterest:
+        statementStatus === "generated"
+          ? parseMoneyNumber(values.paymentToAvoidInterest) ?? 0
+          : 0,
+
+      lastCutoffDate:
+        statementStatus === "generated"
+          ? normalizeString(values.lastCutoffDate)
+          : "",
+
+      nextCutoffDate:
+        statementStatus === "not-generated"
+          ? normalizeString(values.nextCutoffDate)
+          : null,
+
+      paymentDueDate:
+        statementStatus === "generated"
+          ? normalizeString(values.paymentDueDate)
+          : "",
+
+      notes: normalizeString(values.notes) || null,
+    };
   });
 
 export type SnapshotFormInput = z.input<typeof snapshotFormSchema>;
