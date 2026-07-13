@@ -146,10 +146,6 @@ export default function CardDetailScreen() {
 
   const { card, insights, latestSnapshot, metrics, status } = detail;
 
-  const hasSnapshot = Boolean(latestSnapshot && metrics);
-  const canShowGeneratedStatementPanels =
-    latestSnapshot && metrics && hasGeneratedStatement(latestSnapshot);
-
   return (
     <ScreenContainer>
       <View className="gap-6">
@@ -207,7 +203,7 @@ export default function CardDetailScreen() {
           ) : null}
         </View>
 
-        {!hasSnapshot ? (
+        {!latestSnapshot || !metrics ? (
           <EmptyState
             message="Captura el estado actual de esta tarjeta para ver saldos, fechas e insights."
             title="Sin estado capturado"
@@ -232,7 +228,7 @@ export default function CardDetailScreen() {
               </View>
             ) : null}
 
-            {canShowGeneratedStatementPanels ? (
+            {hasGeneratedStatement(latestSnapshot) ? (
               <>
                 <CardDatesPanel metrics={metrics} status={status} />
 
