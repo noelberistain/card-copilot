@@ -44,7 +44,7 @@ export default function SnapshotScreen() {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
 
-          <Text className="mt-3 text-sm text-slate-500">Cargando tarjeta...</Text>
+          <Text className="mt-3 text-sm text-ink-muted">Cargando tarjeta...</Text>
         </View>
       </ScreenContainer>
     );
@@ -72,10 +72,10 @@ export default function SnapshotScreen() {
         <ScreenHeader
           showBackButton
           subtitle={
-            <Text className="mt-2 text-base text-slate-500">
+            <Text className="mt-2 text-base text-ink-muted">
               Registra el estado actual de{" "}
-              <Text className="font-bold text-slate-950">{card.alias}</Text> para calcular
-              pagos, saldos e insights más adelante.
+              <Text className="font-display-bold text-ink">{card.alias}</Text> para
+              calcular pagos, saldos e insights más adelante.
             </Text>
           }
 

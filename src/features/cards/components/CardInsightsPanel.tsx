@@ -9,51 +9,51 @@ interface CardInsightsPanelProps {
 function getInsightClasses(tone: CardInsightTone) {
   switch (tone) {
     case "danger":
-      return "border-red-200 bg-red-50";
+      return "border-danger/20 bg-danger/10";
     case "warning":
-      return "border-amber-200 bg-amber-50";
+      return "border-warning/20 bg-warning/10";
     case "success":
-      return "border-emerald-200 bg-emerald-50";
+      return "border-success/20 bg-success/10";
     case "info":
     default:
-      return "border-blue-200 bg-blue-50";
+      return "border-primary/20 bg-primary-muted";
   }
 }
 
 function getTitleClasses(tone: CardInsightTone) {
   switch (tone) {
     case "danger":
-      return "text-red-800";
+      return "text-danger";
     case "warning":
-      return "text-amber-800";
+      return "text-warning";
     case "success":
-      return "text-emerald-800";
+      return "text-success";
     case "info":
     default:
-      return "text-blue-800";
+      return "text-primary";
   }
 }
 
 function getMessageClasses(tone: CardInsightTone) {
   switch (tone) {
     case "danger":
-      return "text-red-700";
+      return "text-danger";
     case "warning":
-      return "text-amber-700";
+      return "text-warning";
     case "success":
-      return "text-emerald-700";
+      return "text-success";
     case "info":
     default:
-      return "text-blue-700";
+      return "text-primary";
   }
 }
 
 export function CardInsightsPanel({ insights }: CardInsightsPanelProps) {
   return (
-    <View className="rounded-3xl bg-white p-5">
-      <Text className="text-base font-semibold text-slate-900">Insights</Text>
+    <View className="rounded-3xl bg-surface-muted p-5">
+      <Text className="font-display text-base text-ink">Insights</Text>
 
-      <Text className="mt-1 text-sm text-slate-500">
+      <Text className="mt-1 text-sm text-ink-muted">
         Explicaciones basadas en el último estado capturado.
       </Text>
 
@@ -63,7 +63,9 @@ export function CardInsightsPanel({ insights }: CardInsightsPanelProps) {
             key={insight.id}
             className={`rounded-2xl border p-4 ${getInsightClasses(insight.tone)}`}
           >
-            <Text className={`text-base font-semibold ${getTitleClasses(insight.tone)}`}>
+            <Text
+              className={`font-sans-semibold text-base ${getTitleClasses(insight.tone)}`}
+            >
               {insight.title}
             </Text>
 

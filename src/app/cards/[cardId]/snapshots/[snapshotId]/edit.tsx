@@ -61,7 +61,7 @@ export default function EditSnapshotScreen() {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
 
-          <Text className="mt-3 text-sm text-slate-500">
+          <Text className="mt-3 text-sm text-ink-muted">
             Cargando estado capturado...
           </Text>
         </View>
@@ -134,14 +134,14 @@ export default function EditSnapshotScreen() {
           title="Editar estado"
         />
 
-        <View className="rounded-3xl bg-white p-5">
-          <Text className="text-sm text-slate-500">Capturado originalmente</Text>
+        <View className="rounded-3xl bg-surface-muted p-5">
+          <Text className="text-sm text-ink-muted">Capturado originalmente</Text>
 
-          <Text className="mt-1 text-base font-semibold text-slate-900">
+          <Text className="mt-1 font-display-bold text-base tabular-nums text-ink">
             {formatHumanDateTime(snapshot.capturedAt)}
           </Text>
 
-          <Text className="mt-2 text-sm text-slate-500">
+          <Text className="mt-2 text-sm text-ink-muted">
             Al guardar cambios, se conserva la fecha original de captura y solo se
             actualizan los datos corregidos.
           </Text>

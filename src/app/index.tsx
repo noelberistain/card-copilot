@@ -14,9 +14,9 @@ export default function HomeScreen() {
     <ScreenContainer>
       <View className="gap-6">
         <View>
-          <Text className="text-3xl font-bold text-slate-950">Card Copilot</Text>
+          <Text className="font-display-extrabold text-3xl text-ink">Card Copilot</Text>
 
-          <Text className="mt-2 text-base text-slate-500">
+          <Text className="mt-2 text-base text-ink-muted">
             Administra tus tarjetas y entiende mejor tus fechas de corte, pago y saldos.
           </Text>
         </View>
@@ -61,17 +61,17 @@ export default function HomeScreen() {
         {loading ? (
           <View className="items-center justify-center py-10">
             <ActivityIndicator />
-            <Text className="mt-3 text-sm text-slate-500">Cargando tarjetas...</Text>
+            <Text className="mt-3 text-sm text-ink-muted">Cargando tarjetas...</Text>
           </View>
         ) : null}
 
         {!loading && error ? (
-          <View className="gap-3 rounded-3xl bg-red-50 p-5">
-            <Text className="text-base font-semibold text-red-700">
+          <View className="gap-3 rounded-3xl bg-danger/10 p-5">
+            <Text className="font-sans-semibold text-base text-danger">
               Ocurrió un problema
             </Text>
 
-            <Text className="text-sm text-red-600">{error}</Text>
+            <Text className="text-sm text-danger">{error}</Text>
 
             <AppButton title="Reintentar" variant="danger" onPress={refresh} />
           </View>

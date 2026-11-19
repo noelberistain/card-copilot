@@ -11,14 +11,14 @@ interface CardListItemProps {
 export function CardListItem({ card, onPress }: CardListItemProps) {
   return (
     <Pressable
-      className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+      className="rounded-3xl border border-ink-muted/20 bg-surface-muted p-5 shadow-sm"
       onPress={onPress}
     >
       <View className="flex-row items-start justify-between gap-4">
         <View className="flex-1">
-          <Text className="text-lg font-semibold text-slate-900">{card.alias}</Text>
+          <Text className="font-display-bold text-lg text-ink">{card.alias}</Text>
 
-          <Text className="mt-1 text-sm text-slate-500">{card.bank}</Text>
+          <Text className="mt-1 text-sm text-ink-muted">{card.bank}</Text>
         </View>
 
         {card.color ? (
@@ -30,24 +30,24 @@ export function CardListItem({ card, onPress }: CardListItemProps) {
       </View>
 
       <View className="mt-4 gap-1">
-        <Text className="text-sm text-slate-500">Línea de crédito</Text>
+        <Text className="text-sm text-ink-muted">Línea de crédito</Text>
 
-        <Text className="text-xl font-bold text-slate-900">
+        <Text className="font-display-bold text-xl tabular-nums text-ink">
           {formatCurrency(card.creditLimit)}
         </Text>
       </View>
 
       <View className="mt-4 flex-row gap-3">
-        <View className="flex-1 rounded-2xl bg-slate-100 p-3">
-          <Text className="text-xs text-slate-500">Corte</Text>
-          <Text className="mt-1 text-base font-semibold text-slate-900">
+        <View className="flex-1 rounded-2xl bg-surface p-3">
+          <Text className="text-xs text-ink-muted">Corte</Text>
+          <Text className="mt-1 font-sans-semibold text-base text-ink">
             Día {card.cutoffDay}
           </Text>
         </View>
 
-        <View className="flex-1 rounded-2xl bg-slate-100 p-3">
-          <Text className="text-xs text-slate-500">Pago</Text>
-          <Text className="mt-1 text-base font-semibold text-slate-900">
+        <View className="flex-1 rounded-2xl bg-surface p-3">
+          <Text className="text-xs text-ink-muted">Pago</Text>
+          <Text className="mt-1 font-sans-semibold text-base text-ink">
             Día {card.paymentDueDay}
           </Text>
         </View>

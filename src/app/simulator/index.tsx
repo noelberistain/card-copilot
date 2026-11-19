@@ -60,10 +60,8 @@ export default function SimulatorScreen() {
           subtitle="Ingresa una compra y te ayudamos a estimar con cuál tarjeta podrías tener más tiempo para pagar."
           title="Simulador de compra"
         />
-        <View className="rounded-3xl bg-white p-5">
-          <Text className="text-base font-semibold text-slate-900">
-            Datos de la compra
-          </Text>
+        <View className="rounded-3xl bg-surface-muted p-5">
+          <Text className="font-display text-base text-ink">Datos de la compra</Text>
 
           <View className="mt-5 gap-4">
             <Controller
@@ -115,47 +113,47 @@ export default function SimulatorScreen() {
         </View>
 
         {simulating ? (
-          <View className="items-center justify-center rounded-3xl bg-white p-6">
+          <View className="items-center justify-center rounded-3xl bg-surface-muted p-6">
             <ActivityIndicator />
 
-            <Text className="mt-3 text-sm text-slate-500">
+            <Text className="mt-3 text-sm text-ink-muted">
               Calculando mejor tarjeta...
             </Text>
           </View>
         ) : null}
 
         {error ? (
-          <View className="rounded-3xl bg-red-50 p-5">
-            <Text className="text-base font-semibold text-red-700">
+          <View className="rounded-3xl bg-danger/10 p-5">
+            <Text className="font-sans-semibold text-base text-danger">
               No se pudo simular la compra
             </Text>
 
-            <Text className="mt-1 text-sm text-red-600">{error}</Text>
+            <Text className="mt-1 text-sm text-danger">{error}</Text>
           </View>
         ) : null}
 
         {result ? (
           <View className="gap-5">
-            <View className="rounded-3xl bg-white p-5">
-              <Text className="text-base font-semibold text-slate-900">Resultado</Text>
+            <View className="rounded-3xl bg-surface-muted p-5">
+              <Text className="font-display text-base text-ink">Resultado</Text>
 
-              <Text className="mt-2 text-sm text-slate-500">
+              <Text className="mt-2 text-sm text-ink-muted">
                 Compra simulada por {formatCurrency(result.amount)} el{" "}
                 {result.purchaseDate}.
               </Text>
 
-              <Text className="mt-4 text-base text-slate-700">{result.summary}</Text>
+              <Text className="mt-4 text-base text-ink">{result.summary}</Text>
             </View>
 
             {result.recommendedCard ? (
               <RecommendedCardCard result={result.recommendedCard} />
             ) : (
-              <View className="rounded-3xl bg-amber-50 p-5">
-                <Text className="text-base font-semibold text-amber-800">
+              <View className="rounded-3xl bg-warning/10 p-5">
+                <Text className="font-sans-semibold text-base text-warning">
                   Sin tarjeta recomendada
                 </Text>
 
-                <Text className="mt-1 text-sm text-amber-700">
+                <Text className="mt-1 text-sm text-warning">
                   Ninguna tarjeta evaluada tiene crédito disponible suficiente para esta
                   compra.
                 </Text>
@@ -164,7 +162,7 @@ export default function SimulatorScreen() {
 
             {otherEligibleCards.length > 0 ? (
               <View className="gap-3">
-                <Text className="text-lg font-bold text-slate-950">
+                <Text className="font-display-bold text-lg text-ink">
                   Otras tarjetas elegibles
                 </Text>
 
@@ -176,7 +174,7 @@ export default function SimulatorScreen() {
 
             {result.ineligibleCards.length > 0 ? (
               <View className="gap-3">
-                <Text className="text-lg font-bold text-slate-950">
+                <Text className="font-display-bold text-lg text-ink">
                   Tarjetas no elegibles
                 </Text>
 
@@ -188,11 +186,11 @@ export default function SimulatorScreen() {
 
             {result.notEvaluatedCards.length > 0 ? (
               <View className="gap-3">
-                <Text className="text-lg font-bold text-slate-950">
+                <Text className="font-display-bold text-lg text-ink">
                   Tarjetas no evaluadas
                 </Text>
 
-                <Text className="text-sm text-slate-500">
+                <Text className="text-sm text-ink-muted">
                   Estas tarjetas no fueron consideradas para la recomendación porque no
                   tienen un estado capturado. Captura un snapshot para conocer su crédito
                   disponible real.
@@ -216,41 +214,45 @@ interface SimulationCardResultProps {
 
 function RecommendedCardCard({ result }: SimulationCardResultProps) {
   return (
-    <View className="rounded-3xl bg-blue-600 p-5">
-      <Text className="text-sm font-medium text-blue-100">Tarjeta recomendada</Text>
+    <View className="rounded-3xl bg-primary p-5">
+      <Text className="font-sans-medium text-sm text-primary-muted">
+        Tarjeta recomendada
+      </Text>
 
-      <Text className="mt-1 text-2xl font-bold text-white">{result.card.alias}</Text>
+      <Text className="mt-1 font-display-bold text-2xl text-white">
+        {result.card.alias}
+      </Text>
 
-      <Text className="mt-1 text-sm text-blue-100">{result.card.bank}</Text>
+      <Text className="mt-1 text-sm text-primary-muted">{result.card.bank}</Text>
 
       <View className="mt-5 gap-3">
-        <View className="rounded-2xl bg-blue-500 p-4">
-          <Text className="text-xs text-blue-100">Tiempo estimado para pagar</Text>
+        <View className="rounded-2xl bg-white/10 p-4">
+          <Text className="text-xs text-primary-muted">Tiempo estimado para pagar</Text>
 
-          <Text className="mt-1 text-xl font-bold text-white">
+          <Text className="mt-1 font-display-bold text-xl tabular-nums text-white">
             {result.estimatedDaysToPay ?? "-"} día(s)
           </Text>
         </View>
 
         <View className="flex-row gap-3">
-          <View className="flex-1 rounded-2xl bg-blue-500 p-4">
-            <Text className="text-xs text-blue-100">Corte estimado</Text>
+          <View className="flex-1 rounded-2xl bg-white/10 p-4">
+            <Text className="text-xs text-primary-muted">Corte estimado</Text>
 
-            <Text className="mt-1 text-sm font-semibold text-white">
+            <Text className="mt-1 font-sans-semibold text-sm tabular-nums text-white">
               {result.estimatedCutoffDate ?? "-"}
             </Text>
           </View>
 
-          <View className="flex-1 rounded-2xl bg-blue-500 p-4">
-            <Text className="text-xs text-blue-100">Pago estimado</Text>
+          <View className="flex-1 rounded-2xl bg-white/10 p-4">
+            <Text className="text-xs text-primary-muted">Pago estimado</Text>
 
-            <Text className="mt-1 text-sm font-semibold text-white">
+            <Text className="mt-1 font-sans-semibold text-sm tabular-nums text-white">
               {result.estimatedPaymentDueDate ?? "-"}
             </Text>
           </View>
         </View>
 
-        <Text className="text-sm text-blue-100">{result.reason}</Text>
+        <Text className="text-sm text-primary-muted">{result.reason}</Text>
       </View>
     </View>
   );
@@ -260,20 +262,18 @@ function SimulationCardResult({ result }: SimulationCardResultProps) {
   const isNotEvaluated = result.evaluationStatus === "not-evaluated";
 
   const containerClass = result.eligible
-    ? "rounded-3xl bg-white p-5"
+    ? "rounded-3xl bg-surface-muted p-5"
     : isNotEvaluated
-      ? "rounded-3xl bg-amber-50 p-5"
-      : "rounded-3xl bg-slate-200 p-5";
+      ? "rounded-3xl bg-warning/10 p-5"
+      : "rounded-3xl bg-ink-muted/10 p-5";
 
   return (
     <View className={containerClass}>
       <View className="flex-row items-start justify-between gap-4">
         <View className="flex-1">
-          <Text className="text-lg font-semibold text-slate-950">
-            {result.card.alias}
-          </Text>
+          <Text className="font-display-bold text-lg text-ink">{result.card.alias}</Text>
 
-          <Text className="mt-1 text-sm text-slate-500">{result.card.bank}</Text>
+          <Text className="mt-1 text-sm text-ink-muted">{result.card.bank}</Text>
         </View>
 
         <StatusBadge result={result} />
@@ -281,34 +281,34 @@ function SimulationCardResult({ result }: SimulationCardResultProps) {
 
       <View className="mt-4 gap-3">
         {!isNotEvaluated ? (
-          <View className="rounded-2xl bg-slate-100 p-4">
-            <Text className="text-xs text-slate-500">Crédito disponible</Text>
+          <View className="rounded-2xl bg-surface p-4">
+            <Text className="text-xs text-ink-muted">Crédito disponible</Text>
 
-            <Text className="mt-1 text-base font-semibold text-slate-950">
+            <Text className="mt-1 font-display-bold text-base tabular-nums text-ink">
               {formatCurrency(result.availableCredit)}
             </Text>
           </View>
         ) : null}
 
         <View className="flex-row gap-3">
-          <View className="flex-1 rounded-2xl bg-slate-100 p-4">
-            <Text className="text-xs text-slate-500">Corte estimado</Text>
+          <View className="flex-1 rounded-2xl bg-surface p-4">
+            <Text className="text-xs text-ink-muted">Corte estimado</Text>
 
-            <Text className="mt-1 text-sm font-semibold text-slate-950">
+            <Text className="mt-1 font-sans-semibold text-sm tabular-nums text-ink">
               {result.estimatedCutoffDate ?? "-"}
             </Text>
           </View>
 
-          <View className="flex-1 rounded-2xl bg-slate-100 p-4">
-            <Text className="text-xs text-slate-500">Pago estimado</Text>
+          <View className="flex-1 rounded-2xl bg-surface p-4">
+            <Text className="text-xs text-ink-muted">Pago estimado</Text>
 
-            <Text className="mt-1 text-sm font-semibold text-slate-950">
+            <Text className="mt-1 font-sans-semibold text-sm tabular-nums text-ink">
               {result.estimatedPaymentDueDate ?? "-"}
             </Text>
           </View>
         </View>
 
-        <Text className="text-sm text-slate-600">{result.reason}</Text>
+        <Text className="text-sm text-ink-muted">{result.reason}</Text>
 
         {isNotEvaluated ? (
           <AppButton
@@ -332,23 +332,23 @@ function SimulationCardResult({ result }: SimulationCardResultProps) {
 function StatusBadge({ result }: SimulationCardResultProps) {
   if (result.evaluationStatus === "not-evaluated") {
     return (
-      <View className="rounded-full bg-amber-100 px-3 py-1">
-        <Text className="text-xs font-semibold text-amber-700">No evaluada</Text>
+      <View className="rounded-full bg-warning/10 px-3 py-1">
+        <Text className="font-sans-semibold text-xs text-warning">No evaluada</Text>
       </View>
     );
   }
 
   if (result.eligible) {
     return (
-      <View className="rounded-full bg-emerald-50 px-3 py-1">
-        <Text className="text-xs font-semibold text-emerald-700">Elegible</Text>
+      <View className="rounded-full bg-success/10 px-3 py-1">
+        <Text className="font-sans-semibold text-xs text-success">Elegible</Text>
       </View>
     );
   }
 
   return (
-    <View className="rounded-full bg-red-50 px-3 py-1">
-      <Text className="text-xs font-semibold text-red-700">No elegible</Text>
+    <View className="rounded-full bg-danger/10 px-3 py-1">
+      <Text className="font-sans-semibold text-xs text-danger">No elegible</Text>
     </View>
   );
 }

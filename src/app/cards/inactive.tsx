@@ -99,22 +99,22 @@ export default function InactiveCardsScreen() {
         />
 
         {loading ? (
-          <View className="items-center justify-center rounded-3xl bg-white p-6">
+          <View className="items-center justify-center rounded-3xl bg-surface-muted p-6">
             <ActivityIndicator />
 
-            <Text className="mt-3 text-sm text-slate-500">
+            <Text className="mt-3 text-sm text-ink-muted">
               Cargando tarjetas inactivas...
             </Text>
           </View>
         ) : null}
 
         {!loading && error ? (
-          <View className="gap-3 rounded-3xl bg-red-50 p-5">
-            <Text className="text-base font-semibold text-red-700">
+          <View className="gap-3 rounded-3xl bg-danger/10 p-5">
+            <Text className="font-sans-semibold text-base text-danger">
               No se pudieron cargar
             </Text>
 
-            <Text className="text-sm text-red-600">{error}</Text>
+            <Text className="text-sm text-danger">{error}</Text>
 
             <AppButton title="Reintentar" variant="danger" onPress={refresh} />
           </View>
@@ -128,11 +128,11 @@ export default function InactiveCardsScreen() {
         ) : null}
 
         {reactivateError ? (
-          <Text className="text-sm font-medium text-red-600">{reactivateError}</Text>
+          <Text className="font-sans-medium text-sm text-danger">{reactivateError}</Text>
         ) : null}
 
         {deleteError ? (
-          <Text className="text-sm font-medium text-red-600">{deleteError}</Text>
+          <Text className="font-sans-medium text-sm text-danger">{deleteError}</Text>
         ) : null}
 
         {!loading && !error && cards.length > 0 ? (

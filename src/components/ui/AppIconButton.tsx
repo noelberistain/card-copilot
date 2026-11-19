@@ -14,14 +14,14 @@ export function AppIconButton({ label, onPress, disabled = false }: AppIconButto
       accessibilityLabel={label}
       accessibilityRole="button"
       className={[
-        "h-10 w-10 items-center justify-center rounded-full bg-white shadow-sm",
+        "h-10 w-10 items-center justify-center rounded-full bg-surface-muted shadow-sm",
         disabled ? "opacity-50" : "",
       ].join(" ")}
       disabled={disabled}
       feedback="scale"
       onPress={onPress}
     >
-      <Text className="text-xl font-semibold text-slate-900">{label}</Text>
+      <Text className="font-sans-semibold text-xl text-ink">{label}</Text>
     </AppPressable>
   );
 }

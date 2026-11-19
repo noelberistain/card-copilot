@@ -14,14 +14,14 @@ interface HomeCardListItemProps {
 function getPaymentToneClasses(tone: HomeCardPaymentTone) {
   switch (tone) {
     case "danger":
-      return "text-red-700";
+      return "text-danger";
     case "warning":
-      return "text-amber-700";
+      return "text-warning";
     case "success":
-      return "text-emerald-700";
+      return "text-success";
     case "default":
     default:
-      return "text-slate-600";
+      return "text-ink-muted";
   }
 }
 
@@ -31,7 +31,7 @@ export function HomeCardListItem({ view, onPress }: HomeCardListItemProps) {
   return (
     <AppPressable
       accessibilityRole="button"
-      className="rounded-3xl bg-white p-5"
+      className="rounded-3xl bg-surface-muted p-5"
       disabled={!onPress}
       feedback={onPress ? "scale" : "none"}
       onPress={onPress}
@@ -39,20 +39,20 @@ export function HomeCardListItem({ view, onPress }: HomeCardListItemProps) {
       <View className="flex-row items-start gap-3">
         <View
           className="mt-1 h-4 w-4 rounded-full"
-          style={{ backgroundColor: card.color ?? "#2563eb" }}
+          style={{ backgroundColor: card.color ?? "#0D9488" }}
         />
 
         <View className="flex-1">
-          <Text className="text-lg font-bold text-slate-950" numberOfLines={1}>
+          <Text className="font-display-bold text-lg text-ink" numberOfLines={1}>
             {card.alias}
           </Text>
 
           <View className="mt-4 flex-row gap-4">
             <View className="flex-1">
-              <Text className="text-xs text-slate-500">{view.balanceLabel}</Text>
+              <Text className="text-xs text-ink-muted">{view.balanceLabel}</Text>
 
               <Text
-                className="mt-1 text-base font-semibold text-slate-950"
+                className="mt-1 font-display-bold text-base tabular-nums text-ink"
                 numberOfLines={1}
               >
                 {view.balanceValue}
@@ -68,7 +68,7 @@ export function HomeCardListItem({ view, onPress }: HomeCardListItemProps) {
               </Text>
 
               <Text
-                className="mt-1 text-base font-semibold text-slate-950"
+                className="mt-1 font-display-bold text-base tabular-nums text-ink"
                 numberOfLines={1}
               >
                 {view.paymentValue}
@@ -76,12 +76,12 @@ export function HomeCardListItem({ view, onPress }: HomeCardListItemProps) {
             </View>
           </View>
 
-          <View className="mt-4 flex-row gap-4 border-t border-slate-100 pt-3">
-            <Text className="flex-1 text-xs text-slate-500" numberOfLines={1}>
+          <View className="mt-4 flex-row gap-4 border-t border-ink-muted/15 pt-3">
+            <Text className="flex-1 text-xs text-ink-muted" numberOfLines={1}>
               {view.cutoffText}
             </Text>
 
-            <Text className="flex-1 text-xs text-slate-500" numberOfLines={1}>
+            <Text className="flex-1 text-xs text-ink-muted" numberOfLines={1}>
               {view.dueText}
             </Text>
           </View>

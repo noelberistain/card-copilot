@@ -17,32 +17,34 @@ export function AppMoneyInput({
 }: AppMoneyInputProps) {
   return (
     <View className="w-full gap-2">
-      <Text className="text-sm font-medium text-slate-700">
+      <Text className="font-sans-medium text-sm text-ink">
         {label}
-        {required ? <Text className="text-red-600"> *</Text> : null}
-        {!required && optional ? <Text className="text-slate-400"> opcional</Text> : null}
+        {required ? <Text className="text-danger"> *</Text> : null}
+        {!required && optional ? <Text className="text-ink-muted"> opcional</Text> : null}
       </Text>
 
       <View
         className={[
-          "min-h-14 flex-row items-center rounded-2xl border bg-white px-4",
-          error ? "border-red-500" : "border-slate-300",
+          "min-h-14 flex-row items-center rounded-2xl border bg-surface-muted px-4",
+          error ? "border-danger" : "border-ink-muted/30",
           props.editable === false ? "opacity-60" : "",
         ].join(" ")}
       >
-        <Text className="mr-2 text-base font-semibold leading-5 text-slate-500">$</Text>
+        <Text className="mr-2 font-sans-semibold text-base leading-5 text-ink-muted">
+          $
+        </Text>
 
         <TextInput
-          className="h-6 flex-1 p-0 text-base leading-5 text-slate-900"
+          className="h-6 flex-1 p-0 font-display text-base tabular-nums leading-5 text-ink"
           keyboardType="decimal-pad"
-          placeholderTextColor="#94a3b8"
+          placeholderTextColor="#64748B"
           style={[{ paddingVertical: 0 }, style]}
           textAlignVertical="center"
           {...props}
         />
       </View>
 
-      {error ? <Text className="text-sm text-red-600">{error}</Text> : null}
+      {error ? <Text className="text-sm text-danger">{error}</Text> : null}
     </View>
   );
 }
