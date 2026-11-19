@@ -15,9 +15,9 @@ interface AppButtonProps {
 }
 
 const variantClasses: Record<AppButtonVariant, string> = {
-  primary: "bg-blue-600",
-  secondary: "bg-slate-700",
-  danger: "bg-red-600",
+  primary: "bg-primary",
+  secondary: "bg-ink",
+  danger: "bg-danger",
 };
 
 const sizeContainerClasses: Record<AppButtonSize, string> = {
@@ -46,16 +46,17 @@ export function AppButton({
       className={[
         fullWidth ? "w-full" : "self-start",
         sizeContainerClasses[size],
-        disabled ? "bg-slate-400" : variantClasses[variant],
+        disabled ? "bg-ink-muted/50" : variantClasses[variant],
       ].join(" ")}
       disabled={disabled}
       feedback="scale"
       onPress={onPress}
     >
       <Text
-        className={["text-center font-semibold text-white", sizeTextClasses[size]].join(
-          " "
-        )}
+        className={[
+          "text-center font-sans-semibold text-white",
+          sizeTextClasses[size],
+        ].join(" ")}
       >
         {title}
       </Text>

@@ -10,7 +10,7 @@ interface ScreenContainerProps {
 export function ScreenContainer({ children, scroll = true }: ScreenContainerProps) {
   if (scroll) {
     return (
-      <SafeAreaView className="flex-1 bg-slate-100">
+      <SafeAreaView className="flex-1 bg-surface">
         <ScrollView
           className="flex-1"
           contentContainerClassName="px-5 py-6"
@@ -23,7 +23,7 @@ export function ScreenContainer({ children, scroll = true }: ScreenContainerProp
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-slate-100">
+    <SafeAreaView className="flex-1 bg-surface">
       <View className="flex-1 px-5 py-6">{children}</View>
     </SafeAreaView>
   );

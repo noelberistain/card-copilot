@@ -16,22 +16,22 @@ export function AppTextInput({
 }: AppTextInputProps) {
   return (
     <View className="w-full gap-2">
-      <Text className="text-sm font-medium text-slate-700">
+      <Text className="font-sans-medium text-sm text-ink">
         {label}
-        {required ? <Text className="text-red-600"> *</Text> : null}
-        {!required && optional ? <Text className="text-slate-400"> opcional</Text> : null}
+        {required ? <Text className="text-danger"> *</Text> : null}
+        {!required && optional ? <Text className="text-ink-muted"> opcional</Text> : null}
       </Text>
 
       <TextInput
         className={[
-          "rounded-2xl border bg-white px-4 py-4 text-base text-slate-900",
-          error ? "border-red-500" : "border-slate-300",
+          "rounded-2xl border bg-surface-muted px-4 py-4 text-base text-ink",
+          error ? "border-danger" : "border-ink-muted/30",
         ].join(" ")}
-        placeholderTextColor="#94a3b8"
+        placeholderTextColor="#64748B"
         {...props}
       />
 
-      {error ? <Text className="text-sm text-red-600">{error}</Text> : null}
+      {error ? <Text className="text-sm text-danger">{error}</Text> : null}
     </View>
   );
 }

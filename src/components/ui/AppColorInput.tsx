@@ -21,10 +21,10 @@ export function AppColorInput({
 }: AppColorInputProps) {
   return (
     <View className="w-full gap-2">
-      <Text className="text-sm font-medium text-slate-700">
+      <Text className="font-sans-medium text-sm text-ink">
         {label}
-        {required ? <Text className="text-red-600"> *</Text> : null}
-        {!required && optional ? <Text className="text-slate-400"> opcional</Text> : null}
+        {required ? <Text className="text-danger"> *</Text> : null}
+        {!required && optional ? <Text className="text-ink-muted"> opcional</Text> : null}
       </Text>
 
       <View className="flex-row flex-wrap gap-3">
@@ -39,7 +39,7 @@ export function AppColorInput({
               accessibilityRole="button"
               className={[
                 "h-12 w-12 items-center justify-center rounded-full border-2",
-                selected ? "border-slate-950" : "border-transparent",
+                selected ? "border-primary" : "border-transparent",
               ].join(" ")}
               onPress={() => onChangeText(colorValue)}
             >
@@ -53,12 +53,12 @@ export function AppColorInput({
       </View>
 
       {selectedColor ? null : (
-        <Text className="text-sm text-slate-400">
+        <Text className="text-sm text-ink-muted">
           Selecciona un color para identificar la tarjeta.
         </Text>
       )}
 
-      {error ? <Text className="text-sm text-red-600">{error}</Text> : null}
+      {error ? <Text className="text-sm text-danger">{error}</Text> : null}
     </View>
   );
 }

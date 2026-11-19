@@ -57,13 +57,13 @@ export function SnapshotForm({
   });
 
   return (
-    <View className="gap-5 rounded-3xl bg-white p-5">
-      <View className="rounded-2xl bg-blue-50 p-4">
-        <Text className="text-sm font-semibold text-blue-800">
+    <View className="gap-5 rounded-3xl bg-surface-muted p-5">
+      <View className="rounded-2xl bg-primary-muted p-4">
+        <Text className="font-sans-semibold text-sm text-primary">
           Captura lo que veas hoy
         </Text>
 
-        <Text className="mt-1 text-sm text-blue-700">
+        <Text className="mt-1 text-sm text-primary">
           Ingresa los datos que aparezcan en tu app bancaria. Si algún dato aún no
           aparece, puedes dejarlo vacío. No inventes montos: mientras más información real
           captures, mejores serán los insights.
@@ -102,12 +102,12 @@ export function SnapshotForm({
         )}
       />
 
-      <View className="rounded-2xl bg-slate-50 p-4">
-        <Text className="text-sm font-semibold text-slate-800">
+      <View className="rounded-2xl bg-surface p-4">
+        <Text className="font-sans-semibold text-sm text-ink">
           Datos del estado de cuenta
         </Text>
 
-        <Text className="mt-1 text-sm text-slate-500">
+        <Text className="mt-1 text-sm text-ink-muted">
           Si tu app ya muestra saldo al corte, pagos y fecha límite, captúralos. Si
           todavía no aparecen, déjalos vacíos.
         </Text>
@@ -220,7 +220,7 @@ export function SnapshotForm({
         )}
       />
 
-      {error ? <Text className="text-sm text-red-600">{error}</Text> : null}
+      {error ? <Text className="text-sm text-danger">{error}</Text> : null}
 
       <AppButton
         disabled={saving || (disableSubmitUntilDirty && !isDirty)}

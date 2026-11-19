@@ -31,10 +31,10 @@ export function ScreenHeader({
         {showBackButton ? <AppIconButton label="←" onPress={handleBackPress} /> : null}
 
         <View className="flex-1">
-          <Text className="text-3xl font-bold text-slate-950">{title}</Text>
+          <Text className="font-display-bold text-3xl text-ink">{title}</Text>
 
           {subtitle ? (
-            <Text className="mt-2 text-base text-slate-500">{subtitle}</Text>
+            <Text className="mt-2 text-base text-ink-muted">{subtitle}</Text>
           ) : null}
         </View>
       </View>

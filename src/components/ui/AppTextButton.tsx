@@ -12,9 +12,9 @@ interface AppTextButtonProps {
 }
 
 const textVariantClasses: Record<AppTextButtonVariant, string> = {
-  primary: "text-blue-700",
-  secondary: "text-slate-600",
-  danger: "text-red-700",
+  primary: "text-primary",
+  secondary: "text-ink-muted",
+  danger: "text-danger",
 };
 
 export function AppTextButton({
@@ -31,7 +31,9 @@ export function AppTextButton({
       feedback="opacity"
       onPress={onPress}
     >
-      <Text className={["text-sm font-semibold", textVariantClasses[variant]].join(" ")}>
+      <Text
+        className={["font-sans-semibold text-sm", textVariantClasses[variant]].join(" ")}
+      >
         {title}
       </Text>
     </AppPressable>

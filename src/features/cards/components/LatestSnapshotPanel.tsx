@@ -20,11 +20,11 @@ export function LatestSnapshotPanel({
 }: LatestSnapshotPanelProps) {
   if (loading) {
     return (
-      <View className="rounded-3xl bg-white p-5">
+      <View className="rounded-3xl bg-surface-muted p-5">
         <View className="flex-row items-center gap-3">
           <ActivityIndicator />
 
-          <Text className="text-sm text-slate-500">Cargando último estado...</Text>
+          <Text className="text-sm text-ink-muted">Cargando último estado...</Text>
         </View>
       </View>
     );
@@ -32,24 +32,22 @@ export function LatestSnapshotPanel({
 
   if (error) {
     return (
-      <View className="rounded-3xl bg-red-50 p-5">
-        <Text className="text-base font-semibold text-red-700">
+      <View className="rounded-3xl bg-danger/10 p-5">
+        <Text className="font-sans-semibold text-base text-danger">
           No se pudo cargar el último estado
         </Text>
 
-        <Text className="mt-1 text-sm text-red-600">{error}</Text>
+        <Text className="mt-1 text-sm text-danger">{error}</Text>
       </View>
     );
   }
 
   if (!snapshot) {
     return (
-      <View className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-5">
-        <Text className="text-base font-semibold text-slate-900">
-          Sin estado capturado
-        </Text>
+      <View className="rounded-3xl border border-dashed border-ink-muted/30 bg-surface-muted p-5">
+        <Text className="font-display text-base text-ink">Sin estado capturado</Text>
 
-        <Text className="mt-1 text-sm text-slate-500">
+        <Text className="mt-1 text-sm text-ink-muted">
           Captura el estado actual de esta tarjeta para empezar a ver saldos, pagos y
           fechas importantes.
         </Text>
@@ -58,52 +56,50 @@ export function LatestSnapshotPanel({
   }
 
   return (
-    <View className="rounded-3xl bg-white p-5">
-      <Text className="text-base font-semibold text-slate-900">
-        Último estado capturado
-      </Text>
+    <View className="rounded-3xl bg-surface-muted p-5">
+      <Text className="font-display text-base text-ink">Último estado capturado</Text>
 
-      <Text className="mt-1 text-sm text-slate-500">
+      <Text className="mt-1 text-sm text-ink-muted">
         Capturado: {formatHumanDateTime(snapshot.capturedAt)}
       </Text>
 
       <View className="mt-4 gap-3">
-        <View className="rounded-2xl bg-slate-100 p-4">
-          <Text className="text-xs text-slate-500">Saldo actual</Text>
+        <View className="rounded-2xl bg-surface p-4">
+          <Text className="text-xs text-ink-muted">Saldo actual</Text>
 
-          <Text className="mt-1 text-xl font-bold text-slate-950">
+          <Text className="mt-1 font-display-bold text-xl tabular-nums text-ink">
             {formatCurrency(snapshot.currentBalance)}
           </Text>
         </View>
-        <View className="rounded-2xl bg-slate-100 p-4">
-          <Text className="text-xs text-slate-500">Pago para no generar intereses</Text>
+        <View className="rounded-2xl bg-surface p-4">
+          <Text className="text-xs text-ink-muted">Pago para no generar intereses</Text>
 
-          <Text className="mt-1 text-xl font-bold text-slate-950">
+          <Text className="mt-1 font-display-bold text-xl tabular-nums text-ink">
             {formatCurrency(snapshot.paymentToAvoidInterest)}
           </Text>
         </View>
         <View className="flex-row gap-3">
-          <View className="flex-1 rounded-2xl bg-slate-100 p-4">
-            <Text className="text-xs text-slate-500">Pago mínimo</Text>
+          <View className="flex-1 rounded-2xl bg-surface p-4">
+            <Text className="text-xs text-ink-muted">Pago mínimo</Text>
 
-            <Text className="mt-1 text-base font-semibold text-slate-950">
+            <Text className="mt-1 font-display-bold text-base tabular-nums text-ink">
               {formatCurrency(snapshot.minimumPayment)}
             </Text>
           </View>
 
-          <View className="flex-1 rounded-2xl bg-slate-100 p-4">
-            <Text className="text-xs text-slate-500">Fecha límite</Text>
+          <View className="flex-1 rounded-2xl bg-surface p-4">
+            <Text className="text-xs text-ink-muted">Fecha límite</Text>
 
-            <Text className="mt-1 text-base font-semibold text-slate-950">
+            <Text className="mt-1 font-display-bold text-base tabular-nums text-ink">
               {snapshot.paymentDueDate}
             </Text>
           </View>
         </View>
         {snapshot.notes ? (
-          <View className="rounded-2xl bg-slate-100 p-4">
-            <Text className="text-xs text-slate-500">Notas</Text>
+          <View className="rounded-2xl bg-surface p-4">
+            <Text className="text-xs text-ink-muted">Notas</Text>
 
-            <Text className="mt-1 text-sm text-slate-700">{snapshot.notes}</Text>
+            <Text className="mt-1 text-sm text-ink">{snapshot.notes}</Text>
           </View>
         ) : null}
         {onEditSnapshot ? (

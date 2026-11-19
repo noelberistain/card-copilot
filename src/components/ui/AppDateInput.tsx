@@ -65,23 +65,26 @@ export function AppDateInput({
 
   return (
     <View className="w-full gap-2">
-      <Text className="text-sm font-medium text-slate-700">
+      <Text className="font-sans-medium text-sm text-ink">
         {label}
-        {required ? <Text className="text-red-600"> *</Text> : null}
-        {!required && optional ? <Text className="text-slate-400"> opcional</Text> : null}
+        {required ? <Text className="text-danger"> *</Text> : null}
+        {!required && optional ? <Text className="text-ink-muted"> opcional</Text> : null}
       </Text>
 
       <Pressable
         className={[
-          "rounded-2xl border bg-white px-4 py-4",
-          error ? "border-red-500" : "border-slate-300",
+          "rounded-2xl border bg-surface-muted px-4 py-4",
+          error ? "border-danger" : "border-ink-muted/30",
           disabled ? "opacity-60" : "",
         ].join(" ")}
         disabled={disabled}
         onPress={openPicker}
       >
         <Text
-          className={["text-base", value ? "text-slate-900" : "text-slate-400"].join(" ")}
+          className={[
+            "font-display text-base tabular-nums",
+            value ? "text-ink" : "text-ink-muted",
+          ].join(" ")}
         >
           {value || placeholder}
         </Text>
@@ -105,20 +108,20 @@ export function AppDateInput({
           onRequestClose={handleDismiss}
         >
           <View className="flex-1 justify-end bg-black/30 px-4 pb-8">
-            <View className="rounded-3xl bg-white p-5">
+            <View className="rounded-3xl bg-surface-muted p-5">
               <View className="mb-4 flex-row items-center justify-between">
                 <Pressable
-                  className="rounded-full bg-slate-200 px-4 py-2"
+                  className="rounded-full bg-ink-muted/20 px-4 py-2"
                   onPress={handleDismiss}
                 >
-                  <Text className="text-sm font-semibold text-slate-700">Cancelar</Text>
+                  <Text className="font-sans-semibold text-sm text-ink">Cancelar</Text>
                 </Pressable>
 
                 <Pressable
-                  className="rounded-full bg-blue-600 px-4 py-2"
+                  className="rounded-full bg-primary px-4 py-2"
                   onPress={confirmIosDate}
                 >
-                  <Text className="text-sm font-semibold text-white">Listo</Text>
+                  <Text className="font-sans-semibold text-sm text-white">Listo</Text>
                 </Pressable>
               </View>
 
@@ -134,7 +137,7 @@ export function AppDateInput({
         </Modal>
       ) : null}
 
-      {error ? <Text className="text-sm text-red-600">{error}</Text> : null}
+      {error ? <Text className="text-sm text-danger">{error}</Text> : null}
     </View>
   );
 }

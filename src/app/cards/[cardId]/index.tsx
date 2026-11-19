@@ -116,7 +116,7 @@ export default function CardDetailScreen() {
         <View className="flex-1 items-center justify-center">
           <ActivityIndicator />
 
-          <Text className="mt-3 text-sm text-slate-500">Cargando detalle...</Text>
+          <Text className="mt-3 text-sm text-ink-muted">Cargando detalle...</Text>
         </View>
       </ScreenContainer>
     );
@@ -145,7 +145,7 @@ export default function CardDetailScreen() {
       <View className="gap-6">
         <ScreenHeader showBackButton subtitle={card.bank} title={card.alias} />
 
-        <View className="gap-3 rounded-3xl bg-white p-4">
+        <View className="gap-3 rounded-3xl bg-surface-muted p-4">
           <AppButton
             fullWidth={false}
             size="sm"
@@ -191,7 +191,9 @@ export default function CardDetailScreen() {
           </View>
 
           {deactivateError ? (
-            <Text className="text-sm font-medium text-red-600">{deactivateError}</Text>
+            <Text className="font-sans-medium text-sm text-danger">
+              {deactivateError}
+            </Text>
           ) : null}
         </View>
 
@@ -205,12 +207,12 @@ export default function CardDetailScreen() {
             <CardSnapshotSummary metrics={metrics} snapshot={latestSnapshot} />
 
             {!hasGeneratedStatement(latestSnapshot) ? (
-              <View className="rounded-3xl bg-amber-50 p-5">
-                <Text className="text-base font-semibold text-amber-800">
+              <View className="rounded-3xl bg-warning/10 p-5">
+                <Text className="font-sans-semibold text-base text-warning">
                   Estado parcial
                 </Text>
 
-                <Text className="mt-1 text-sm text-amber-700">
+                <Text className="mt-1 text-sm text-warning">
                   Esta tarjeta todavía no tiene información completa de estado de cuenta.
                   Por ahora usaremos el saldo actual y el crédito disponible reportado
                   para estimaciones, pero aún no hay pago mínimo, pago para no generar

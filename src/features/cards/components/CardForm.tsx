@@ -169,7 +169,9 @@ export function CardForm({
         />
       </View>
 
-      {error ? <Text className="text-sm font-medium text-red-600">{error}</Text> : null}
+      {error ? (
+        <Text className="font-sans-medium text-sm text-danger">{error}</Text>
+      ) : null}
 
       <AppButton
         disabled={saving || (disableSubmitUntilDirty && !isDirty)}
